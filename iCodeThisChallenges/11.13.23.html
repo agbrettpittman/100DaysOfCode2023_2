@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>iCodeThis - 11/13/23</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+            }
+            header {
+                display: grid;
+                grid-template-rows: 5vh 20vh 5vh;
+                grid-auto-flow: row;
+                background-color: #3a4853;
+                color: white;
+                padding: 0 4vw;
+            }
+            header a {
+                color: white;
+                text-decoration: none;
+                font-size: 2em;
+            }
+            nav.main-nav {
+                display: flex;
+                justify-content: space-between;
+                padding: 4vw 0;
+                font-size: 2em;
+            }
+            .event-header {
+                display: grid;
+                grid-template-columns: 20vw 1fr;
+                grid-template-rows: 1fr 1fr;
+                align-items: center;
+                font-size: 2.25rem;
+                column-gap: 4vw;
+                grid-template-areas: 
+                    "img h1"
+                    "img p";
+            }
+            .event-header h1 {
+                grid-area: h1;
+                align-self: end;
+                margin: 0;
+            }
+            .event-header p {
+                grid-area: p;
+                align-self: start;
+                margin: 0;
+            }
+            .event-header img{
+                width: 100%;
+                border-radius: 50%;
+                aspect-ratio: 1/1;
+                grid-area: img;
+            }
+            nav.schedule-nav {
+                display: flex;
+                gap: 4vw;
+                font-size: 1.5em;
+            }
+            .schedule {
+                padding: 7vw 4vw 0 4vw;
+                overflow: auto;
+                height: 70vh;
+                display: flex;
+                flex-direction: column;
+                gap: 3vh;
+            }
+            
+            .event {
+                display: grid;
+                grid-template-areas: 
+                    "date       button"
+                    "location   button"
+                    "specifics  button"
+                ;
+                align-items: start;
+                font-size: 2rem;
+            }
+            .event div {
+                display: flex;
+                gap: 4vw;
+            }
+            .event h3 {
+                grid-area: date;
+                margin: 0;
+            }
+            .event div p {
+                margin: 0;
+            }
+            .event button {
+                grid-area: button;
+                padding: 1vw;
+                border-radius: 1vw;
+                border: none;
+                background-color: #3a4853;
+                color: white;
+                font-size: 1em;
+                width: fit-content;
+                justify-self: end;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <header>
+                <nav class="main-nav">
+                    <a href="">←</a>
+                    <a href="">🔔</a>
+                </nav>
+                <div class="event-header">
+                    <img alt="Katy Perry Face" src="https://media.glamour.com/photos/5695e73593ef4b09520f5445/master/w_1600%2Cc_limit/beauty-2013-07-katy-perry-no-alcohol-vogue-cover-main.jpg">
+                    <h1>Katy Perry</h1>
+                    <p>event schedule</p>
+                </div>
+                <nav class="schedule-nav">
+                    <a href="">November</a>
+                    <a href="">December</a>
+                </nav>
+            </header>
+            <div class="schedule">
+                <div class="event">
+                    <h3>NOV 26</h3>
+                    <p>Denver, CO, US</p>
+                    <div><p>📌 Pepsi Center</p><p>🕒 20:00</p></div>
+                    <button>🎟️ Buy Tickets</button>
+                </div>
+                <div class="event">
+                    <h3>NOV 28</h3>
+                    <p>Omaha, NE, US</p>
+                    <div><p>📌 BOK Center</p><p>🕒 20:00</p></div>
+                    <button>🎟️ Buy Tickets</button>
+                </div>
+                <div class="event">
+                    <h3>NOV 29</h3>
+                    <p>Tulsa, OK, US</p>
+                    <div><p>📌 Century Center</p><p>🕒 20:00</p></div>
+                    <button>🎟️ Buy Tickets</button>
+                </div>
+                <div class="event">
+                    <h3>NOV 30</h3>
+                    <p>St. Paul, MN, US</p>
+                    <div><p>📌 Xcel Center</p><p>🕒 20:00</p></div>
+                    <button>🎟️ Buy Tickets</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

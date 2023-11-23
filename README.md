@@ -13,9 +13,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦
+🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦
 
 ## Log
+
+### Day 11: November 23, 2023
+
+Finished the Scott Tolinski Level 1 Typescript Tutorial on Level Up Tutorials. Started out on the React + TS one, but it appeared quite a few things from the intro video were out of date, so I found a crash course by ByteGrad and started that. The ByteGrad course moves at a pretty breakneck pace and I've had to stop it several times. Still, it seems pretty informative!
 
 ### Day 10: November 22, 2023
 

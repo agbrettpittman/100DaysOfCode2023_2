@@ -6,6 +6,9 @@ import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [Ping, setPing] = useState(0)
+
+  const icon = <i></i>
 
   return (
     <>
@@ -18,7 +21,7 @@ function App() {
         </a>
       </div>
       <h1>Vite + React</h1>
-      <MyButton backgroundColor="red" fontSize={30} pillShape={true} />
+      <MyButton />
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

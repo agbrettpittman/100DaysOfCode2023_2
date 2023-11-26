@@ -13,9 +13,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦
+🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦🟦
 
 ## Log
+
+### Day 12: Nuvember 24, 2023
+
+I'm about 3/4 through ByteGrad's TypeScript in React crash course. Lots of concepts today, but conceptually, most of it is starting to make sense. The "as const" keyword seems fairly useful, as well as the "&" operator.
 
 ### Day 11: November 23, 2023
 

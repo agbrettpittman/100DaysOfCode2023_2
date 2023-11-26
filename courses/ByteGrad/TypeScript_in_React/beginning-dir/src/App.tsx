@@ -1,40 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import MyButton from './library/MyButton'
-import './App.css'
+import Counter from "./components/Counter"
+import Heading from "./components/Heading"
+import List from "./components/List"
+import Section from "./components/Section"
+import { useState } from "react"
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [Ping, setPing] = useState(0)
 
-  const icon = <i></i>
+    const [count, setCount] = useState<number>(0)
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <MyButton />
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <>
+            <Heading title="Hello World"/>
+            <Section title="Counter Section">
+                <Counter setCount={setCount}>Count is {count}</Counter>
+            </Section>
+            <Section title="List Component Below">
+                <List 
+                    items={["Item 1", "Item 2", "Item 3"]}
+                    render={(item) => <span className="bold gold">{item}</span>}
+                    icon={<span>🚀</span>}
+                />
+            </Section>
+        </>
+    )
 }
 
 export default App

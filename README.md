@@ -13,9 +13,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦🟦
+🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦🟦🟦
 
 ## Log
+
+### Day 13: November 25, 2023
+
+Finished Byte Grad's TypeScript in React course. It was very in-depth, and definitely a bit difficult to code along with. It's also a ton of knowledge to try to retain. It ended with 30 min to spare, so I watched David Gray's React Typescript Tutorial for Beginners video. I loved that one. It was super easy to code with and solidify concepts from the other videos. Tomorrow I'll start on a small practice project to tie in everything. Heck, maybe I'll make it using GraphQL too.
 
 ### Day 12: Nuvember 24, 2023
 

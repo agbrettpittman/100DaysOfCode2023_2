@@ -1,5 +1,5 @@
 import { randomBytes, pbkdf2Sync } from "crypto";
-import { UsersModel } from "./database/schemas";
+import { UsersModel } from "./database/schemas.js";
 
 const resolvers = {
     Query: {

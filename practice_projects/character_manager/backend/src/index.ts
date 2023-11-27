@@ -8,9 +8,9 @@ import { useServer } from "graphql-ws/lib/use/ws";
 import { Kind } from "graphql/language";
 import { createServer } from "http";
 import { WebSocketServer } from "ws";
-import { typeDefs } from "./typeDefs";
+import typeDefs from "./typeDefs.js";
 import mongoose from "mongoose";
-import resolvers from "./resolvers";
+import resolvers from "./resolvers.js"
 
 const db = mongoose.connection
 mongoose.connect("mongodb://localhost:27017/Character-Manager");

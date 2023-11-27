@@ -7,9 +7,13 @@ type User {
     name: String
     userName: String
     email: String
-    password: String
-    salt: String
 }
+
+type LoginPayload {
+    token: String
+    user: User
+}
+
 type Query {
     users: [User]
 }
@@ -21,8 +25,16 @@ input CreateUserInput {
     password: String!
 }
 
+input LoginUserInput {
+    userName: String!
+    password: String!
+}
+
 type Mutation {
     createUser(input: CreateUserInput): User
+    loginUser(input: LoginUserInput): LoginPayload
 }
 
 `;
+
+export default typeDefs

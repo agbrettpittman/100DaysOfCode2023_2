@@ -11,7 +11,9 @@ import { WebSocketServer } from "ws";
 import typeDefs from "./typeDefs.js";
 import mongoose from "mongoose";
 import resolvers from "./resolvers.js"
+import * as dotenv from 'dotenv';
 
+dotenv.config();
 const db = mongoose.connection
 mongoose.connect("mongodb://localhost:27017/Character-Manager");
 

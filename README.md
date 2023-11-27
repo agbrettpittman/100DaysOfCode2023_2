@@ -9,13 +9,20 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 🟪 = iCodeThis Challenge
 🟨 = GraphQL
 🟦 = TypeScript
+🟧 = Practice Project
 ❌ = Missed Day
 
 ### Chart
 
-🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦🟦🟦
+🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦🟦🟦🟧
 
 ## Log
+
+### Day 14: November 26, 2023
+
+Started on a small project to tie the last 2 weeks together. My wife gave me the idea of a "character manager" where users can create fictional characters, and then transfer the rights to those characters to others. There are currently other tools that allow for this; however, the point is to practice technology, not to implement an end-to-end solution. Definitely will not be implementing any kind of payment. That is WAY out of the scope of this practice project. Still, it's a project that I plan to iterate over and "redo" to test out new technologies since it covers several topics at a high level...basic CRUD, user auth and sessions, permissions, file uploads, and associations between entities.
+
+Today I got the Mongo DB turned up, and user creation from the GraphQL API working (including salting and hashing of the passwords)
 
 ### Day 13: November 25, 2023
 

@@ -14,9 +14,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲
+🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲
 
 ## Log
+
+### Day 16: November 28, 2023
+
+I think I've got auth working on the API side. Today I got refresh tokens to be stored in the MongoDB, created a route for extending the expiration on a token, and one for logging users out.
 
 ### Day 15: November 27, 2023
 

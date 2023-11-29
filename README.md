@@ -1,22 +1,26 @@
 # 100DaysOfCode2023_2
 
-This is my 2nd run through the 100 Days of Code challenge. I completed the challenge earlier this year as well. I previously started in January. This time I'm starting in November and plan to continue starting at that time each year (so hopefully I don't end up with another "..._2" directory / repo again). Last year I posted all of my log entries on Twitter. With the recent changes to Twitter (now X) and because I don't have premium, I am publishing on X and LinkedIn to hopefully get a bit more engagement. You can find my log entries on both of those. If I miss a day I simply add a day to the end of the challenge (Although I try to never miss a day, things do come up). I'll try to post my log entries here as well (I'll just copy from LinkedIn since it allows for longer posts). Below is a chart of each day's main activity. I'm also including a legend for the chart below.
+This is my 2nd run through the 100 Days of Code challenge. I completed the challenge earlier this year as well. I previously started in January. This time I'm starting in November and plan to continue starting at that time each year (so hopefully I don't end up with another "..._2" directory / repo again). Last year I posted all of my log entries on Twitter. With the recent changes to Twitter (now X) and because I don't have premium, I am publishing on X and LinkedIn to hopefully get a bit more engagement. You can find my log entries on both of those. If I miss a day I simply add a day to the end of the challenge (Although I try to never miss a day, things do come up). I'll try to post my log entries here as well (I'll just copy from LinkedIn since it allows for longer posts). Below is a chart of each day's main activity.
 
 ## Activity Overview
 
 ### Legend
 
-🟪 = iCodeThis Challenge
-🟨 = GraphQL
-🟦 = TypeScript
-🟧 = Practice Project
-❌ = Missed Day
+- 🟪 = iCodeThis Challenge
+- 🌴 = GraphQL
+- 🟦 = TypeScript
+- 🐲 = Practice Project (Character Manager) [ 🌴 , 🟦 ]
+- ❌ = Missed Day
 
 ### Chart
 
-🟪🟨🟨🟨🟨🟨🟨🟦🟦🟦🟦🟦🟦🟧
+🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲
 
 ## Log
+
+### Day 15: November 27, 2023
+
+Worked some more on the practice project. I broke my Mongoose schema and GraphQL typedefs and resolvers into separate files and ran into several issues with TypeScript. once I figured those out I got logins working with JWTs as the tokens. Probably will add refresh tokens to the DB tomorrow along with logouts and that will probably be about as far as I go with authentication. Authorization will be implemented as the features requiring it are.
 
 ### Day 14: November 26, 2023
 

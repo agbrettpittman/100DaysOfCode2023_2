@@ -10,7 +10,8 @@ type User {
 }
 
 type LoginPayload {
-    token: String
+    accessToken: String
+    refreshToken: String
     user: User
 }
 
@@ -33,6 +34,8 @@ input LoginUserInput {
 type Mutation {
     createUser(input: CreateUserInput): User
     loginUser(input: LoginUserInput): LoginPayload
+    logoutUser(refreshToken: String): Boolean
+    extendTokens(refreshToken: String): LoginPayload
 }
 
 `;

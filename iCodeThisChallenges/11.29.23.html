@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>11.29.23</title>
+    <style>
+        :root {
+            --main-color: #bc1f4b;
+        }
+
+        body {
+            background-color: #191b1d;
+            color: white;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .current-plan {
+            background-color: var(--main-color);
+            text-align: center;
+            border-radius: 0px 0px 5px 5px;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 30vw;
+        }
+        .current-plan p:nth-child(2){
+            font-weight: bold;
+        }
+        .main-content {
+            background-color: #191b1d;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30vw;
+        }
+        .main-content > header {
+            padding: 1em;
+            text-align: center;
+        }
+        .billing-cycle-switch {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1em;
+            gap: 10px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 2em;
+            height: 1em;
+            border-radius: 30px;
+            background-color: var(--main-color);
+        }
+        .switch div {
+            position: absolute;
+            top: 1px;
+            right: 2px;
+            width: 0.8em;
+            height: 0.8em;
+            border-radius: 50%;
+            background-color: white;
+            transition: transform 0.2s ease-in-out;
+        }
+        .billing-option {
+            background-color: #22262b;
+        }
+        .billing-option ul {
+            padding-left: 1em;
+            list-style: none;
+        }
+        .billing-option ul li {
+            margin-bottom: 1em;
+        }
+        .billing-option ul li::before{
+            content: "•";
+            color: var(--main-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+    </style>
+</head>
+<div>
+    <div class="current-plan">
+        <p>Your current plan:</p>
+        <p>Starter Trial • 500MAUs</p>
+    </div>
+    <div class="main-content">
+        <header>
+            <h2>Choose a plan</h2>
+            <div class="billing-cycle-switch">
+                <p>Billed monthly</p><div class="switch"><div></div></div><p>Billed annually</p>
+            </div>
+        </header>
+        <div class="billing-options">
+            <div class="billing-option">
+                <h3>Starter</h3>
+                <p>$19</p>
+                <ul>
+                    <li>500 MAUs</li>
+                    <li>3 projects</li>
+                    <li>Unlimited guides</li>
+                    <li>unlimited flows</li>
+                    <li>Unlimited branded themes</li>
+                    <li>Email support</li>
+                </ul>
+                <button>Choose Plan</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

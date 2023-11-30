@@ -32,7 +32,6 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 30vw;
         }
         .main-content > header {
             padding: 1em;
@@ -63,8 +62,30 @@
             background-color: white;
             transition: transform 0.2s ease-in-out;
         }
+        .billing-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 1em;
+        }
         .billing-option {
             background-color: #22262b;
+            display: grid;
+            align-content: space-between;
+            justify-items: center;
+            border-radius: 5px;
+            padding: 30px;
+            gap: 20px;
+        }
+        .billing-option h3 {
+            text-align: center;
+            margin: 0;
+        }
+        .billing-option p.price {
+            text-align: center;
+            font-size: 2.5em;
+            margin: 0;
+            font-weight: bold;
         }
         .billing-option ul {
             padding-left: 1em;
@@ -80,6 +101,17 @@
             display: inline-block;
             width: 1em;
             margin-left: -1em;
+        }
+        .billing-option button {
+            padding: 10px 2em;
+            width: fit-content;
+            background-color: transparent;
+            border: 1px solid var(--main-color);
+            color: white;
+            border-radius: 3px;
+        }
+        .billing-option button.active {
+            background-color: var(--main-color);
         }
     </style>
 </head>
@@ -98,7 +130,7 @@
         <div class="billing-options">
             <div class="billing-option">
                 <h3>Starter</h3>
-                <p>$19</p>
+                <p class="price">$19</p>
                 <ul>
                     <li>500 MAUs</li>
                     <li>3 projects</li>
@@ -109,6 +141,28 @@
                 </ul>
                 <button>Choose Plan</button>
             </div>
+            <div class="billing-option">
+                <h3>Pro</h3>
+                <p class="price">$99 / month</p>
+                <ul>
+                    <li>All starter features, plus:</li>
+                    <li>Unlimited projects</li>
+                    <li>Unlimited fully customizable themes</li>
+                    <li>A dedicated Customer Success Manager</li>
+                </ul>
+                <button class="active">Choose Plan</button>
+            </div>
+            <div class="billing-option">
+                <h3>Enterprise</h3>
+                <p class="price">Let's Talk!</p>
+                <ul>
+                    <li>All pro features</li>
+                    <li>Unlimited MAUs</li>
+                    <li>Dedicated environment</li>
+                    <li>Enterprise account administration</li>
+                    <li>Premium support and services</li>
+                </ul>
+                <button>Contact Us</button>
         </div>
     </div>
 </body>

@@ -14,9 +14,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲
+🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪
 
 ## Log
+
+### Day 17: November 29, 2023
+
+I was at work during this coding session, so rather than getting my full env for my practice project spun up there, I did an iCodeThis challenge today. I'm fairly happy with the results given that I limit myself to an hour for the challenges, so this is all in less than an hour with straight HTML and CSS. A lot of stuff definitely doesn't match the prompt, but, for me at least, the prompts are typically pretty challenging to complete in less than an hour (including writing the actual HTML). Therefore, part of the exercise is figuring out what the most important aspects are and which ones can be left off. I hate I didn't get to the dropdown for the pro version, but I spent a bit too much time on the grid for the options
 
 ### Day 16: November 28, 2023
 

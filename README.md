@@ -14,9 +14,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪
+🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲
 
 ## Log
+
+### Day 18, November 30, 2023
+
+Back to working on the practice project. Today I got parsing and validating the JWT in the GraphQL context, character creation, and transferring a character working. yay!
 
 ### Day 17: November 29, 2023
 

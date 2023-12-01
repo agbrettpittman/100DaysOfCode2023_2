@@ -1,5 +1,5 @@
 import { randomBytes, pbkdf2Sync } from "crypto";
-import { UsersModel, RefreshTokensModel } from "./database/schemas.js";
+import { UsersModel, RefreshTokensModel, CharactersModel } from "./database/schemas.js";
 import { GraphQLError } from "graphql";
 import jwt from 'jsonwebtoken';
 
@@ -99,6 +99,44 @@ const resolvers = {
                     }
                 });
             }
+        },
+        createCharacter: async (obj:{}, { input }, { userId}) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = new CharactersModel({
+                creatorId: userId,
+                ownerId: userId,
+                ...input
+            });
+            await character.save();
+            return character;
+        },
+        transferCharacter: async (obj:{}, { characterId, newOwnerId }, { userId }) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId);
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            await character.updateOne({ ownerId: newOwnerId });
+            return character;
         }
     }
 };

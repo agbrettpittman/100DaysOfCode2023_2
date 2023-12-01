@@ -9,6 +9,21 @@ type User {
     email: String
 }
 
+type CharacterAttribute {
+    name: String
+    value: String
+}
+
+type Character {
+    _id: ID!
+    creatorId: String
+    ownerId: String
+    name: String
+    subTitle: String
+    description: String
+    details: [CharacterAttribute]
+}
+
 type LoginPayload {
     accessToken: String
     refreshToken: String
@@ -16,7 +31,8 @@ type LoginPayload {
 }
 
 type Query {
-    users: [User]
+    users: [User],
+    characters: [Character]
 }
 
 input CreateUserInput {
@@ -31,11 +47,25 @@ input LoginUserInput {
     password: String!
 }
 
+input CharacterAttributeInput {
+    name: String!
+    value: String!
+}
+
+input CreateCharacterInput {
+    name: String!
+    subTitle: String
+    description: String
+    details: [CharacterAttributeInput]
+}
+
 type Mutation {
     createUser(input: CreateUserInput): User
     loginUser(input: LoginUserInput): LoginPayload
     logoutUser(refreshToken: String): Boolean
     extendTokens(refreshToken: String): LoginPayload
+    createCharacter(input: CreateCharacterInput): Character
+    transferCharacter(characterId: String!, newOwnerId: String!): Character
 }
 
 `;

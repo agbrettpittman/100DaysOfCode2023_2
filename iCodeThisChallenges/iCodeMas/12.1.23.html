@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>iCodeMas</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+            justify-items: center;
+            display: grid;
+            gap: 10vh;
+            padding-top: 80px;
+        }
+        .bg-image{
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        header {
+            background-color: white;
+            color: #1d7cb1;
+            padding: 2%;
+            border-radius: 10px;
+            width: fit-content;
+        }
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 10vw);
+            gap: 2%;
+            width: 50%;
+            margin: auto;
+            justify-items: center;
+            justify-content: space-evenly;
+        }
+        .countdown-card {
+            background-color: white;
+            color: #1d7cb1;
+            padding: 2%;
+            border: 4px solid #84d3f2;
+            border-radius: 10px;
+            width: 100%;
+            height: 30vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            position: relative
+        }
+        .countdown-card-number {
+            font-size: 10vh;
+            font-weight: bold;
+        }
+        .countdown-card-text {
+            font-size: 3vh;
+        }
+    </style>
+    <script type="text/javascript" defer>
+        var countDownDate = new Date("Dec 25, 2023 00:00:00").getTime();
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+            var days = Math.floor(distance/(1000*60*60*24));
+            var hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+            var minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+            var seconds = Math.floor((distance%(1000*60))/1000);
+            document.getElementsByClassName("countdown-card-number")[0].innerHTML = days;
+            document.getElementsByClassName("countdown-card-number")[1].innerHTML = hours;
+            document.getElementsByClassName("countdown-card-number")[2].innerHTML = minutes;
+            document.getElementsByClassName("countdown-card-number")[3].innerHTML = seconds;
+
+            if(distance<0){
+                clearInterval(x);
+                document.getElementsByClassName("countdown-card-number")[0].innerHTML = 0;
+                document.getElementsByClassName("countdown-card-number")[1].innerHTML = 0;
+                document.getElementsByClassName("countdown-card-number")[2].innerHTML = 0;
+                document.getElementsByClassName("countdown-card-number")[3].innerHTML = 0;
+            }
+        },1000);
+    </script>
+</head>
+<body>
+    <img class="bg-image" src="winterWonderLand.jpg" alt="Winter Wonderland" width="100%">
+    <header>
+        <h1>iCodeMas is Coming to Town</h1>
+        <p>Celebrate the Magic of the Season! Exclusive Christmas Challenges for 24 days!</p>
+    </header>
+    <div class="countdown">
+        <div class="countdown-card">
+            <div class="countdown-card-number">0</div>
+            <div class="countdown-card-text">Days</div>
+        </div>
+        <div class="countdown-card">
+            <div class="countdown-card-number">0</div>
+            <div class="countdown-card-text">Hours</div>
+        </div> 
+        <div class="countdown-card">
+            <div class="countdown-card-number">0</div>
+            <div class="countdown-card-text">Minutes</div>
+        </div>
+        <div class="countdown-card">
+            <div class="countdown-card-number">0</div>
+            <div class="countdown-card-text">Seconds</div>
+        </div>
+    </div>
+</body>
+</html>

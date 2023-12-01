@@ -12,6 +12,7 @@ import typeDefs from "./typeDefs.js";
 import mongoose from "mongoose";
 import resolvers from "./resolvers.js"
 import * as dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();
 const db = mongoose.connection
@@ -35,7 +36,17 @@ db.once('open', async () => {
         csrfPrevention: true,
         cache: 'bounded',
         context: ({ req }) => {
-            return { userId: 1 }
+            const token = req.headers.authorization || null;
+            if (token) {
+                try {
+                    const { userId, expiration } = jwt.verify(token, process.env.JWT_SECRET);
+                    if (new Date(expiration) < new Date()) throw new Error('Token expired');
+                    return { userId };
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+            return { userId: null };
         },
         plugins: [
             // Proper shutdown for the HTTP server.

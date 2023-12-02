@@ -7,7 +7,7 @@
   "scripts": {
     "compile": "tsc",
     "start": "npm run compile && node ./dist/index.js",
-    "dev": "nodemon --ignore 'dist/' --exec 'npm run start'"
+    "dev": "tsc -w & nodemon ./dist/index.js"
   },
   "keywords": [],
   "author": "",

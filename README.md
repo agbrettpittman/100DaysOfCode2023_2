@@ -14,9 +14,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲
+🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪
 
 ## Log
+
+### Day 19, December 1, 2023
+
+Worked on Day 1 of the iCodeThis iCodeMas challenge. Got the initial visuals done and decided it'd be cool to have little candy canes rotating above the card numbers. That part proved very difficult, so I didn't get to finish that in time. I'll need to use inkscape next time. I decide to create graphics like that on the fly.
 
 ### Day 18, November 30, 2023
 

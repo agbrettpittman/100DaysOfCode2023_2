@@ -52,8 +52,15 @@ input CharacterAttributeInput {
     value: String!
 }
 
-input CreateCharacterInput {
+input CharacterCreateInput {
     name: String!
+    subTitle: String
+    description: String
+    details: [CharacterAttributeInput]
+}
+
+input CharacterUpdateInput {
+    name: String
     subTitle: String
     description: String
     details: [CharacterAttributeInput]
@@ -64,7 +71,8 @@ type Mutation {
     loginUser(input: LoginUserInput): LoginPayload
     logoutUser(refreshToken: String): Boolean
     extendTokens(refreshToken: String): LoginPayload
-    createCharacter(input: CreateCharacterInput): Character
+    createCharacter(input: CharacterCreateInput): Character
+    updateCharacter(characterId: String!, input: CharacterUpdateInput): Character
     transferCharacter(characterId: String!, newOwnerId: String!): Character
 }
 

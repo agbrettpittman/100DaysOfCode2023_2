@@ -43,7 +43,7 @@ db.once('open', async () => {
                     if (new Date(expiration) < new Date()) throw new Error('Token expired');
                     return { userId };
                 } catch (err) {
-                    console.log(err)
+                    console.log(err.message);
                 }
             }
             return { userId: null };

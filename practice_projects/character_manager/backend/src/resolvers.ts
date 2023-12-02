@@ -7,6 +7,9 @@ const resolvers = {
     Query: {
         users: async () => {
             return await UsersModel.find();
+        },
+        characters: async () => {
+            return await CharactersModel.find();
         }
     },
 
@@ -115,6 +118,29 @@ const resolvers = {
             await character.save();
             return character;
         },
+        updateCharacter: async (obj:{}, { characterId, input }, { userId }) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId);
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
+            return UpdatedCharacter
+        },
         transferCharacter: async (obj:{}, { characterId, newOwnerId }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
@@ -135,8 +161,8 @@ const resolvers = {
                     http: { status: 401 }
                 }
             });
-            await character.updateOne({ ownerId: newOwnerId });
-            return character;
+            const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { ownerId: newOwnerId }, { new: true });
+            return UpdatedCharacter;
         }
     }
 };

@@ -14,9 +14,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪
+🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 
 ## Log
+
+### Day 20, December 2, 2023
+
+As much as I'd like to participate in iCodeThis's iCodeMas, I suspect I'll get more out of the 100 Days by focusing on what I wanted to learn. So, back to the practice project. Finally figured out auto restarting TS (should have been simple, I'm sure, but took a bit of research). I also got updates working and fixed a bug where updates and transfers were not returning the new values.
 
 ### Day 19, December 1, 2023
 

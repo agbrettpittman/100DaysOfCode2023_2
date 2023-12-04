@@ -4,7 +4,11 @@ import { GraphQLError } from "graphql";
 import { finished } from 'stream/promises';
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
+import mmm from 'mmmagic'
 import fs from 'fs';
+import { promisify } from "util";
+
+const { Magic, MAGIC_MIME_TYPE } = mmm;
 
 const resolvers = {
     Query: {
@@ -171,18 +175,48 @@ const resolvers = {
         },
         singleUpload: async (obj:{}, { file }) => {
             const { createReadStream, filename, mimetype, encoding } = await file;
-      
-            // Invoking the `createReadStream` will return a Readable Stream.
-            // See https://nodejs.org/api/stream.html#stream_readable_streams
             const stream = createReadStream();
       
-            // This is purely for demonstration purposes and will overwrite the
-            // local-file-output.txt in the current working directory on EACH upload.
-            const out = fs.createWriteStream('uploads/testFile');
+            const CurrDate = Date.now();
+            const FilePath = `uploads/file-${CurrDate}`;
+
+            const out = fs.createWriteStream(FilePath);
             stream.pipe(out);
+            
             await finished(out);
-      
-            return { filename, mimetype, encoding };
+            
+            console.log(`detecting file type for ${FilePath}`);
+            const magic = new Magic(MAGIC_MIME_TYPE);
+            const detectFilePromise = promisify(magic.detectFile.bind(magic));
+
+            try {
+                const result = await detectFilePromise(FilePath);
+                console.log(`file type detected as ${result}`);
+                // verify that the file is an image
+                if (!result.startsWith('image/')) {
+                    console.log('file is not an image');
+                    fs.unlink(FilePath, (err) => {
+                        if (err) throw err;
+                        console.log(`${FilePath} was deleted`);
+                    });
+                    // throw graphql 422 error
+                    throw new GraphQLError('File must be an image', {
+                        extensions: {
+                            code: 'INVALID_FILE_TYPE',
+                            http: { status: 422 }
+                        }
+                    });
+                } else {
+                    return { filename, mimetype, encoding };
+                }
+            } catch (err) {
+                throw new GraphQLError(err.message, {
+                    extensions: {
+                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                        http: { status: err.extensions?.http?.status || 500 }
+                    }
+                });
+            }
         },
     }
 };

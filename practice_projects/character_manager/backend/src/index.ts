@@ -34,7 +34,7 @@ db.once('open', async () => {
     const schema = makeExecutableSchema({ typeDefs, resolvers });
     const server = new ApolloServer({
         schema,
-        //csrfPrevention: true,
+        csrfPrevention: true,
         cache: 'bounded',
         context: ({ req }) => {
             // log the query if it is a mutation

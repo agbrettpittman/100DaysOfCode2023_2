@@ -20,6 +20,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 22, December 4, 2023
+
+Figured out what was going on with CSRF blocking my requests, then got file validation working (I'm locking the file uploads down to just images). Had to research a bit as to the best way to handle file validation and landed on using the mmmagic package.
+
 ### Day 21, December 3, 2023
 
 Got file uploads working today. It took quite a bit of effort. The recommended graphql-upload library did not work well with TS, so I replaced it with the graphql-upload-ts that is largely a drop-in replacement. Then I had to turn off CSRF prevention as that kept throwing errors when testing from the sandbox. I'll explore that tomorrow.

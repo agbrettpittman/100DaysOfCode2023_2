@@ -2,6 +2,14 @@ import gql from "graphql-tag";
 
 export const typeDefs = gql`
 
+scalar Upload
+
+type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+}
+
 type User {
     _id: ID!
     name: String
@@ -74,6 +82,7 @@ type Mutation {
     createCharacter(input: CharacterCreateInput): Character
     updateCharacter(characterId: String!, input: CharacterUpdateInput): Character
     transferCharacter(characterId: String!, newOwnerId: String!): Character
+    singleUpload(file: Upload!): File!
 }
 
 `;

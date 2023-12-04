@@ -1,7 +1,10 @@
 import { randomBytes, pbkdf2Sync } from "crypto";
 import { UsersModel, RefreshTokensModel, CharactersModel } from "./database/schemas.js";
 import { GraphQLError } from "graphql";
+import { finished } from 'stream/promises';
 import jwt from 'jsonwebtoken';
+import { GraphQLUpload } from "graphql-upload-ts";
+import fs from 'fs';
 
 const resolvers = {
     Query: {
@@ -12,6 +15,8 @@ const resolvers = {
             return await CharactersModel.find();
         }
     },
+
+    Upload: GraphQLUpload,
 
     Mutation: {
         createUser: async (obj:{}, { input }) => {
@@ -163,7 +168,22 @@ const resolvers = {
             });
             const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { ownerId: newOwnerId }, { new: true });
             return UpdatedCharacter;
-        }
+        },
+        singleUpload: async (obj:{}, { file }) => {
+            const { createReadStream, filename, mimetype, encoding } = await file;
+      
+            // Invoking the `createReadStream` will return a Readable Stream.
+            // See https://nodejs.org/api/stream.html#stream_readable_streams
+            const stream = createReadStream();
+      
+            // This is purely for demonstration purposes and will overwrite the
+            // local-file-output.txt in the current working directory on EACH upload.
+            const out = fs.createWriteStream('uploads/testFile');
+            stream.pipe(out);
+            await finished(out);
+      
+            return { filename, mimetype, encoding };
+        },
     }
 };
 

@@ -13,6 +13,7 @@ import mongoose from "mongoose";
 import resolvers from "./resolvers.js"
 import * as dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
+import { graphqlUploadExpress } from "graphql-upload-ts";
 
 dotenv.config();
 const db = mongoose.connection
@@ -33,9 +34,14 @@ db.once('open', async () => {
     const schema = makeExecutableSchema({ typeDefs, resolvers });
     const server = new ApolloServer({
         schema,
-        csrfPrevention: true,
+        //csrfPrevention: true,
         cache: 'bounded',
         context: ({ req }) => {
+            // log the query if it is a mutation
+            if (req.body.operationName !== 'IntrospectionQuery') {
+                console.log(req.body.query);
+                console.log(req.body.variables);
+            }
             const token = req.headers.authorization || null;
             if (token) {
                 try {
@@ -81,6 +87,9 @@ db.once('open', async () => {
   
     // More required logic for integrating with Express
     await server.start();
+
+    app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+
     server.applyMiddleware({
       app,
   

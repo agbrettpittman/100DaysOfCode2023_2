@@ -14,11 +14,14 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-
-🐲
+- 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
+- 🐲🟪
 
 ## Log
+
+### Day 23, December 5, 2023
+
+Had to do today's session from work again, so I did the iCodeThis iCodeMas challenge for day 5. Today's challenge was a bit easier, so I actually got to add some javascript functionality and a couple of small animations!
 
 ### Day 22, December 4, 2023
 

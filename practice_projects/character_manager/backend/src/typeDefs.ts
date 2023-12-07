@@ -22,6 +22,12 @@ type CharacterAttribute {
     value: String
 }
 
+type CharacterImage {
+    filename: String
+    mainPhoto: Boolean
+    caption: String
+}
+
 type Character {
     _id: ID!
     creatorId: String
@@ -30,6 +36,7 @@ type Character {
     subTitle: String
     description: String
     details: [CharacterAttribute]
+    images: [CharacterImage]
 }
 
 type LoginPayload {
@@ -60,11 +67,18 @@ input CharacterAttributeInput {
     value: String!
 }
 
+input CharacterImageDetailsInput {
+    mainPhoto: Boolean,
+    filename: String,
+    caption: String
+}
+
 input CharacterCreateInput {
     name: String!
     subTitle: String
     description: String
     details: [CharacterAttributeInput]
+    imageDetails: [CharacterImageDetailsInput]
 }
 
 input CharacterUpdateInput {
@@ -79,7 +93,7 @@ type Mutation {
     loginUser(input: LoginUserInput): LoginPayload
     logoutUser(refreshToken: String): Boolean
     extendTokens(refreshToken: String): LoginPayload
-    createCharacter(input: CharacterCreateInput): Character
+    createCharacter(input: CharacterCreateInput, images: [Upload]): Character
     updateCharacter(characterId: String!, input: CharacterUpdateInput): Character
     transferCharacter(characterId: String!, newOwnerId: String!): Character
     singleUpload(file: Upload!): File!

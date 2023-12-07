@@ -112,20 +112,105 @@ const resolvers = {
                 });
             }
         },
-        createCharacter: async (obj:{}, { input }, { userId}) => {
+        createCharacter: async (obj:{}, { input, images }, { userId}) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
                     code: 'UNAUTHORIZED',
                     http: { status: 401 }
                 }
             });
+            const { imageDetails, ...rest } = input;
+
+            if (images.length){
+                const UniqueFilenames = [...new Set(imageDetails.map((imageDetail) => imageDetail.filename))];
+                if (UniqueFilenames.length !== images.length) throw new GraphQLError('Must have unique filenames', {
+                    extensions: {
+                        code: 'INVALID_IMAGE_DETAILS',
+                        http: { status: 422 }
+                    }
+                });
+            }
+
+            if (imageDetails.length){
+                const MainPhotoCount = imageDetails.filter((imageDetail) => imageDetail.mainPhoto).length;
+                if (MainPhotoCount !== 1) throw new GraphQLError('Must have exactly one main photo', {
+                    extensions: {
+                        code: 'INVALID_IMAGE_DETAILS',
+                        http: { status: 422 }
+                    }
+                });
+            }
+
+
             const character = new CharactersModel({
                 creatorId: userId,
                 ownerId: userId,
-                ...input
+                ...rest
             });
             await character.save();
-            return character;
+
+            const CharacterId = character._id;
+            let imagesArray = [];
+            
+            for (const [index, image] of images.entries()) {
+
+                const { createReadStream, filename, mimetype, encoding } = await image;
+                const DetailsOfImage = imageDetails.find((imageDetail) => imageDetail.filename === filename);
+                const stream = createReadStream();
+      
+                const SystemFileName = `${CharacterId}-${index}`;
+                const FilePath = `uploads/${SystemFileName}`;
+
+                const out = fs.createWriteStream(FilePath);
+                stream.pipe(out);
+                
+                await finished(out);
+                
+                console.log(`detecting file type for ${FilePath}`);
+                const magic = new Magic(MAGIC_MIME_TYPE);
+                const detectFilePromise = promisify(magic.detectFile.bind(magic));
+
+                try {
+                    const result = await detectFilePromise(FilePath);
+                    console.log(`file type detected as ${result}`);
+                    // verify that the file is an image
+                    if (!result.startsWith('image/')) {
+                        console.log('file is not an image');
+                        fs.unlink(FilePath, (err) => {
+                            if (err) throw err;
+                            console.log(`${FilePath} was deleted`);
+                        });
+                        // throw graphql 422 error
+                        throw new GraphQLError('File must be an image', {
+                            extensions: {
+                                code: 'INVALID_FILE_TYPE',
+                                http: { status: 422 }
+                            }
+                        });
+                    } else {
+                        imagesArray.push({ 
+                            filename: SystemFileName, 
+                            mainPhoto: DetailsOfImage.mainPhoto,
+                            caption: DetailsOfImage.caption
+                        });
+                    }
+                } catch (err) {
+                    throw new GraphQLError(err.message, {
+                        extensions: {
+                            code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                            http: { status: err.extensions?.http?.status || 500 }
+                        }
+                    });
+                }
+            }
+
+            const UpdatedChracter = await CharactersModel.findByIdAndUpdate(
+                CharacterId, 
+                { images: imagesArray }, 
+                { new: true }
+            );
+
+            return UpdatedChracter;
         },
         updateCharacter: async (obj:{}, { characterId, input }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {

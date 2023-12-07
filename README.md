@@ -14,11 +14,18 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ### Chart
 
-🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-
-🐲
+- 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
+- 🐲🟪🐲
 
 ## Log
+
+### Day 24, December 6, 2023
+
+Pretty cool day today! I took what I figured out about uploading files and made it so that when you create a character you can upload multiple images for it along with an array specifying details about those images. This is all done via the API sandbox at the moment of course. I haven't gotten to the React frontend portion yet. The API will then map the images' filenames to the details array. It'll throw an error if it finds multiple images with the exact same file name. I'll make the frontend automatically give unique filenames when the user uploads the files, as the filenames are only necessary for the mapping. The details array contains information like the caption for the picture or if it is the character's main photo. The original file name is then discarded and a generic one is generated before being saved to the server for security purposes.
+
+### Day 23, December 5, 2023
+
+Had to do today's session from work again, so I did the iCodeThis iCodeMas challenge for day 5. Today's challenge was a bit easier, so I actually got to add some javascript functionality and a couple of small animations!
 
 ### Day 22, December 4, 2023
 

@@ -4,6 +4,7 @@ import { GraphQLError } from "graphql";
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
 import { handleImageUploads } from "./utils.js";
+import { Request } from "express";
 
 const resolvers = {
     Query: {
@@ -173,39 +174,49 @@ const resolvers = {
             const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
             return UpdatedCharacter
         },
-        uploadCharacterImages: async (obj:{}, { characterId, images }, { userId }) => {
-            if (!userId) throw new GraphQLError('Unauthorized', {
-                extensions: {
-                    code: 'UNAUTHORIZED',
-                    http: { status: 401 }
-                }
-            });
-            const character = await CharactersModel.findById(characterId);
-            if (!character) throw new GraphQLError('Character not found', {
-                extensions: {
-                    code: 'NOT_FOUND',
-                    http: { status: 404 }
-                }
-            });
-            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
-                extensions: {
-                    code: 'UNAUTHORIZED',
-                    http: { status: 401 }
-                }
-            });
+        uploadCharacterImages: async (obj:{}, { characterId, images }, { userId, req, res }) => {
 
             try {
+
+                if (!userId) throw new GraphQLError('Unauthorized', {
+                    extensions: {
+                        code: 'UNAUTHORIZED',
+                        http: { status: 401 }
+                    }
+                });
+                const character = await CharactersModel.findById(characterId);
+                if (!character) throw new GraphQLError('Character not found', {
+                    extensions: {
+                        code: 'NOT_FOUND',
+                        http: { status: 404 }
+                    }
+                });
+                if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                    extensions: {
+                        code: 'UNAUTHORIZED',
+                        http: { status: 401 }
+                    }
+                });
+    
                 const UpdatedCharacter = await handleImageUploads(characterId, images);
+                console.log("got updated character");
                 return UpdatedCharacter;
             } catch (err) {
-                console.log("Error in uploadCharacterImages: ", err.message);
-                throw new GraphQLError(err.message, {
+                console.log("got error");
+                const GQLError = new GraphQLError(err.message, {
                     extensions: {
                         code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
                         http: { status: err.extensions?.http?.status || 500 }
                     }
                 });
+                try {
+                    res.end(JSON.stringify(GQLError));
+                } catch (err) {
+                    console.log(err)
+                    throw GQLError
+                }
             }
+
         },
         transferCharacter: async (obj:{}, { characterId, newOwnerId }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
@@ -234,3 +245,15 @@ const resolvers = {
 };
 
 export default resolvers
+
+
+/*
+
+curl http://localhost:4000/ \
+    -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTY2OTJkNzU1NzE0ODRlZDgwOGMyMDEiLCJleHBpcmF0aW9uIjoiMjAyMy0xMi0wOFQxMzo0OTozMi41OTNaIiwiaWF0IjoxNzAyMDQyNzcyfQ.YJg-YmyYl9TJjEQ_wgo6s2v14ej4qW2oBx5Dwa0kl9U' \
+    -H 'Apollo-Require-Preflight: true' \
+ -F operations='{"query":"mutation UploadCharacterImages($characterId: String!, $images: [Upload]) {\n  uploadCharacterImages(characterId: $characterId, images: $images) {\n    _id\n    creatorId\n    ownerId\n    name\n    subTitle\n    description\n    details {\n      name\n      value\n    }\n    images {\n      filename\n      mainPhoto\n      caption\n    }\n  }\n}","operationName":"UploadCharacterImages","variables":{"characterId":"65727439c669f1330e4c935d","images":[null,null]}}' \
+ -F map='{"0":["variables.images.0"],"1":["variables.images.1"]}' \
+ -F 0=@christmasBG.jpg \,
+ -F 1=@zztestFile.txt \
+ */

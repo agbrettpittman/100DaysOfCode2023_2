@@ -36,7 +36,7 @@ db.once('open', async () => {
         schema,
         csrfPrevention: true,
         cache: 'bounded',
-        context: ({ req }) => {
+        context: ({ req, res }) => {
             // log the query if it is a mutation
             if (req.body.operationName !== 'IntrospectionQuery') {
                 console.log(req.body.query);
@@ -52,7 +52,7 @@ db.once('open', async () => {
                     console.log(err.message);
                 }
             }
-            return { userId: null };
+            return { userId: null, req, res }
         },
         plugins: [
             // Proper shutdown for the HTTP server.

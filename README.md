@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲
+- 🐲🟪🐲🐲🐲
 
 ## Log
+
+### Day 25, December 7, 2023
+
+I got uploading new files for a given character working. I started working on rolling back all uploads in a given request if there is a failure. I ran into an odd problem where Apollo's sandbox would hang and no longer be accessible at all. It seems to happen primarily when I try to submit multiple requests while one or more is hanging. It also seems like the sandbox either doesn't have a timeout, or a very high one. Trying to fix that took up a decent bit of time as well. The requests seemed to hang when throwing errors, so that was interesting too.
 
 ### Day 24, December 6, 2023
 

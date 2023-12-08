@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲
 
 ## Log
+
+### Day 26, December 8, 2023
+
+Finally figured out what was causing Apollo to hang. Essentially I was not properly handling/terminating the file streams on error. It was throwing me off because it seemed to only happen when a large file was added (that took a bit to figure out as well). Essentially, the request was being "paused" while the files were being read, and I was handling file validation as I read them in (so as to not save files unnecessarily to the server). So if an error was thrown while the file's read stream was open, the stream was not being properly closed, so the request was not being properly closed. Adding a `response.end()` to the catch of my resolver fixed this and properly passed the error to the server. This is the kind of stuff I was hoping to discover with this practice project, so this is a good thing.
 
 ### Day 25, December 7, 2023
 

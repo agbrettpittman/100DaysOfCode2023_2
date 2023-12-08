@@ -95,8 +95,8 @@ type Mutation {
     extendTokens(refreshToken: String): LoginPayload
     createCharacter(input: CharacterCreateInput, images: [Upload]): Character
     updateCharacter(characterId: String!, input: CharacterUpdateInput): Character
+    uploadCharacterImages(characterId: String!, images: [Upload]): Character
     transferCharacter(characterId: String!, newOwnerId: String!): Character
-    singleUpload(file: Upload!): File!
 }
 
 `;

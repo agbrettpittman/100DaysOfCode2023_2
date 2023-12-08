@@ -1,14 +1,9 @@
 import { randomBytes, pbkdf2Sync } from "crypto";
 import { UsersModel, RefreshTokensModel, CharactersModel } from "./database/schemas.js";
 import { GraphQLError } from "graphql";
-import { finished } from 'stream/promises';
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
-import mmm from 'mmmagic'
-import fs from 'fs';
-import { promisify } from "util";
-
-const { Magic, MAGIC_MIME_TYPE } = mmm;
+import { handleImageUploads } from "./utils.js";
 
 const resolvers = {
     Query: {
@@ -150,67 +145,10 @@ const resolvers = {
             await character.save();
 
             const CharacterId = character._id;
-            let imagesArray = [];
             
-            for (const [index, image] of images.entries()) {
+            const UpdatedCharacter = await handleImageUploads(CharacterId, images, imageDetails);
 
-                const { createReadStream, filename, mimetype, encoding } = await image;
-                const DetailsOfImage = imageDetails.find((imageDetail) => imageDetail.filename === filename);
-                const stream = createReadStream();
-      
-                const SystemFileName = `${CharacterId}-${index}`;
-                const FilePath = `uploads/${SystemFileName}`;
-
-                const out = fs.createWriteStream(FilePath);
-                stream.pipe(out);
-                
-                await finished(out);
-                
-                console.log(`detecting file type for ${FilePath}`);
-                const magic = new Magic(MAGIC_MIME_TYPE);
-                const detectFilePromise = promisify(magic.detectFile.bind(magic));
-
-                try {
-                    const result = await detectFilePromise(FilePath);
-                    console.log(`file type detected as ${result}`);
-                    // verify that the file is an image
-                    if (!result.startsWith('image/')) {
-                        console.log('file is not an image');
-                        fs.unlink(FilePath, (err) => {
-                            if (err) throw err;
-                            console.log(`${FilePath} was deleted`);
-                        });
-                        // throw graphql 422 error
-                        throw new GraphQLError('File must be an image', {
-                            extensions: {
-                                code: 'INVALID_FILE_TYPE',
-                                http: { status: 422 }
-                            }
-                        });
-                    } else {
-                        imagesArray.push({ 
-                            filename: SystemFileName, 
-                            mainPhoto: DetailsOfImage.mainPhoto,
-                            caption: DetailsOfImage.caption
-                        });
-                    }
-                } catch (err) {
-                    throw new GraphQLError(err.message, {
-                        extensions: {
-                            code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
-                            http: { status: err.extensions?.http?.status || 500 }
-                        }
-                    });
-                }
-            }
-
-            const UpdatedChracter = await CharactersModel.findByIdAndUpdate(
-                CharacterId, 
-                { images: imagesArray }, 
-                { new: true }
-            );
-
-            return UpdatedChracter;
+            return UpdatedCharacter;
         },
         updateCharacter: async (obj:{}, { characterId, input }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
@@ -235,6 +173,40 @@ const resolvers = {
             const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
             return UpdatedCharacter
         },
+        uploadCharacterImages: async (obj:{}, { characterId, images }, { userId }) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId);
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+
+            try {
+                const UpdatedCharacter = await handleImageUploads(characterId, images);
+                return UpdatedCharacter;
+            } catch (err) {
+                console.log("Error in uploadCharacterImages: ", err.message);
+                throw new GraphQLError(err.message, {
+                    extensions: {
+                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                        http: { status: err.extensions?.http?.status || 500 }
+                    }
+                });
+            }
+        },
         transferCharacter: async (obj:{}, { characterId, newOwnerId }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
@@ -257,51 +229,6 @@ const resolvers = {
             });
             const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { ownerId: newOwnerId }, { new: true });
             return UpdatedCharacter;
-        },
-        singleUpload: async (obj:{}, { file }) => {
-            const { createReadStream, filename, mimetype, encoding } = await file;
-            const stream = createReadStream();
-      
-            const CurrDate = Date.now();
-            const FilePath = `uploads/file-${CurrDate}`;
-
-            const out = fs.createWriteStream(FilePath);
-            stream.pipe(out);
-            
-            await finished(out);
-            
-            console.log(`detecting file type for ${FilePath}`);
-            const magic = new Magic(MAGIC_MIME_TYPE);
-            const detectFilePromise = promisify(magic.detectFile.bind(magic));
-
-            try {
-                const result = await detectFilePromise(FilePath);
-                console.log(`file type detected as ${result}`);
-                // verify that the file is an image
-                if (!result.startsWith('image/')) {
-                    console.log('file is not an image');
-                    fs.unlink(FilePath, (err) => {
-                        if (err) throw err;
-                        console.log(`${FilePath} was deleted`);
-                    });
-                    // throw graphql 422 error
-                    throw new GraphQLError('File must be an image', {
-                        extensions: {
-                            code: 'INVALID_FILE_TYPE',
-                            http: { status: 422 }
-                        }
-                    });
-                } else {
-                    return { filename, mimetype, encoding };
-                }
-            } catch (err) {
-                throw new GraphQLError(err.message, {
-                    extensions: {
-                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
-                        http: { status: err.extensions?.http?.status || 500 }
-                    }
-                });
-            }
         },
     }
 };

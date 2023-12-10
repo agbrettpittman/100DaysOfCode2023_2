@@ -8,69 +8,60 @@ import { Types as MonTypes} from "mongoose";
 
 const { Magic, MAGIC_MIME_TYPE } = mmm;
 
-export async function handleImageUploads(CharacterId:MonTypes.ObjectId, images:[any], imageDetails:[any?] = []){
-    
-
-    const CurrentCharacter = await CharactersModel.findById(CharacterId)
-    let imagesArray = CurrentCharacter?.images || [];
-    let filesWritten = []
-    const StartingIndex = imagesArray.length;
-
-    // write all files to disk
-    
-    try {
-        for (const [index, image] of images.entries()) {
-    
-            const { createReadStream, filename, mimetype, encoding } = await image;
-            const FileNumber = StartingIndex + index;
-            const stream = createReadStream();
-    
-            const SystemFileName = `${CharacterId}-${FileNumber}`;
-            const FilePath = `uploads/${SystemFileName}`;
-    
-            const out = fs.createWriteStream(FilePath);
-            stream.pipe(out);
-            
-            await finished(out);
-
-            filesWritten.push({SystemFileName, filename});
-        }
-    } catch (err) {
-
-        for (const FileWritten of filesWritten) {
-            const FilePath = `uploads/${FileWritten.SystemFileName}`;
-            fs.unlink(FilePath, (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                console.log(`${FilePath} was deleted`);
-            });
-        }
-
-        throw new GraphQLError(err.message, {
-            extensions: {
-                code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
-                http: { status: err.extensions?.http?.status || 500 }
-            }
+export async function consumeFileStreams(images:[any]) {
+    // generate random 32 character string
+    const RandomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const TempDirectory = `uploads/tmp/${RandomString}`;
+    let files = [];
+    if (!fs.existsSync(TempDirectory)) {
+        fs.mkdirSync(TempDirectory);
+    }
+    for (const [index, image] of images.entries()) {
+        const { createReadStream, filename } = await image;
+        const stream = createReadStream();
+        const SysFileName = `file-${index}`
+        const out = fs.createWriteStream(`${TempDirectory}/${SysFileName}`);
+        stream.pipe(out);
+        await finished(out);
+        files.push({ 
+            origFileName: filename,
+            sysFileName: SysFileName,
         });
     }
+    return { 
+        directory: TempDirectory,
+        files
+    };
+}
+
+export async function hanldeCharacterImages(CharacterId:MonTypes.ObjectId, tempDirectory:string, imageDetails:[any?] = []){
+    
+    const CurrentCharacter = await CharactersModel.findById(CharacterId)
+    let imagesArray = CurrentCharacter?.images || [];
+    const StartingIndex = imagesArray.length;
     
     try {
-                
-        for (const {SystemFileName, filename} of filesWritten) {
+
+        const files = fs.readdirSync(tempDirectory);
+        
+        for (const [index, fileName] of files.entries()) {
+
+            const FilePath = `${tempDirectory}/${fileName}`;
             
-            console.log(`detecting file type for ${SystemFileName}`);
+            console.log(`detecting file type for ${FilePath}`);
             const magic = new Magic(MAGIC_MIME_TYPE);
             const detectFilePromise = promisify(magic.detectFile.bind(magic));
-            let detailsOfImage = imageDetails.find((imageDetail) => imageDetail.filename === filename);
-            if (!detailsOfImage) detailsOfImage = { mainPhoto: false, caption: '' };
     
             try {
-                const result = await detectFilePromise(`uploads/${SystemFileName}`);
+                const result = await detectFilePromise(FilePath);
                 console.log(`file type detected as ${result}`);
                 // verify that the file is an image
                 if (!result.startsWith('image/')) {
+                    console.log('file is not an image');
+                    fs.unlink(FilePath, (err) => {
+                        if (err) throw err;
+                        console.log(`${FilePath} was deleted`);
+                    });
                     // throw graphql 422 error
                     throw new GraphQLError('File must be an image', {
                         extensions: {
@@ -79,11 +70,26 @@ export async function handleImageUploads(CharacterId:MonTypes.ObjectId, images:[
                         }
                     });
                 } else {
+
+                    let detailsOfImage = imageDetails.find((imageDetailEntry) => imageDetailEntry.filename === fileName);
+
+                    if (!detailsOfImage) {
+                        detailsOfImage = {
+                            mainPhoto: false,
+                            caption: ''
+                        }
+                    }
+
+                    const SystemFileName = `${CharacterId}-${StartingIndex + index}`;
+
                     imagesArray.push({ 
                         filename: SystemFileName, 
                         mainPhoto: detailsOfImage.mainPhoto,
                         caption: detailsOfImage.caption
                     });
+
+                    const NewFilePath = `uploads/${SystemFileName}`;
+                    fs.renameSync(FilePath, NewFilePath);
                 }
             } catch (err) {
                 throw new GraphQLError(err.message, {
@@ -94,7 +100,7 @@ export async function handleImageUploads(CharacterId:MonTypes.ObjectId, images:[
                 });
             }
         }
-        
+    
         const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(
             CharacterId, 
             { images: imagesArray }, 
@@ -104,21 +110,6 @@ export async function handleImageUploads(CharacterId:MonTypes.ObjectId, images:[
         return UpdatedCharacter;
 
     } catch (err) {
-        
-        for (const FileWritten of filesWritten) {
-            const FilePath = `uploads/${FileWritten.SystemFileName}`;
-            fs.unlink(FilePath, (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                console.log(`${FilePath} was deleted`);
-            });
-        }
-
-        console.log(err.message);
-        console.log("got past loop")
-
         throw new GraphQLError(err.message, {
             extensions: {
                 code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',

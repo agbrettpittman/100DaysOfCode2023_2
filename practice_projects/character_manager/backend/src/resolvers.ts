@@ -3,8 +3,10 @@ import { UsersModel, RefreshTokensModel, CharactersModel } from "./database/sche
 import { GraphQLError } from "graphql";
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
-import { handleImageUploads } from "./utils.js";
+import { consumeFileStreams, hanldeCharacterImages } from "./utils.js";
 import { Request } from "express";
+import fs from 'fs';
+import path from 'path';
 
 const resolvers = {
     Query: {
@@ -109,47 +111,72 @@ const resolvers = {
             }
         },
         createCharacter: async (obj:{}, { input, images }, { userId}) => {
-            if (!userId) throw new GraphQLError('Unauthorized', {
-                extensions: {
-                    code: 'UNAUTHORIZED',
-                    http: { status: 401 }
-                }
-            });
-            const { imageDetails, ...rest } = input;
 
-            if (images.length){
-                const UniqueFilenames = [...new Set(imageDetails.map((imageDetail) => imageDetail.filename))];
-                if (UniqueFilenames.length !== images.length) throw new GraphQLError('Must have unique filenames', {
-                    extensions: {
-                        code: 'INVALID_IMAGE_DETAILS',
-                        http: { status: 422 }
-                    }
-                });
-            }
-
-            if (imageDetails.length){
-                const MainPhotoCount = imageDetails.filter((imageDetail) => imageDetail.mainPhoto).length;
-                if (MainPhotoCount !== 1) throw new GraphQLError('Must have exactly one main photo', {
-                    extensions: {
-                        code: 'INVALID_IMAGE_DETAILS',
-                        http: { status: 422 }
-                    }
-                });
-            }
-
-
-            const character = new CharactersModel({
-                creatorId: userId,
-                ownerId: userId,
-                ...rest
-            });
-            await character.save();
-
-            const CharacterId = character._id;
+            let tempDirectory: string | null = null;
             
-            const UpdatedCharacter = await handleImageUploads(CharacterId, images, imageDetails);
+            try {
 
-            return UpdatedCharacter;
+                if (images.length){
+                    const ConsumedFiles = await consumeFileStreams(images)
+
+                    tempDirectory = ConsumedFiles.directory;
+                }
+
+                if (!userId) throw new GraphQLError('Unauthorized', {
+                    extensions: {
+                        code: 'UNAUTHORIZED',
+                        http: { status: 401 }
+                    }
+                });
+                const { imageDetails, ...rest } = input;
+
+                if (images.length){
+                    const UniqueFilenames = [...new Set(imageDetails.map((imageDetail) => imageDetail.filename))];
+                    console.log(UniqueFilenames, images.length)
+                    if (UniqueFilenames.length !== images.length) throw new GraphQLError('Must have unique filenames', {
+                        extensions: {
+                            code: 'INVALID_IMAGE_DETAILS',
+                            http: { status: 422 }
+                        }
+                    });
+                    if (imageDetails.length){
+                        const MainPhotoCount = imageDetails.filter((imageDetail) => imageDetail.mainPhoto).length;
+                        if (MainPhotoCount !== 1) throw new GraphQLError('Must have exactly one main photo', {
+                            extensions: {
+                                code: 'INVALID_IMAGE_DETAILS',
+                                http: { status: 422 }
+                            }
+                        });
+                    }
+                }
+
+
+
+                const character = new CharactersModel({
+                    creatorId: userId,
+                    ownerId: userId,
+                    ...rest
+                });
+                await character.save();
+
+                const CharacterId = character._id;
+                
+                const UpdatedCharacter = await hanldeCharacterImages(CharacterId, images, imageDetails);
+
+                return UpdatedCharacter;
+            } catch (err) {
+                throw new GraphQLError(err.message, {
+                    extensions: {
+                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                        http: { status: err.extensions?.http?.status || 500 }
+                    }
+                });
+            } finally {
+                console.log(tempDirectory)
+                if (tempDirectory) {
+                    fs.rmdirSync(tempDirectory, { recursive: true });
+                }
+            }
         },
         updateCharacter: async (obj:{}, { characterId, input }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
@@ -176,46 +203,50 @@ const resolvers = {
         },
         uploadCharacterImages: async (obj:{}, { characterId, images }, { userId, req, res }) => {
 
+            let tempDirectory: string | null = null;
+            
             try {
+                    const ConsumedFiles = await consumeFileStreams(images)
+                    tempDirectory = ConsumedFiles.directory;
 
-                if (!userId) throw new GraphQLError('Unauthorized', {
-                    extensions: {
-                        code: 'UNAUTHORIZED',
-                        http: { status: 401 }
-                    }
-                });
-                const character = await CharactersModel.findById(characterId);
-                if (!character) throw new GraphQLError('Character not found', {
-                    extensions: {
-                        code: 'NOT_FOUND',
-                        http: { status: 404 }
-                    }
-                });
-                if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
-                    extensions: {
-                        code: 'UNAUTHORIZED',
-                        http: { status: 401 }
-                    }
-                });
-    
-                const UpdatedCharacter = await handleImageUploads(characterId, images);
-                console.log("got updated character");
-                return UpdatedCharacter;
-            } catch (err) {
-                console.log("got error");
-                const GQLError = new GraphQLError(err.message, {
-                    extensions: {
-                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
-                        http: { status: err.extensions?.http?.status || 500 }
-                    }
-                });
-                try {
-                    res.end(JSON.stringify(GQLError));
+                    if (!userId) throw new GraphQLError('Unauthorized', {
+                        extensions: {
+                            code: 'UNAUTHORIZED',
+                            http: { status: 401 }
+                        }
+                    });
+                    const character = await CharactersModel.findById(characterId);
+                    if (!character) throw new GraphQLError('Character not found', {
+                        extensions: {
+                            code: 'NOT_FOUND',
+                            http: { status: 404 }
+                        }
+                    });
+                    if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                        extensions: {
+                            code: 'UNAUTHORIZED',
+                            http: { status: 401 }
+                        }
+                    });
+        
+                    const UpdatedCharacter = await hanldeCharacterImages(characterId, tempDirectory);
+
+                    return UpdatedCharacter;
+                    
                 } catch (err) {
-                    console.log(err)
-                    throw GQLError
+                    throw new GraphQLError(err.message, {
+                        extensions: {
+                            code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                            http: { status: err.extensions?.http?.status || 500 }
+                        }
+                    });
+                } finally {
+                    console.log(tempDirectory)
+                    if (tempDirectory) {
+                        fs.rmdirSync(tempDirectory, { recursive: true });
+                    }
                 }
-            }
+
 
         },
         transferCharacter: async (obj:{}, { characterId, newOwnerId }, { userId }) => {

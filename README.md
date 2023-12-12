@@ -15,9 +15,17 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 28, December 10, 2023
+
+Working on generalizing the image handling for characters so that I don't have to worry about it again. I got the uploading of files broken out and working in a generic fashion. This also means adding files on character create now works better as well. Now I'm figuring out how to handle adding the images to characters and handling partial success. eg when uploading multiple files, if one fails, all others should be attempted independently. Additionally, if you are uploading the files with a character creation, if something happens when uploading the files, but the actual creation of the character succeeds, you should still create the character, and alert the user of what exactly failed.
+
+### Day 27, December 9, 2023
+
+after some more research, I landed on just creating a temporary directory to save files to before validating. If an error is thrown, I either delete the erroneous file or the entire temporary directory. I was trying to avoid saving files that haven't been validated, but it does seem that that is the proper course for these things.
 
 ### Day 26, December 8, 2023
 

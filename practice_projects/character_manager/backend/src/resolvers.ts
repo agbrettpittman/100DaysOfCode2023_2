@@ -3,7 +3,7 @@ import { UsersModel, RefreshTokensModel, CharactersModel } from "./database/sche
 import { GraphQLError } from "graphql";
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
-import { consumeFileStreams, hanldeCharacterImages } from "./utils.js";
+import { consumeFileStreams, hanldeCharacterImages, validateCharacterImages } from "./utils.js";
 import { Request } from "express";
 import fs from 'fs';
 import path from 'path';
@@ -110,48 +110,34 @@ const resolvers = {
                 });
             }
         },
-        createCharacter: async (obj:{}, { input, images }, { userId}) => {
+        createCharacter: async (obj:{}, { input, images }, { userId }) => {
 
             let tempDirectory: string | null = null;
+            let consumedFiles = { directory: null, files: [] };
             
             try {
 
                 if (images.length){
-                    const ConsumedFiles = await consumeFileStreams(images)
-
-                    tempDirectory = ConsumedFiles.directory;
+                    console.log("Consuming files")
+                    consumedFiles = await consumeFileStreams(images)
+                    tempDirectory = consumedFiles.directory;
                 }
-
+                
+                console.log("Authorizing user")
                 if (!userId) throw new GraphQLError('Unauthorized', {
                     extensions: {
                         code: 'UNAUTHORIZED',
                         http: { status: 401 }
                     }
                 });
+
+                if (images.length) {
+                    console.log("Validating images")
+                    await validateCharacterImages(tempDirectory, consumedFiles.files, input.imageDetails);
+                }
                 const { imageDetails, ...rest } = input;
 
-                if (images.length){
-                    const UniqueFilenames = [...new Set(imageDetails.map((imageDetail) => imageDetail.filename))];
-                    console.log(UniqueFilenames, images.length)
-                    if (UniqueFilenames.length !== images.length) throw new GraphQLError('Must have unique filenames', {
-                        extensions: {
-                            code: 'INVALID_IMAGE_DETAILS',
-                            http: { status: 422 }
-                        }
-                    });
-                    if (imageDetails.length){
-                        const MainPhotoCount = imageDetails.filter((imageDetail) => imageDetail.mainPhoto).length;
-                        if (MainPhotoCount !== 1) throw new GraphQLError('Must have exactly one main photo', {
-                            extensions: {
-                                code: 'INVALID_IMAGE_DETAILS',
-                                http: { status: 422 }
-                            }
-                        });
-                    }
-                }
-
-
-
+                console.log("Creating character")
                 const character = new CharactersModel({
                     creatorId: userId,
                     ownerId: userId,
@@ -159,11 +145,22 @@ const resolvers = {
                 });
                 await character.save();
 
-                const CharacterId = character._id;
-                
-                const UpdatedCharacter = await hanldeCharacterImages(CharacterId, images, imageDetails);
-
-                return UpdatedCharacter;
+                if (images.length) {
+                    try {
+                        console.log("Adding images to character")
+                        const CharacterId = character._id;
+                        const UpdatedCharacter = await hanldeCharacterImages(CharacterId, tempDirectory, imageDetails);
+                        return UpdatedCharacter;
+                    }
+                    catch (err) {
+                        // delete character
+                        console.log(`Deleting character ${character._id}`)
+                        await CharactersModel.deleteOne({ _id: character._id });
+                        throw err;                      
+                    }
+                } else {
+                    return character;
+                }
             } catch (err) {
                 throw new GraphQLError(err.message, {
                     extensions: {
@@ -172,9 +169,8 @@ const resolvers = {
                     }
                 });
             } finally {
-                console.log(tempDirectory)
                 if (tempDirectory) {
-                    fs.rmdirSync(tempDirectory, { recursive: true });
+                    fs.rmSync(tempDirectory, { recursive: true });
                 }
             }
         },

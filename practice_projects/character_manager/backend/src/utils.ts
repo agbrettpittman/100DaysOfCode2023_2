@@ -9,30 +9,126 @@ import { Types as MonTypes} from "mongoose";
 const { Magic, MAGIC_MIME_TYPE } = mmm;
 
 export async function consumeFileStreams(images:[any]) {
-    // generate random 32 character string
-    const RandomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    const TempDirectory = `uploads/tmp/${RandomString}`;
-    let files = [];
-    if (!fs.existsSync(TempDirectory)) {
-        fs.mkdirSync(TempDirectory);
-    }
-    for (const [index, image] of images.entries()) {
-        const { createReadStream, filename } = await image;
-        const stream = createReadStream();
-        const SysFileName = `file-${index}`
-        const out = fs.createWriteStream(`${TempDirectory}/${SysFileName}`);
-        stream.pipe(out);
-        await finished(out);
-        files.push({ 
-            origFileName: filename,
-            sysFileName: SysFileName,
+    try {
+        // generate random 32 character string
+        const RandomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const TempDirectory = `uploads/tmp/${RandomString}`;
+        let files:[any?] = [];
+        if (!fs.existsSync(TempDirectory)) {
+            fs.mkdirSync(TempDirectory);
+        }
+        for (const [index, image] of images.entries()) {
+            const { createReadStream, filename } = await image;
+            const stream = createReadStream();
+            const SysFileName = `file-${index}`
+            const out = fs.createWriteStream(`${TempDirectory}/${SysFileName}`);
+            stream.pipe(out);
+            await finished(out);
+            files.push({ 
+                origFileName: filename,
+                sysFileName: SysFileName,
+            });
+        }
+        return { 
+            directory: TempDirectory,
+            files
+        };
+
+    } catch (err) {
+        throw new GraphQLError(err.message, {
+            extensions: {
+                code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                http: { status: err.extensions?.http?.status || 500 }
+            }
         });
     }
-    return { 
-        directory: TempDirectory,
-        files
-    };
 }
+
+export async function validateCharacterImages(
+    tempDirectory:string, fileNameMappings:any[], imageDetails:any[] = [], characterId:MonTypes.ObjectId = null
+) {
+    try {
+        const files = fs.readdirSync(tempDirectory);
+
+        let mainPhotoFound = false;
+
+        if (characterId) {
+            const CurrentCharacter = await CharactersModel.findById(characterId);
+            const CurrentImages = CurrentCharacter?.images || [];
+            mainPhotoFound = CurrentImages.some((image) => image.mainPhoto);
+        }
+
+        // verify that any image details only correspond to one file
+        imageDetails.forEach((imageDetailEntry) => {
+            const { filename } = imageDetailEntry;
+            const MatchingMappings = fileNameMappings.filter((fileNameMapping) => fileNameMapping.origFileName === filename);
+            if (MatchingMappings.length > 1) {
+                throw new GraphQLError('Multiple files found for the same details entry', {
+                    extensions: {
+                        code: 'INVALID_FILE_NAME',
+                        http: { status: 422 }
+                    }
+                });
+            }
+            if (imageDetailEntry.mainPhoto) {
+                if (mainPhotoFound) {
+                    throw new GraphQLError('Multiple main photos found', {
+                        extensions: {
+                            code: 'INVALID_FILE_NAME',
+                            http: { status: 422 }
+                        }
+                    });
+                } else {
+                    mainPhotoFound = true;
+                }
+            }
+        })
+
+        // validate the files themselves
+        for (const [index, fileName] of files.entries()) {
+            const FilePath = `${tempDirectory}/${fileName}`;
+            console.log(`detecting file type for ${FilePath}`);
+
+            // Verify that the file is an image
+            const magic = new Magic(MAGIC_MIME_TYPE);
+            const detectFilePromise = promisify(magic.detectFile.bind(magic));
+            const DetectedMIME = await detectFilePromise(FilePath);
+            console.log(`file type detected as ${DetectedMIME}`);
+            if (!DetectedMIME.startsWith('image/')) {
+                console.log('file is not an image');
+                // throw graphql 422 error
+                throw new GraphQLError('Files must be images', {
+                    extensions: {
+                        code: 'INVALID_FILE_TYPE',
+                        http: { status: 422 }
+                    }
+                });
+            }
+
+            // verify that there is only one image detail entry for the file
+            const { origFileName } = fileNameMappings.find((fileNameMapping) => fileNameMapping.sysFileName === fileName);
+            let detailsOfImage = imageDetails.filter((imageDetailEntry) => imageDetailEntry.filename === origFileName);
+
+            if (detailsOfImage.length > 1) {
+                throw new GraphQLError('Multiple image details found for the same file', {
+                    extensions: {
+                        code: 'INVALID_FILE_NAME',
+                        http: { status: 422 }
+                    }
+                });
+            }
+
+        }
+    } catch (err) {
+        throw new GraphQLError(err.message, {
+            extensions: {
+                code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                http: { status: err.extensions?.http?.status || 500 }
+            }
+        });
+    }
+}
+
 
 export async function hanldeCharacterImages(CharacterId:MonTypes.ObjectId, tempDirectory:string, imageDetails:[any?] = []){
     
@@ -42,63 +138,33 @@ export async function hanldeCharacterImages(CharacterId:MonTypes.ObjectId, tempD
     
     try {
 
+        console.log(`reading files from ${tempDirectory}`)
         const files = fs.readdirSync(tempDirectory);
         
         for (const [index, fileName] of files.entries()) {
 
             const FilePath = `${tempDirectory}/${fileName}`;
             
-            console.log(`detecting file type for ${FilePath}`);
-            const magic = new Magic(MAGIC_MIME_TYPE);
-            const detectFilePromise = promisify(magic.detectFile.bind(magic));
-    
-            try {
-                const result = await detectFilePromise(FilePath);
-                console.log(`file type detected as ${result}`);
-                // verify that the file is an image
-                if (!result.startsWith('image/')) {
-                    console.log('file is not an image');
-                    fs.unlink(FilePath, (err) => {
-                        if (err) throw err;
-                        console.log(`${FilePath} was deleted`);
-                    });
-                    // throw graphql 422 error
-                    throw new GraphQLError('File must be an image', {
-                        extensions: {
-                            code: 'INVALID_FILE_TYPE',
-                            http: { status: 422 }
-                        }
-                    });
-                } else {
+            let detailsOfImage = imageDetails.find((imageDetailEntry) => imageDetailEntry.filename === fileName);
 
-                    let detailsOfImage = imageDetails.find((imageDetailEntry) => imageDetailEntry.filename === fileName);
-
-                    if (!detailsOfImage) {
-                        detailsOfImage = {
-                            mainPhoto: false,
-                            caption: ''
-                        }
-                    }
-
-                    const SystemFileName = `${CharacterId}-${StartingIndex + index}`;
-
-                    imagesArray.push({ 
-                        filename: SystemFileName, 
-                        mainPhoto: detailsOfImage.mainPhoto,
-                        caption: detailsOfImage.caption
-                    });
-
-                    const NewFilePath = `uploads/${SystemFileName}`;
-                    fs.renameSync(FilePath, NewFilePath);
+            if (!detailsOfImage) {
+                detailsOfImage = {
+                    mainPhoto: false,
+                    caption: ''
                 }
-            } catch (err) {
-                throw new GraphQLError(err.message, {
-                    extensions: {
-                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
-                        http: { status: err.extensions?.http?.status || 500 }
-                    }
-                });
             }
+
+            const SystemFileName = `${CharacterId}-${StartingIndex + index}`;
+
+            imagesArray.push({ 
+                filename: SystemFileName, 
+                mainPhoto: detailsOfImage.mainPhoto,
+                caption: detailsOfImage.caption
+            });
+
+            const NewFilePath = `uploads/${SystemFileName}`;
+            console.log(`moving ${FilePath} to ${NewFilePath}`);
+            fs.renameSync(FilePath, NewFilePath);
         }
     
         const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(

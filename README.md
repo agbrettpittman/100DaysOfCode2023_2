@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 30, December 12, 2023
+
+I believe the API is mostly in a good place. Today I got editing image details, deleting images, deleting characters, all working and I fixed a bug that was preventing image details from being set correctly. I do need to go back through and actually take advantage of TypeScript throughout the Apollo GraphQL API, but I'll be focusing on understanding TypeScript while working on the frontend, which I'll start tomorrow. Hopefully by the end of that I'll have a good enough understanding of TypeScript to efficiently go back through and add more types to the API side.
 
 ### Day 29, December 11, 2023
 

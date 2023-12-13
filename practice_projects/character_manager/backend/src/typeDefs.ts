@@ -73,6 +73,13 @@ input CharacterImageDetailsInput {
     caption: String
 }
 
+input UpdateCharacterImageDetailsInput {
+    characterId: String!,
+    imageId: Int!,
+    mainPhoto: Boolean,
+    caption: String
+}
+
 input CharacterCreateInput {
     name: String!
     subTitle: String
@@ -96,6 +103,9 @@ type Mutation {
     createCharacter(input: CharacterCreateInput, images: [Upload]): Character
     updateCharacter(characterId: String!, input: CharacterUpdateInput): Character
     uploadCharacterImages(characterId: String!, images: [Upload]): Character
+    updateCharacterImageDetails(input: UpdateCharacterImageDetailsInput): Character
+    deleteCharacter(characterId: String!): Boolean
+    deleteCharacterImage(characterId: String!, imageId: Int!): Character
     transferCharacter(characterId: String!, newOwnerId: String!): Character
 }
 

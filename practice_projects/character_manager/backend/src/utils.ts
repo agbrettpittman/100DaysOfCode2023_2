@@ -8,7 +8,7 @@ import { Types as MonTypes} from "mongoose";
 
 const { Magic, MAGIC_MIME_TYPE } = mmm;
 
-export async function consumeFileStreams(images:[any]) {
+export async function consumeFileStreams(images:[any],imageDetails:any[] = []) {
     try {
         // generate random 32 character string
         const RandomString = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -31,7 +31,7 @@ export async function consumeFileStreams(images:[any]) {
         }
         return { 
             directory: TempDirectory,
-            files
+            files,
         };
 
     } catch (err) {
@@ -119,6 +119,16 @@ export async function validateCharacterImages(
             }
 
         }
+
+        return imageDetails.map((imageDetailEntry) => {
+            const { filename } = imageDetailEntry;
+            const MatchingMappings = fileNameMappings.filter((fileNameMapping) => fileNameMapping.origFileName === filename);
+            return {
+                ...imageDetailEntry,
+                filename: MatchingMappings[0].sysFileName
+            }
+        });
+
     } catch (err) {
         throw new GraphQLError(err.message, {
             extensions: {
@@ -138,13 +148,13 @@ export async function hanldeCharacterImages(CharacterId:MonTypes.ObjectId, tempD
     
     try {
 
-        console.log(`reading files from ${tempDirectory}`)
         const files = fs.readdirSync(tempDirectory);
         
         for (const [index, fileName] of files.entries()) {
 
             const FilePath = `${tempDirectory}/${fileName}`;
-            
+            console.log(imageDetails)
+            console.log(fileName)
             let detailsOfImage = imageDetails.find((imageDetailEntry) => imageDetailEntry.filename === fileName);
 
             if (!detailsOfImage) {

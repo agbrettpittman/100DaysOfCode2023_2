@@ -112,18 +112,18 @@ const resolvers = {
         },
         createCharacter: async (obj:{}, { input, images }, { userId }) => {
 
+            const { imageDetails, ...rest } = input;
             let tempDirectory: string | null = null;
             let consumedFiles = { directory: null, files: [] };
+            let remappedImageDetails = imageDetails;
             
             try {
 
                 if (images.length){
-                    console.log("Consuming files")
                     consumedFiles = await consumeFileStreams(images)
                     tempDirectory = consumedFiles.directory;
                 }
                 
-                console.log("Authorizing user")
                 if (!userId) throw new GraphQLError('Unauthorized', {
                     extensions: {
                         code: 'UNAUTHORIZED',
@@ -131,11 +131,13 @@ const resolvers = {
                     }
                 });
 
+                
+
                 if (images.length) {
-                    console.log("Validating images")
-                    await validateCharacterImages(tempDirectory, consumedFiles.files, input.imageDetails);
+                    remappedImageDetails = await validateCharacterImages(
+                        tempDirectory, consumedFiles.files, imageDetails
+                    );
                 }
-                const { imageDetails, ...rest } = input;
 
                 console.log("Creating character")
                 const character = new CharactersModel({
@@ -147,14 +149,14 @@ const resolvers = {
 
                 if (images.length) {
                     try {
-                        console.log("Adding images to character")
                         const CharacterId = character._id;
-                        const UpdatedCharacter = await hanldeCharacterImages(CharacterId, tempDirectory, imageDetails);
+                        const UpdatedCharacter = await hanldeCharacterImages(
+                            CharacterId, tempDirectory, remappedImageDetails
+                        );
                         return UpdatedCharacter;
                     }
                     catch (err) {
                         // delete character
-                        console.log(`Deleting character ${character._id}`)
                         await CharactersModel.deleteOne({ _id: character._id });
                         throw err;                      
                     }
@@ -224,6 +226,8 @@ const resolvers = {
                             http: { status: 401 }
                         }
                     });
+
+                    await validateCharacterImages(tempDirectory, ConsumedFiles.files);
         
                     const UpdatedCharacter = await hanldeCharacterImages(characterId, tempDirectory);
 
@@ -244,6 +248,120 @@ const resolvers = {
                 }
 
 
+        },
+        updateCharacterImageDetails: async (obj:{}, { input }, { userId }) => {
+            const { characterId, imageId, ...newDetails } = input;
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId);
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            let newImages = [...character.images]
+            if (!newImages[imageId]) throw new GraphQLError('Image not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+
+            newImages = newImages.map((image, index) => {
+                if (index === imageId) {
+                    return { ...image, ...newDetails }
+                } else if (newDetails.mainPhoto && image.mainPhoto) {
+                    return { ...image, mainPhoto: false }
+                } else {
+                    return image;
+                }
+            })
+
+            const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { images: newImages }, { new: true });
+
+            return UpdatedCharacter;
+
+        },
+        deleteCharacter: async (obj:{}, { characterId }, { userId }) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId);
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+
+            // delete images
+            for (const image of character.images) {
+                fs.rmSync(`uploads/${image.filename}`);
+            }
+
+            await CharactersModel.deleteOne({ _id: characterId });
+            return true;
+        },
+        deleteCharacterImage: async (obj:{}, { characterId, imageId }, { userId }) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId);
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const image = character.images[imageId];
+            if (!image) throw new GraphQLError('Image not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            fs.rmSync(`uploads/${image.filename}`);
+            character.images.splice(imageId, 1);
+
+            // loop through remaining images and rename them
+            for (let i = imageId; i < character.images.length; i++) {
+                const image = character.images[i];
+                const newFileName = `${characterId}-${i}`;
+                fs.renameSync(`uploads/${image.filename}`, `uploads/${newFileName}`);
+                image.filename = newFileName;
+            }
+
+            const UpdatedCharacter = await character.save();
+            return UpdatedCharacter;
         },
         transferCharacter: async (obj:{}, { characterId, newOwnerId }, { userId }) => {
             if (!userId) throw new GraphQLError('Unauthorized', {
@@ -272,15 +390,3 @@ const resolvers = {
 };
 
 export default resolvers
-
-
-/*
-
-curl http://localhost:4000/ \
-    -H 'Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTY2OTJkNzU1NzE0ODRlZDgwOGMyMDEiLCJleHBpcmF0aW9uIjoiMjAyMy0xMi0wOFQxMzo0OTozMi41OTNaIiwiaWF0IjoxNzAyMDQyNzcyfQ.YJg-YmyYl9TJjEQ_wgo6s2v14ej4qW2oBx5Dwa0kl9U' \
-    -H 'Apollo-Require-Preflight: true' \
- -F operations='{"query":"mutation UploadCharacterImages($characterId: String!, $images: [Upload]) {\n  uploadCharacterImages(characterId: $characterId, images: $images) {\n    _id\n    creatorId\n    ownerId\n    name\n    subTitle\n    description\n    details {\n      name\n      value\n    }\n    images {\n      filename\n      mainPhoto\n      caption\n    }\n  }\n}","operationName":"UploadCharacterImages","variables":{"characterId":"65727439c669f1330e4c935d","images":[null,null]}}' \
- -F map='{"0":["variables.images.0"],"1":["variables.images.1"]}' \
- -F 0=@christmasBG.jpg \,
- -F 1=@zztestFile.txt \
- */

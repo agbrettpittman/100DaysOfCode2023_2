@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 29, December 11, 2023
+
+I'm thinking file uploads are in a good place now. Most parts are in isolated utility functions, and error handling is working well. Need to handle deleting the files, modifying their captions, and selecting a main photo for the character. After that, I think I'll be good to move onto the front-end! This has taken longer than expected, but that is at least partially because I am having to come up with the architecture as well as learn the new frameworks. Once I have this done this time, it should be easier with future languages and frameworks as the architecture will already exist.
 
 ### Day 28, December 10, 2023
 

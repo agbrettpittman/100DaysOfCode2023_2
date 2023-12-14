@@ -19,6 +19,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 32, December 14, 2023
+
+Connected the frontend to the backend so that it's pulling a list of available characters. I also started playing with Apollo's code-gen tool. It seems like a neat tool, and a good way to allow for less type redundancy. I'm still trying to figure out typing the queries themselves. Typing the variables once they are there is easy. However, technically I don't *know* that the data will actually be there. So the answer to that would be to type the query. That seems very possible and like it should be easy; I'm just having a hard time understanding how to do it at the moment.
+
 ### Day 31, December 13, 2023
 
 Got started on the frontend. This is the first time I've really used Vite in any earnest. I worked with it briefly last round, but not long. I switched back to CRA because my focus was on automated testing, and it appeared Jest worked better with CRA. Additionally, our production React apps used CRA, so CRA was more applicable to our environment. Now CRA is dead, so there's a distinct need to learn Vite. I am loving how fast it is. The main focus though is TypeScript. TS isn't being too bad, but it's making certain things more difficult than it normally would be. That's how any new technology is going to be though, so I'm not holding it against TS (yet). Plus, I'm sure the things I'm accounting for I should have been anyways.

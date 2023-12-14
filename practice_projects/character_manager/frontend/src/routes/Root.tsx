@@ -1,4 +1,21 @@
+import { Outlet, Link, useLoaderData } from "react-router-dom";
+import { getCharacters } from "@/apiCalls";
+
+export async function loader() {
+    try {
+        const CharactersResponse = await getCharacters();
+        return { characters: CharactersResponse.data.characters };
+    } catch (error) {
+        console.log(error);
+        return { characters: [] };
+    }
+}
+
 export default function Root() {
+    const { characters } = useLoaderData() as { characters: any[] };
+
+    console.log(characters);
+
     return (
       <>
         <div id="sidebar">
@@ -27,17 +44,20 @@ export default function Root() {
             </form>
           </div>
           <nav>
-            <ul>
-              <li>
-                <a href={`/contacts/1`}>Your Name</a>
-              </li>
-              <li>
-                <a href={`/contacts/2`}>Your Friend</a>
-              </li>
-            </ul>
+            {characters.map((character) => (
+                <Link
+                    key={character.id}
+                    to={`/Characters/${character.id}`}
+                >
+                    {character.name}
+                </Link>
+                ))    
+            }
           </nav>
         </div>
-        <div id="detail"></div>
+        <div id="detail">
+            <Outlet />
+        </div>
       </>
     );
   }

@@ -1,6 +1,8 @@
 import { ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client';
 import { GetCharactersQuery, 
     GetCharactersQueryVariables, 
+    GetCharacterQuery,
+    GetCharacterQueryVariables,
     CreateCharacterMutation,
     CreateCharacterMutationVariables,
     CharacterCreateInput
@@ -49,7 +51,32 @@ export function getCharacters(){
                     }
                 }
             }
-        `
+export function getCharacter(id: string){
+    return ApolloClientInstance.query<GetCharacterQuery, GetCharacterQueryVariables>({
+        query: gql`
+            query getCharacter($id: String!) {
+                character(id: $id) {
+                    _id
+                    creatorId
+                    ownerId
+                    name
+                    subTitle
+                    description
+                    details {
+                        name
+                        value
+                    }
+                    images {
+                        filename
+                        mainPhoto
+                        caption
+                    }
+                }
+            }
+        `,
+        variables: {
+            id
+        }
     })
 }
 

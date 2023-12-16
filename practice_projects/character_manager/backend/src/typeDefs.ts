@@ -47,7 +47,8 @@ type LoginPayload {
 
 type Query {
     users: [User],
-    characters: [Character]
+    characters: [Character],
+    character(id: String!): Character
 }
 
 input CreateUserInput {

@@ -15,6 +15,9 @@ const resolvers = {
         },
         characters: async () => {
             return await CharactersModel.find();
+        },
+        character: async (obj:{}, { id }) => {
+            return await CharactersModel.findById(id);
         }
     },
 

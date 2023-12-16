@@ -8,6 +8,7 @@ import Root, {
     loader as rootLoader,
     action as rootAction
 } from "@routes/Root";
+import { loader as characterLoader } from "@routes/Character";
 import Character from "@routes/Character";
 import "./index.css";
 import ErrorPage from "./error-page";
@@ -21,8 +22,9 @@ const router = createBrowserRouter([
     action: rootAction,
     children: [
         {
-            path: "Characters/:CharacterId",
+            path: "Characters/:characterId",
             element: <Character />,
+            loader: characterLoader,
         }
     ],
   },

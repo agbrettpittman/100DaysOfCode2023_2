@@ -1,12 +1,34 @@
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client';
+import { GetCharactersQuery, 
+    GetCharactersQueryVariables, 
+    CreateCharacterMutation,
+    CreateCharacterMutationVariables,
+    CharacterCreateInput
+} from '@/__generated__/graphql';
+import { setContext } from '@apollo/client/link/context';
 
-const ApolloClientInstance = new ApolloClient({
-    uri: "http://localhost:4000/",
-    cache: new InMemoryCache()
-})
 
-export function getCharacters() {
-    return ApolloClientInstance.query({
+const httpLink = createHttpLink({
+    uri: 'http://localhost:4000/',
+  });
+  
+  const authLink = setContext((_, { headers }) => {
+    // Add your headers here
+    return {
+      headers: {
+        ...headers,
+        'Authorization': localStorage.getItem('accessToken') || '',
+      },
+    };
+  });
+  
+  const ApolloClientInstance = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+
+export function getCharacters(){
+    return ApolloClientInstance.query<GetCharactersQuery, GetCharactersQueryVariables>({
         query: gql`
             query getCharacters {
                 characters {
@@ -29,4 +51,48 @@ export function getCharacters() {
             }
         `
     })
+}
+
+export function createCharacter(){
+
+    const randomNumber = Math.floor(Math.random() * 1000)
+    const characterInput:CharacterCreateInput = {
+        description: "Blonde Hair Viking",
+        name: `Ragnar ${randomNumber}`,
+        subTitle: "Viking Leader",
+        details: [
+            {
+                name: "Dual Axes",
+                value: "Equipment"
+            }
+        ],
+    };
+
+    return ApolloClientInstance.mutate<CreateCharacterMutation, CreateCharacterMutationVariables>({
+        mutation: gql`
+            mutation createCharacter($input: CharacterCreateInput!) {
+                createCharacter(input: $input) {
+                    _id
+                    creatorId
+                    ownerId
+                    name
+                    subTitle
+                    description
+                    details {
+                        name
+                        value
+                    }
+                    images {
+                        filename
+                        mainPhoto
+                        caption
+                    }
+                }
+            }
+        `,
+        variables: {
+            input: characterInput
+        }
+    })
+
 }

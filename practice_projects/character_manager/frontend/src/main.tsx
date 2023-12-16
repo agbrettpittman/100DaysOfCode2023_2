@@ -4,7 +4,10 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Root, { loader as rootLoader } from "@routes/Root";
+import Root, { 
+    loader as rootLoader,
+    action as rootAction
+} from "@routes/Root";
 import Character from "@routes/Character";
 import "./index.css";
 import ErrorPage from "./error-page";
@@ -15,6 +18,7 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     loader: rootLoader,
+    action: rootAction,
     children: [
         {
             path: "Characters/:CharacterId",

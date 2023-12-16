@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 32, December 14, 2023
+
+Connected the frontend to the backend so that it's pulling a list of available characters. I also started playing with Apollo's code-gen tool. It seems like a neat tool, and a good way to allow for less type redundancy. I'm still trying to figure out typing the queries themselves. Typing the variables once they are there is easy. However, technically I don't *know* that the data will actually be there. So the answer to that would be to type the query. That seems very possible and like it should be easy; I'm just having a hard time understanding how to do it at the moment.
 
 ### Day 31, December 13, 2023
 

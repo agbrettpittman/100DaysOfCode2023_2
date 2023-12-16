@@ -29,7 +29,12 @@ export default function Root() {
     const [Token, setToken] = useState<string>("");
 
     useEffect(() => {
+        let lsToken = localStorage.getItem("accessToken");
+        if (!Token && lsToken) {
+            setToken(lsToken);
+        } else if (Token !== lsToken) {
         localStorage.setItem("accessToken", Token);
+        }
     }, [Token]);
 
     return (

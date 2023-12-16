@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 34, December 16, 2023
+
+Added the ability to go to the page of a given character and pull their data from the API. Ran into a problem for a bit caused by Apollo caching data by default, so had to disable that. At the same time as learning about GQL and TS, I'm also learning about browser routing with React Router. The last couple of times I used RR I used hash routing. Browser routing looks like it's better, so I'm trying to use that as well. 
 
 ### Day 33, December 15, 2023
 

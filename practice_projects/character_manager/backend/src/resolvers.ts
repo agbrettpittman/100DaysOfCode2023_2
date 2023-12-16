@@ -119,7 +119,7 @@ const resolvers = {
             
             try {
 
-                if (images.length){
+                if (images?.length){
                     consumedFiles = await consumeFileStreams(images)
                     tempDirectory = consumedFiles.directory;
                 }
@@ -133,7 +133,7 @@ const resolvers = {
 
                 
 
-                if (images.length) {
+                if (images?.length) {
                     remappedImageDetails = await validateCharacterImages(
                         tempDirectory, consumedFiles.files, imageDetails
                     );
@@ -147,7 +147,7 @@ const resolvers = {
                 });
                 await character.save();
 
-                if (images.length) {
+                if (images?.length) {
                     try {
                         const CharacterId = character._id;
                         const UpdatedCharacter = await hanldeCharacterImages(

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 export async function action() {
     try {
         const CharacterResponse = await createCharacter();
-        console.log(CharacterResponse.data)
+        await getCharacters(false)
         return { character: CharacterResponse.data}
     } catch (error) {
         console.log(error);
@@ -16,7 +16,7 @@ export async function action() {
 
 export async function loader() {
     try {
-        const CharactersResponse = await getCharacters();
+        const CharactersResponse = await getCharacters(false);
         return { characters: CharactersResponse.data.characters };
     } catch (error) {
         console.log(error);
@@ -33,7 +33,7 @@ export default function Root() {
         if (!Token && lsToken) {
             setToken(lsToken);
         } else if (Token !== lsToken) {
-        localStorage.setItem("accessToken", Token);
+            localStorage.setItem("accessToken", Token);
         }
     }, [Token]);
 

@@ -1,11 +1,12 @@
 import { ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client';
-import { GetCharactersQuery, 
+import { 
+    GetCharactersQuery, 
     GetCharactersQueryVariables, 
     GetCharacterQuery,
     GetCharacterQueryVariables,
     CreateCharacterMutation,
     CreateCharacterMutationVariables,
-    CharacterCreateInput
+    CharacterCreateInput,
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';
 
@@ -29,7 +30,7 @@ const httpLink = createHttpLink({
     cache: new InMemoryCache(),
   });
 
-export function getCharacters(){
+export function getCharacters(useCache = true){
     return ApolloClientInstance.query<GetCharactersQuery, GetCharactersQueryVariables>({
         query: gql`
             query getCharacters {
@@ -51,6 +52,11 @@ export function getCharacters(){
                     }
                 }
             }
+        `,
+        fetchPolicy: useCache ? 'cache-first' : 'no-cache'
+    })
+}
+
 export function getCharacter(id: string){
     return ApolloClientInstance.query<GetCharacterQuery, GetCharacterQueryVariables>({
         query: gql`
@@ -89,8 +95,8 @@ export function createCharacter(){
         subTitle: "Viking Leader",
         details: [
             {
-                name: "Dual Axes",
-                value: "Equipment"
+                name: "Equipment",
+                value: "Dual Axes"
             }
         ],
     };
@@ -123,3 +129,5 @@ export function createCharacter(){
     })
 
 }
+
+export default ApolloClientInstance;

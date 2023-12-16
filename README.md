@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 33, December 15, 2023
+
+Thanks to ChatGPT I feel like I halfway understand the types from @apollographql code gen. Not very well, but a bit. I also got character creates working from the frontend. Lots of today was conversing with Chat to try to understand how to use the types.
 
 ### Day 32, December 14, 2023
 

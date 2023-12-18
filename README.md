@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 35, December 17, 2023
+
+Got editing characters working. I'll need to add more in-depth editing in the future. I'm slowly understanding typing more. My brother gave me an idea for a name for the project: Lair of the Ancients. This is based on some Dungeons and Dragons lore that ancient dragons are able to shapeshift...similar to how RPG / tabletop players, fictional writers, and cosplayers "shift" into their various characters.
 
 ### Day 34, December 16, 2023
 

@@ -11,6 +11,7 @@ import Root, {
 import { loader as characterLoader } from "@routes/Character";
 import Character from "@routes/Character";
 import EditCharacter, { action as editAction} from "@routes/Edit";
+import { action as destroyAction } from "@routes/Destroy";
 import "./index.css";
 import ErrorPage from "./error-page";
 
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
             element: <EditCharacter />,
             loader: characterLoader,
             action: editAction,
+        },
+        {
+            path: "Characters/:characterId/destroy",
+            action: destroyAction,
         },
     ],
   },

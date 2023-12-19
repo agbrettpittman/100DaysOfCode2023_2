@@ -9,6 +9,7 @@ import {
     UpdateCharacterMutation,
     UpdateCharacterMutationVariables,
     DeleteCharacterMutation,
+    DeleteCharacterMutationVariables,
     CharacterCreateInput,
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';
@@ -163,6 +164,19 @@ export function updateCharacter(characterId: string, input: CharacterUpdateInput
     })
 
 
+}
+
+export function deleteCharacter(characterId: string){
+    return ApolloClientInstance.mutate<DeleteCharacterMutation, DeleteCharacterMutationVariables>({
+        mutation: gql`
+            mutation deleteCharacter($characterId: String!) {
+                deleteCharacter(characterId: $characterId)
+            }
+        `,
+        variables: {
+            characterId
+        }
+    })
 }
 
 export default ApolloClientInstance;

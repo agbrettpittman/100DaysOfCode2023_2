@@ -20,71 +20,60 @@ const SubTitle = styled.h2`
 `;
 
 export default function Character() {
-  const { character } = useLoaderData() as {character: CharacterType};
+    const { character } = useLoaderData() as {character: CharacterType};
 
-  return (
-    <div id="character">
-        {/*
-        <div>
-            <img
-            key={contact.avatar}
-            src={contact.avatar || ""}
-            />
-        </div>
-        */}
+    function handleDestroy(event: React.FormEvent<HTMLFormElement>) {
+        if (
+            !confirm(
+            "Please confirm you want to delete this record."
+            )
+        ) {
+            event.preventDefault();
+        }
+    }
 
-        <div>
-            <h1>
-                {character.name || <i>No Name</i>}
-                <Favorite character={character} />
-            </h1>
+    return (
+        <div id="character">
+            <div>
+                <h1>
+                    {character.name || <i>No Name</i>}
+                    <Favorite character={character} />
+                </h1>
 
                 {character.subTitle && (
-                <SubTitle>
+                    <SubTitle>
                         {character.subTitle}
-                </SubTitle>
-            )}
+                    </SubTitle>
+                )}
 
                 {character.description && (
                     <p>{character.description}</p>
                 )}
 
-            {character.details?.length && (
-                <ul>
-                    {character.details.map((detail) => {
-                        if (!detail?.name) return null;
-                        return (
-                            <li key={detail.name}>
-                                <strong>{detail.name}: </strong>
-                                {detail.value || <i>No Value</i>}
-                            </li>
-                        )
-                    })}
-                </ul>
-            )}
-            <div>
-            <Form action="edit">
-                <button type="submit">Edit</button>
-            </Form>
-            <Form
-                method="post"
-                action="destroy"
-                onSubmit={(event) => {
-                if (
-                    !confirm(
-                    "Please confirm you want to delete this record."
-                    )
-                ) {
-                    event.preventDefault();
-                }
-                }}
-            >
-                <button type="submit">Delete</button>
-            </Form>
+                {character.details?.length && (
+                    <ul>
+                        {character.details.map((detail) => {
+                            if (!detail?.name) return null;
+                            return (
+                                <li key={detail.name}>
+                                    <strong>{detail.name}: </strong>
+                                    {detail.value || <i>No Value</i>}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                )}
+                <div>
+                <Form action="edit">
+                    <button type="submit">Edit</button>
+                </Form>
+                <Form method="post" action="destroy" onSubmit={handleDestroy}>
+                    <button type="submit">Delete</button>
+                </Form>
+                </div>
             </div>
         </div>
-    </div>
-  );
+    );
 }
 
 function Favorite({ character }: { character: CharacterType }) {

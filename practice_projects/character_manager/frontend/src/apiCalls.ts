@@ -6,6 +6,9 @@ import {
     GetCharacterQueryVariables,
     CreateCharacterMutation,
     CreateCharacterMutationVariables,
+    UpdateCharacterMutation,
+    UpdateCharacterMutationVariables,
+    DeleteCharacterMutation,
     CharacterCreateInput,
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';

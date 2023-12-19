@@ -39,11 +39,15 @@ export default function Character() {
                 <Favorite character={character} />
             </h1>
 
-            {character.description && (
+                {character.subTitle && (
                 <SubTitle>
-                    {character.description}
+                        {character.subTitle}
                 </SubTitle>
             )}
+
+                {character.description && (
+                    <p>{character.description}</p>
+                )}
 
             {character.details?.length && (
                 <ul>

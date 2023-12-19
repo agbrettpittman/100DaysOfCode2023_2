@@ -43,6 +43,7 @@ html {
   button {
     color: #3992ff;
     font-weight: 500;
+    cursor: pointer;
   }
   
   textarea:hover,

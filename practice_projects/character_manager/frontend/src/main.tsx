@@ -10,6 +10,7 @@ import Root, {
 } from "@routes/Root";
 import { loader as characterLoader } from "@routes/Character";
 import Character from "@routes/Character";
+import EditCharacter, { action as editAction} from "@routes/Edit";
 import "./index.css";
 import ErrorPage from "./error-page";
 
@@ -25,7 +26,13 @@ const router = createBrowserRouter([
             path: "Characters/:characterId",
             element: <Character />,
             loader: characterLoader,
-        }
+        },
+        {
+            path: "Characters/:characterId/edit",
+            element: <EditCharacter />,
+            loader: characterLoader,
+            action: editAction,
+        },
     ],
   },
   

@@ -13,8 +13,12 @@ const resolvers = {
         users: async () => {
             return await UsersModel.find();
         },
-        characters: async () => {
-            return await CharactersModel.find();
+        characters: async (obj:{}, { name }) => {
+            let search = {};
+            if (name) {
+                search = { name: { $regex: name, $options: 'i' } }
+            }
+            return await CharactersModel.find(search);
         },
         character: async (obj:{}, { id }) => {
             return await CharactersModel.findById(id);

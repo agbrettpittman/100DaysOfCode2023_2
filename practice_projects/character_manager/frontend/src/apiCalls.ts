@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client';
 import { 
     GetCharactersQuery, 
-    GetCharactersQueryVariables, 
+    QueryCharactersArgs,
     GetCharacterQuery,
     GetCharacterQueryVariables,
     CreateCharacterMutation,
@@ -11,6 +11,7 @@ import {
     DeleteCharacterMutation,
     DeleteCharacterMutationVariables,
     CharacterCreateInput,
+    CharacterUpdateInput,
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';
 
@@ -34,11 +35,11 @@ const httpLink = createHttpLink({
     cache: new InMemoryCache(),
   });
 
-export function getCharacters(useCache = true){
-    return ApolloClientInstance.query<GetCharactersQuery, GetCharactersQueryVariables>({
+export function getCharacters(useCache = true, name = ""){
+    return ApolloClientInstance.query<GetCharactersQuery, QueryCharactersArgs>({
         query: gql`
-            query getCharacters {
-                characters {
+            query getCharacters($name: String) {
+                characters(name: $name) {
                     _id
                     creatorId
                     ownerId
@@ -57,6 +58,9 @@ export function getCharacters(useCache = true){
                 }
             }
         `,
+        variables: {
+            name
+        },
         fetchPolicy: useCache ? 'cache-first' : 'no-cache'
     })
 }

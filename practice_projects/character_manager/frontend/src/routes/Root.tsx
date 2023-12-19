@@ -1,22 +1,26 @@
-import { Outlet, Link, useLoaderData, Form } from "react-router-dom";
+import { Outlet, Link, useLoaderData, Form, NavLink, useNavigation } from "react-router-dom";
 import { getCharacters, createCharacter } from "@/apiCalls";
 import { Character } from "@/__generated__/graphql";
 import { useState, useEffect } from "react";
+import { redirect } from "react-router-dom";
 
 export async function action() {
     try {
         const CharacterResponse = await createCharacter();
         await getCharacters(false)
-        return { character: CharacterResponse.data}
+        if (!CharacterResponse?.data?.createCharacter?._id) throw new Error("No characterId");
+        return redirect(`/Characters/${CharacterResponse.data.createCharacter._id}/edit`);
     } catch (error) {
         console.log(error);
         return { character: {} }
     }
 }
 
-export async function loader() {
+export async function loader({ request }: { request: any }) {
     try {
-        const CharactersResponse = await getCharacters(false);
+        const url = new URL(request.url);
+        const q = url.searchParams.get("q") || ""
+        const CharactersResponse = await getCharacters(false,q);
         return { characters: CharactersResponse.data.characters };
     } catch (error) {
         console.log(error);
@@ -27,6 +31,7 @@ export async function loader() {
 export default function Root() {
     const { characters } = useLoaderData() as {characters: Character[]}
     const [Token, setToken] = useState<string>("");
+    const navigation = useNavigation();
 
     useEffect(() => {
         let lsToken = localStorage.getItem("accessToken");
@@ -42,27 +47,27 @@ export default function Root() {
         <div id="sidebar">
             <h1>Character Manager</h1>
             <div>
-                <form id="search-form" role="search">
-                <input
-                    id="q"
-                    aria-label="Search contacts"
-                    placeholder="Search"
-                    type="search"
-                    name="q"
-                />
-                    
-                <div
-                    id="search-spinner"
-                    aria-hidden
-                    hidden={true}
-                />
-                <div
-                    className="sr-only"
-                    aria-live="polite"
-                ></div>
-                </form>
+                <Form id="search-form" role="search">
+                    <input
+                        id="q"
+                        aria-label="Search contacts"
+                        placeholder="Search"
+                        type="search"
+                        name="q"
+                    />
+                        
+                    <div
+                        id="search-spinner"
+                        aria-hidden
+                        hidden={true}
+                    />
+                    <div
+                        className="sr-only"
+                        aria-live="polite"
+                    ></div>
+                </Form>
                 <Form method="post">
-                <button type="submit">New</button>
+                    <button type="submit">New</button>
                 </Form>
             </div>
             <input 

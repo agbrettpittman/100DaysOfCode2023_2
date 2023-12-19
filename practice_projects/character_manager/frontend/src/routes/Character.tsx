@@ -2,6 +2,7 @@ import { Form, useLoaderData } from "react-router-dom";
 import { getCharacter } from "@/apiCalls";
 import { Character as CharacterType } from "@/__generated__/graphql";
 import styled from "styled-components";
+import { Eye, EyeOff } from "@styled-icons/feather"
 
 export async function loader({ params }: { params:any}) {
     try {
@@ -13,10 +14,36 @@ export async function loader({ params }: { params:any}) {
     }
 }
 
+const CharacterTitle = styled.h1`
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    form {
+        display: flex;
+        align-items: center;
+    }
+`;
+
 const SubTitle = styled.h2`
     font-size: 1.5rem;
     font-weight: normal;
     margin: 0;
+`;
+
+const PrivateButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 1.5em;
+    color: #0074c9;
+    :hover {
+        color: #60829b;
+    }
 `;
 
 export default function Character() {
@@ -35,10 +62,10 @@ export default function Character() {
     return (
         <div id="character">
             <div>
-                <h1>
+                <CharacterTitle>
                     {character.name || <i>No Name</i>}
                     <Favorite character={character} />
-                </h1>
+                </CharacterTitle>
 
                 {character.subTitle && (
                     <SubTitle>
@@ -77,20 +104,20 @@ export default function Character() {
 }
 
 function Favorite({ character }: { character: CharacterType }) {
-    let favorite = true;
+    const CharacterIsPrivate = character.private;
     return (
         <Form method="post">
-        <button
+        <PrivateButton
             name="favorite"
-            value={favorite ? "false" : "true"}
+            value={CharacterIsPrivate ? "false" : "true"}
             aria-label={
-            favorite
-                ? "Remove from favorites"
-                : "Add to favorites"
+                CharacterIsPrivate
+                ? "Make Public"
+                : "Make Private"
             }
         >
-            {favorite ? "★" : "☆"}
-        </button>
+            {CharacterIsPrivate ? <Eye /> : <EyeOff />}
+        </PrivateButton>
         </Form>
     );
 }

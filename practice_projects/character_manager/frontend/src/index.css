@@ -57,28 +57,12 @@ html {
     transform: translateY(1px);
   }
   
-  #character h1 {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  #character h1 form {
-    display: flex;
-    align-items: center;
-    margin-top: 0.25rem;
-  }
   #character h1 form button {
     box-shadow: none;
-    font-size: 1.5rem;
-    font-weight: 400;
     padding: 0;
   }
   #character h1 form button[value="true"] {
     color: #a4a4a4;
-  }
-  #character h1 form button[value="true"]:hover,
-  #character h1 form button[value="false"] {
-    color: #eeb004;
   }
   
   form[action$="destroy"] button {
@@ -254,13 +238,6 @@ html {
   #character {
     max-width: 40rem;
     display: flex;
-  }
-  
-  #character h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.2;
   }
   
   #character h1 + p {

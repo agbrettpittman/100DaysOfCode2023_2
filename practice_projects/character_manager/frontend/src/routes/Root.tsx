@@ -1,4 +1,4 @@
-import { Outlet, Link, useLoaderData, Form, NavLink, useNavigation } from "react-router-dom";
+import { Outlet, Link, useLoaderData, Form, NavLink, useNavigation, useSubmit } from "react-router-dom";
 import { getCharacters, createCharacter } from "@/apiCalls";
 import { Character } from "@/__generated__/graphql";
 import { useState, useEffect } from "react";
@@ -21,7 +21,7 @@ export async function loader({ request }: { request: any }) {
         const url = new URL(request.url);
         const q = url.searchParams.get("q") || ""
         const CharactersResponse = await getCharacters(false,q);
-        return { characters: CharactersResponse.data.characters };
+        return { characters: CharactersResponse.data.characters, q };
     } catch (error) {
         console.log(error);
         return { characters: [] };
@@ -29,9 +29,13 @@ export async function loader({ request }: { request: any }) {
 }
 
 export default function Root() {
-    const { characters } = useLoaderData() as {characters: Character[]}
-    const [Token, setToken] = useState<string>("");
+    const { characters, q } = useLoaderData() as {characters: Character[], q: string};
+    const [Token, setToken] = useState("");
     const navigation = useNavigation();
+    const submit = useSubmit();
+
+    const DecodedSearchParams = navigation.location && new URLSearchParams(navigation.location.search)
+    const Searching =  DecodedSearchParams && DecodedSearchParams.get("q") !== null;
 
     useEffect(() => {
         let lsToken = localStorage.getItem("accessToken");
@@ -41,6 +45,19 @@ export default function Root() {
             localStorage.setItem("accessToken", Token);
         }
     }, [Token]);
+
+    useEffect(() => {
+        const SearchInput = document.getElementById("q") as HTMLInputElement;
+        if (!SearchInput) return;
+        SearchInput.value = q;
+    }, [q]);
+
+    function searchSubmit(e: React.ChangeEvent<HTMLInputElement>) {
+        const isFirstSearch = q == null;
+        submit(e.currentTarget.form, {
+            replace: !isFirstSearch,
+        });
+    }
 
     return (
       <>
@@ -54,12 +71,15 @@ export default function Root() {
                         placeholder="Search"
                         type="search"
                         name="q"
+                        defaultValue={q}
+                        onChange={searchSubmit}
+                        className={Searching ? "loading" : ""}
                     />
                         
                     <div
                         id="search-spinner"
                         aria-hidden
-                        hidden={true}
+                        hidden={!Searching}
                     />
                     <div
                         className="sr-only"

@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 36, December 18, 2023
+
+Got a simple index route setup, character deletion working, and searching by character name working. The query variables type from Apollo code gen did not get picked up, instead, it was put in the query args type. Not sure why or when to use one or the other. the code gen seems to export quite a few types and I'm having a difficult time deciphering when to use the different options.
 
 ### Day 35, December 17, 2023
 

@@ -71,17 +71,22 @@ export default function Root() {
             />
           <nav>
             {characters.map((character) => (
-                <Link
+                <NavLink
                     key={character._id}
                     to={`/Characters/${character._id}`}
+                    className={({ isActive, isPending }) =>
+                        isActive ? "active"
+                        : isPending ? "pending"
+                        : ""
+                    }
                 >
                     {character.name}
-                </Link>
+                </NavLink>
                 ))    
             }
           </nav>
         </div>
-        <div id="detail">
+        <div id="detail" className={navigation.state === "loading" ? "loading" : ""}>
             <Outlet />
         </div>
       </>

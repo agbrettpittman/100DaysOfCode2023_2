@@ -14,6 +14,7 @@ import EditCharacter, { action as editAction} from "@routes/Edit";
 import { action as destroyAction } from "@routes/Destroy";
 import "./index.css";
 import ErrorPage from "./error-page";
+import Index from "@routes/Index";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
     loader: rootLoader,
     action: rootAction,
     children: [
+        { index: true, element: <Index /> },
         {
             path: "Characters/:characterId",
             element: <Character />,

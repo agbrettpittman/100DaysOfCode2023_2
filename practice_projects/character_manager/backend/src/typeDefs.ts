@@ -37,6 +37,7 @@ type Character {
     description: String
     details: [CharacterAttribute]
     images: [CharacterImage]
+    private: Boolean
 }
 
 type LoginPayload {
@@ -85,6 +86,7 @@ input CharacterCreateInput {
     name: String!
     subTitle: String
     description: String
+    private: Boolean = false
     details: [CharacterAttributeInput]
     imageDetails: [CharacterImageDetailsInput]
 }
@@ -93,6 +95,7 @@ input CharacterUpdateInput {
     name: String
     subTitle: String
     description: String
+    private: Boolean
     details: [CharacterAttributeInput]
 }
 

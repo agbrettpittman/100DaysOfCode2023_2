@@ -46,6 +46,7 @@ export function getCharacters(useCache = true, name = ""){
                     name
                     subTitle
                     description
+                    private
                     details {
                         name
                         value
@@ -76,6 +77,7 @@ export function getCharacter(id: string){
                     name
                     subTitle
                     description
+                    private
                     details {
                         name
                         value
@@ -119,6 +121,7 @@ export function createCharacter(){
                     name
                     subTitle
                     description
+                    private
                     details {
                         name
                         value

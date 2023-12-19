@@ -15,9 +15,17 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 35, December 17, 2023
+
+Got editing characters working. I'll need to add more in-depth editing in the future. I'm slowly understanding typing more. My brother gave me an idea for a name for the project: Lair of the Ancients. This is based on some Dungeons and Dragons lore that ancient dragons are able to shapeshift...similar to how RPG / tabletop players, fictional writers, and cosplayers "shift" into their various characters.
+
+### Day 34, December 16, 2023
+
+Added the ability to go to the page of a given character and pull their data from the API. Ran into a problem for a bit caused by Apollo caching data by default, so had to disable that. At the same time as learning about GQL and TS, I'm also learning about browser routing with React Router. The last couple of times I used RR I used hash routing. Browser routing looks like it's better, so I'm trying to use that as well. 
 
 ### Day 33, December 15, 2023
 

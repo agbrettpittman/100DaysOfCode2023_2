@@ -133,4 +133,36 @@ export function createCharacter(){
 
 }
 
+export function updateCharacter(characterId: string, input: CharacterUpdateInput){
+    return ApolloClientInstance.mutate<UpdateCharacterMutation, UpdateCharacterMutationVariables>({
+        mutation: gql`
+            mutation updateCharacter($characterId: String!, $input: CharacterUpdateInput!) {
+                updateCharacter(characterId: $characterId, input: $input) {
+                    _id
+                    creatorId
+                    ownerId
+                    name
+                    subTitle
+                    description
+                    details {
+                        name
+                        value
+                    }
+                    images {
+                        filename
+                        mainPhoto
+                        caption
+                    }
+                }
+            }
+        `,
+        variables: {
+            characterId,
+            input
+        }
+    })
+
+
+}
+
 export default ApolloClientInstance;

@@ -3,6 +3,8 @@ import * as ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
+  createRoutesFromElements,
+  Route
 } from "react-router-dom";
 import Root, { 
     loader as rootLoader,
@@ -19,34 +21,25 @@ import "./index.css";
 import ErrorPage from "./error-page";
 import Index from "@routes/Index";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    loader: rootLoader,
-    action: rootAction,
-    children: [
-        { index: true, element: <Index /> },
-        {
-            path: "Characters/:characterId",
-            element: <Character />,
-            loader: characterLoader,
-        },
-        {
-            path: "Characters/:characterId/edit",
-            element: <EditCharacter />,
-            loader: characterLoader,
-            action: editAction,
-        },
-        {
-            path: "Characters/:characterId/destroy",
-            action: destroyAction,
-        },
-    ],
-  },
-  
-]);
+const router = createBrowserRouter( createRoutesFromElements(
+    <Route 
+        path="/" element={<Root />} errorElement={<ErrorPage />} 
+        loader={rootLoader} action={rootAction}
+    >
+        <Route errorElement={<ErrorPage />} >
+            <Route index={true} element={<Index />} />
+            <Route 
+                path="Characters/:characterId" element={<Character />} 
+                loader={characterLoader} action={characterAction} 
+            />
+            <Route 
+                path="Characters/:characterId/edit" element={<EditCharacter />} 
+                loader={characterLoader} action={editAction} 
+            />
+            <Route path="Characters/:characterId/destroy" action={destroyAction} />
+        </Route>
+    </Route>
+));    
 
 const RootElement = document.getElementById("root") as HTMLElement;
 

@@ -1,7 +1,8 @@
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { Character as CharacterType } from "@/__generated__/graphql";
+import { Character as CharacterType, CharacterAttribute, Maybe } from "@/__generated__/graphql";
 import { updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
+import { useState } from "react";
 
 export async function action({ request, params }: { request: any, params: any }) {
     const formData = await request.formData();
@@ -66,7 +67,27 @@ const ButtonBar = styled.div`
 export default function EditCharacter() {
 
     const { character } = useLoaderData() as {character: CharacterType};
+    const [CharacterDetails, setCharacterDetails] = useState(character.details);
     const navigate = useNavigate();
+
+    function changeCharacterDetail(e){
+        if (!CharacterDetails || !CharacterDetails.length) {
+            return;
+        }
+        const [detailIndex, detailKey] = e.target.name.split('.');
+        if (!detailIndex || !detailKey) {
+            return;
+        }
+        if (!CharacterDetails[detailIndex]) {
+            return;
+        }
+        let newDetails = [...CharacterDetails];
+        console.log(newDetails)
+        console.log(detailIndex, detailKey)
+        console.log(newDetails[detailIndex][detailKey])
+        newDetails[detailIndex][detailKey] = e.target.value;
+        setCharacterDetails(newDetails);
+    }
 
     return (
         <StyledForm id="contact-form" method="post">
@@ -97,6 +118,27 @@ export default function EditCharacter() {
                 rows={6}
             />
         </FormLabel>
+        {CharacterDetails && CharacterDetails.map((detail: Maybe<CharacterAttribute>, index: number) => {
+            if (!detail?.name || !detail?.value) {
+                return null;
+            }
+            return (
+                <FormLabel key={index}>
+                    <input
+                        type="text"
+                        defaultValue={detail.name}
+                        name={`${index}.name`}
+                        onChange={changeCharacterDetail}
+                    />
+                    <input
+                        type="text"
+                        defaultValue={detail.value}
+                        name={`${index}.value`}
+                        onChange={changeCharacterDetail}
+                    />
+                </FormLabel>
+            )
+        })}
         <ButtonBar>
             <button type="submit">Save</button>
             <button type="button"

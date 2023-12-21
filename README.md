@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 37, December 19, 2023
+
+Got live searching when the user types in the search bar working, detecting when data is loading, the API now has a way to specify a given character as "private" to that user, and the frontend can display that that character is private.
 
 ### Day 36, December 18, 2023
 

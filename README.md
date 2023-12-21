@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 38, December 20, 2023
+
+Today I added the ability to set a given character as private, added 404 errors that allowed the nav to still be visible, and converted the routes to the JSX format. I definitely prefer that format, and it's similar to what I've done in the past when working with React Router. That finished the React Router tutorial. I started on personal changes now to fill in the gaps that the tutorial didn't necessarily cover. I started with working on making character attributes editable. 
 
 ### Day 37, December 19, 2023
 

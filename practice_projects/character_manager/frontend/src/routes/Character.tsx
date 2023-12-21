@@ -1,13 +1,26 @@
-import { Form, useLoaderData } from "react-router-dom";
-import { getCharacter } from "@/apiCalls";
+import { Form, useFetcher, useLoaderData } from "react-router-dom";
+import { getCharacter, updateCharacter } from "@/apiCalls";
 import { Character as CharacterType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff } from "@styled-icons/feather"
 
 export async function loader({ params }: { params:any}) {
+    const NoCharacterError = new Response("No character returned", {
+        status: 404,
+        statusText: "Character Not Found",
+    });
     try {
         const CharacterResponse = await getCharacter(params.characterId);
+        if (!CharacterResponse?.data?.character?._id) {
+            throw NoCharacterError
+        }
         return { character: CharacterResponse.data.character };
+    } catch (error) {
+        console.log(error);
+        throw NoCharacterError
+    }
+}
+
 export async function action({ request, params }: { request: any, params: any }) {
     try {
         let formData = await request.formData();
@@ -122,17 +135,17 @@ function Favorite({ character }: { character: CharacterType }) {
 
     return (
         <FetcherForm method="post">
-        <PrivateButton
+            <PrivateButton
                 name="private"
                 value={characterIsPrivate ? "false" : "true"}
-            aria-label={
+                aria-label={
                     characterIsPrivate
-                ? "Make Public"
-                : "Make Private"
-            }
-        >
+                    ? "Make Public"
+                    : "Make Private"
+                }
+            >
                 {characterIsPrivate ? <Eye /> : <EyeOff />}
-        </PrivateButton>
+            </PrivateButton>
         </FetcherForm>
     );
 }

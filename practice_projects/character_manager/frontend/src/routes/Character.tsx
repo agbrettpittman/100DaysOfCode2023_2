@@ -8,6 +8,15 @@ export async function loader({ params }: { params:any}) {
     try {
         const CharacterResponse = await getCharacter(params.characterId);
         return { character: CharacterResponse.data.character };
+export async function action({ request, params }: { request: any, params: any }) {
+    try {
+        let formData = await request.formData();
+        const UpdatedCharacter = await updateCharacter(params.characterId, {
+            private: formData.get("private") === "true",
+        });
+        if (!UpdatedCharacter?.data?.updateCharacter?._id) throw new Error("No character returned");
+        console.log(UpdatedCharacter.data.updateCharacter)
+        return { character: UpdatedCharacter.data.updateCharacter };
     } catch (error) {
         console.log(error);
         return { character: {} };
@@ -104,20 +113,26 @@ export default function Character() {
 }
 
 function Favorite({ character }: { character: CharacterType }) {
-    const CharacterIsPrivate = character.private;
+    const { Form:FetcherForm, formData:FetcherFormData } = useFetcher()
+    let characterIsPrivate = character.private;
+
+    if (FetcherFormData) {
+        characterIsPrivate = FetcherFormData.get("private") === "true";
+    }
+
     return (
-        <Form method="post">
+        <FetcherForm method="post">
         <PrivateButton
-            name="favorite"
-            value={CharacterIsPrivate ? "false" : "true"}
+                name="private"
+                value={characterIsPrivate ? "false" : "true"}
             aria-label={
-                CharacterIsPrivate
+                    characterIsPrivate
                 ? "Make Public"
                 : "Make Private"
             }
         >
-            {CharacterIsPrivate ? <Eye /> : <EyeOff />}
+                {characterIsPrivate ? <Eye /> : <EyeOff />}
         </PrivateButton>
-        </Form>
+        </FetcherForm>
     );
 }

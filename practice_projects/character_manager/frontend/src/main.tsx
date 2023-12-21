@@ -8,7 +8,10 @@ import Root, {
     loader as rootLoader,
     action as rootAction
 } from "@routes/Root";
-import { loader as characterLoader } from "@routes/Character";
+import { 
+    loader as characterLoader,
+    action as characterAction
+} from "@routes/Character";
 import Character from "@routes/Character";
 import EditCharacter, { action as editAction} from "@routes/Edit";
 import { action as destroyAction } from "@routes/Destroy";

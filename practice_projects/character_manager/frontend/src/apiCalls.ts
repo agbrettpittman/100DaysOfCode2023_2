@@ -152,6 +152,7 @@ export function updateCharacter(characterId: string, input: CharacterUpdateInput
                     name
                     subTitle
                     description
+                    private
                     details {
                         name
                         value

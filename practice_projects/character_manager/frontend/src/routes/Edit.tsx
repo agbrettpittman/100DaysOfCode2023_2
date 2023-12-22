@@ -82,7 +82,7 @@ export default function EditCharacter() {
                     name: detail.name,
                     value: detail.value
                 }
-            })
+            }).filter( (detail: Maybe<CharacterAttribute>) => detail !== null);
         }
 
         try {
@@ -145,9 +145,18 @@ export default function EditCharacter() {
                         defaultValue={detail?.value || ''}
                         onChange={(e) => changeCharacterDetail(e, index, 'value')}
                     />
+                    <button type="button" onClick={() => {
+                        let newDetails = _.cloneDeep(CharacterDetails);
+                        newDetails.splice(index, 1);
+                        setCharacterDetails(newDetails);
+                    }}>Remove</button>
                 </FormLabel>
             )
         })}
+
+        <ButtonBar>
+            <button type="button" onClick={() => setCharacterDetails([...CharacterDetails, {name: '', value: ''}])}>Add Detail</button>
+        </ButtonBar>
 
         <ButtonBar>
             <button type="submit">Save</button>

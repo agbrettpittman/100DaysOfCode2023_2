@@ -19,6 +19,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 39, December 21, 2023
+
+Typescript was kicking my absolute tail today, but finally got the ability to edit the attributes of a given character working. At times it seems like TS's logic parser can't connect certain statements, other-times it feels like magic. I suspect it just takes getting used to and learning the little "gotchas" like everything else.
+
 ### Day 38, December 20, 2023
 
 Today I added the ability to set a given character as private, added 404 errors that allowed the nav to still be visible, and converted the routes to the JSX format. I definitely prefer that format, and it's similar to what I've done in the past when working with React Router. That finished the React Router tutorial. I started on personal changes now to fill in the gaps that the tutorial didn't necessarily cover. I started with working on making character attributes editable. 

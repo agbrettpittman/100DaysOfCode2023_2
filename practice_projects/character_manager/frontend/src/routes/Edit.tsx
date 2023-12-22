@@ -3,27 +3,7 @@ import { Character as CharacterType, CharacterAttribute, Maybe } from "@/__gener
 import { updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
 import { useState } from "react";
-
-export async function action({ request, params }: { request: any, params: any }) {
-    const formData = await request.formData();
-    const updates: { [key: string]: string } = Object.fromEntries(formData)
-
-    try {
-
-        if (!params.characterId) {
-            throw new Error("Missing characterId");
-        } else if (typeof params.characterId !== "string") {
-            throw new Error("Invalid characterId");
-        }
-        
-        await updateCharacter(params.characterId, updates);
-        return redirect(`/Characters/${params.characterId}`);
-    } catch (error) {
-        console.log(error);
-        return null;
-    }
-
-  }
+import _ from "lodash";
 
 const NameInput = styled.input`
     font-size: 2rem;
@@ -67,30 +47,63 @@ const ButtonBar = styled.div`
 export default function EditCharacter() {
 
     const { character } = useLoaderData() as {character: CharacterType};
-    const [CharacterDetails, setCharacterDetails] = useState(character.details);
+    const [CharacterDetails, setCharacterDetails] = useState((character.details?.length) ? character.details : [{name: '', value: ''}]);
     const navigate = useNavigate();
 
-    function changeCharacterDetail(e){
-        if (!CharacterDetails || !CharacterDetails.length) {
-            return;
-        }
-        const [detailIndex, detailKey] = e.target.name.split('.');
-        if (!detailIndex || !detailKey) {
-            return;
-        }
-        if (!CharacterDetails[detailIndex]) {
-            return;
-        }
-        let newDetails = [...CharacterDetails];
-        console.log(newDetails)
-        console.log(detailIndex, detailKey)
-        console.log(newDetails[detailIndex][detailKey])
-        newDetails[detailIndex][detailKey] = e.target.value;
+    function changeCharacterDetail(e: React.ChangeEvent<HTMLInputElement>, index: number, key: string) {
+        if (!CharacterDetails || !CharacterDetails.length) return;
+        if (index === undefined || !key) return;
+        if (key !== 'name' && key !== 'value') return;
+        if (!CharacterDetails?.[index]) return;
+        let newDetails = _.cloneDeep(CharacterDetails);
+        newDetails[index]![key] = e.target.value;
         setCharacterDetails(newDetails);
     }
 
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+        const updates: { [key: string]: any } = {};
+  
+        formData.forEach((value, key) => {
+            if (typeof value === 'string' || value instanceof File) {
+                updates[key] = value.toString();
+            }
+        });
+
+        if (CharacterDetails && CharacterDetails.length) {
+            updates.details = CharacterDetails.map( (detail: Maybe<CharacterAttribute>) => {
+                console.log(detail)
+                if (!detail?.name || !detail?.value) {
+                    return null;
+                }
+                return {
+                    name: detail.name,
+                    value: detail.value
+                }
+            })
+        }
+
+        try {
+
+            if (!character._id) {
+                throw new Error("Missing characterId");
+            }
+            
+            await updateCharacter(character._id, updates);
+            navigate(`/Characters/${character._id}`);
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+      
+    }
+
+    console.log(CharacterDetails)
+
     return (
-        <StyledForm id="contact-form" method="post">
+        <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
         <FormLabel>
             <h1>Name: </h1>
             <NameInput
@@ -118,27 +131,24 @@ export default function EditCharacter() {
                 rows={6}
             />
         </FormLabel>
+
         {CharacterDetails && CharacterDetails.map((detail: Maybe<CharacterAttribute>, index: number) => {
-            if (!detail?.name || !detail?.value) {
-                return null;
-            }
             return (
                 <FormLabel key={index}>
                     <input
                         type="text"
-                        defaultValue={detail.name}
-                        name={`${index}.name`}
-                        onChange={changeCharacterDetail}
+                        defaultValue={detail?.name || ''}
+                        onChange={(e) => changeCharacterDetail(e, index, 'name')}
                     />
                     <input
                         type="text"
-                        defaultValue={detail.value}
-                        name={`${index}.value`}
-                        onChange={changeCharacterDetail}
+                        defaultValue={detail?.value || ''}
+                        onChange={(e) => changeCharacterDetail(e, index, 'value')}
                     />
                 </FormLabel>
             )
         })}
+
         <ButtonBar>
             <button type="submit">Save</button>
             <button type="button"

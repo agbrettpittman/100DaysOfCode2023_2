@@ -15,7 +15,7 @@ import {
     action as characterAction
 } from "@routes/Character";
 import Character from "@routes/Character";
-import EditCharacter, { action as editAction} from "@routes/Edit";
+import EditCharacter from "@routes/Edit";
 import { action as destroyAction } from "@routes/Destroy";
 import "./index.css";
 import ErrorPage from "./error-page";
@@ -34,7 +34,7 @@ const router = createBrowserRouter( createRoutesFromElements(
             />
             <Route 
                 path="Characters/:characterId/edit" element={<EditCharacter />} 
-                loader={characterLoader} action={editAction} 
+                loader={characterLoader} 
             />
             <Route path="Characters/:characterId/destroy" action={destroyAction} />
         </Route>

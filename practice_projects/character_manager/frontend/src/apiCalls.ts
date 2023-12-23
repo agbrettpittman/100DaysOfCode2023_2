@@ -10,6 +10,9 @@ import {
     UpdateCharacterMutationVariables,
     DeleteCharacterMutation,
     DeleteCharacterMutationVariables,
+    LoginUserMutation,
+    LoginUserMutationVariables,
+    CreateUserMutation,
     CharacterCreateInput,
     CharacterUpdateInput,
 } from '@/__generated__/graphql';
@@ -188,7 +191,7 @@ export function deleteCharacter(characterId: string){
 }
 
 export function loginUser(userName: string, password: string){
-    return ApolloClientInstance.mutate({
+    return ApolloClientInstance.mutate<LoginUserMutation, LoginUserMutationVariables>({
         mutation: gql`
             mutation loginUser($input: LoginUserInput!) {
                 loginUser(input: $input) {

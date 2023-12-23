@@ -187,4 +187,22 @@ export function deleteCharacter(characterId: string){
     })
 }
 
+export function loginUser(userName: string, password: string){
+    return ApolloClientInstance.mutate({
+        mutation: gql`
+            mutation loginUser($input: LoginUserInput!) {
+                loginUser(input: $input) {
+                    accessToken
+                }
+            }
+        `,
+        variables: {
+            input: {
+                userName,
+                password
+            }
+        }
+    })
+}
+
 export default ApolloClientInstance;

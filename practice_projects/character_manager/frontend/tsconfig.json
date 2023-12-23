@@ -23,7 +23,8 @@
     "types": ["node"],
     "paths": {
         "@routes/*": ["./src/routes/*"],
-        "@/*": ["./src/*"]
+        "@/*": ["./src/*"],
+        "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
     }
   },
   "include": ["src"],

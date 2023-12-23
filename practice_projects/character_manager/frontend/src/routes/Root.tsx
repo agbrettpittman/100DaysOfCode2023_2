@@ -30,21 +30,11 @@ export async function loader({ request }: { request: any }) {
 
 export default function Root() {
     const { characters, q } = useLoaderData() as {characters: Character[], q: string};
-    const [Token, setToken] = useState("");
     const navigation = useNavigation();
     const submit = useSubmit();
 
     const DecodedSearchParams = navigation.location && new URLSearchParams(navigation.location.search)
     const Searching =  DecodedSearchParams && DecodedSearchParams.get("q") !== null;
-
-    useEffect(() => {
-        let lsToken = localStorage.getItem("accessToken");
-        if (!Token && lsToken) {
-            setToken(lsToken);
-        } else if (Token !== lsToken) {
-            localStorage.setItem("accessToken", Token);
-        }
-    }, [Token]);
 
     useEffect(() => {
         const SearchInput = document.getElementById("q") as HTMLInputElement;
@@ -90,10 +80,6 @@ export default function Root() {
                     <button type="submit">New</button>
                 </Form>
             </div>
-            <input 
-                type="text" placeholder="Authorization Token" value={Token} 
-                onChange={(e) => setToken(e.target.value)} 
-            />
           <nav>
             {characters.map((character) => (
                 <NavLink

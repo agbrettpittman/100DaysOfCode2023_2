@@ -15,9 +15,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 ### Chart
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
-- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 40, December 22, 2023
+
+Much more productive day today. I got adding character attributes working, created a login page, added a route that will automatically take you to the login page if your token expires, and integrated Material UI. Tomorrow I need to work on integrating the refresh tokens I have the API sending.
 
 ### Day 39, December 21, 2023
 

@@ -28,7 +28,6 @@ export async function action({ request, params }: { request: any, params: any })
             private: formData.get("private") === "true",
         });
         if (!UpdatedCharacter?.data?.updateCharacter?._id) throw new Error("No character returned");
-        console.log(UpdatedCharacter.data.updateCharacter)
         return { character: UpdatedCharacter.data.updateCharacter };
     } catch (error) {
         console.log(error);

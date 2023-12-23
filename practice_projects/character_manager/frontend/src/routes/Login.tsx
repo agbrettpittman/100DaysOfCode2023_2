@@ -7,7 +7,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CssBaseline from '@mui/material/CssBaseline';
+import Alert from "@mui/material/Alert";
 import styled from "styled-components";
+import { Divider, Snackbar } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
 
 const FormWrapper = styled(Box)`
     display: flex;
@@ -18,23 +21,33 @@ const FormWrapper = styled(Box)`
 export default function Login() {
 
     const [Authorized, setAuthorized] = useState<boolean | null>(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
-        const AuthInterval = setInterval(() => {
-            const lsToken = localStorage.getItem("accessToken");
-            
-            if (!lsToken || !isTokenValid(lsToken)) {
-                setAuthorized(false);
-                return;
-            }
-
-            setAuthorized(true);
-        }, 1000);
-
+        checkCurrentAuthStatus();
+        const AuthInterval = setInterval(checkCurrentAuthStatus, 1000);
         return () => {
             clearInterval(AuthInterval);
         }
     }, []);
+
+    function checkCurrentAuthStatus() {
+        const lsToken = localStorage.getItem("accessToken");
+            
+        if (!lsToken || !isTokenValid(lsToken)) {
+            localStorage.removeItem("accessToken");
+            setAuthorized(false);
+            return;
+        }
+
+        setAuthorized(true);
+    }
+
+    function removeSearchParam(key: string) {
+        const newParams = new URLSearchParams(searchParams);
+        newParams.delete(key);
+        setSearchParams(newParams);
+    }
 
     function isTokenValid(token: string) {
         try {
@@ -84,12 +97,19 @@ export default function Login() {
         return <Outlet />
     } else if (Authorized === false) {
         return (
-            <Container component="main" maxWidth="xs">
+            <Container component="main" >
+                <Snackbar 
+                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                    open={searchParams.get("signedUp") === "true"} autoHideDuration={6000}
+                    onClose={() => removeSearchParam("signedUp")}
+                >
+                    <Alert severity="success">You're Signed Up! Now Login</Alert>
+                </Snackbar>
                 <CssBaseline />
-                <FormWrapper sx={{marginTop: 8,}}>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
+                <Typography component="h1" variant="h2" sx={{mt: 4}} align="center">
+                    Lair of the Ancients
+                </Typography>
+                <FormWrapper sx={{mt: 8,}} maxWidth="xs">
                     <Box onSubmit={handleLogin} component="form" noValidate sx={{ mt: 1 }}>
                         <TextField
                             margin="normal" label="Username" name="username" autoComplete="username"
@@ -100,7 +120,11 @@ export default function Login() {
                             name="password" label="Password" type="password"
                         />
                         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }} fullWidth>
-                            Sign In
+                            Login
+                        </Button>
+                        <Divider>Or</Divider>
+                        <Button href="/Signup" variant="outlined" sx={{ mt: 3, mb: 2 }} fullWidth>
+                            Sign up
                         </Button>
                     </Box>
                 </FormWrapper>

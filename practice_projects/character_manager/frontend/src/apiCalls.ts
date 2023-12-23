@@ -13,6 +13,8 @@ import {
     LoginUserMutation,
     LoginUserMutationVariables,
     CreateUserMutation,
+    CreateUserMutationVariables,
+    CreateUserInput,
     CharacterCreateInput,
     CharacterUpdateInput,
 } from '@/__generated__/graphql';
@@ -204,6 +206,24 @@ export function loginUser(userName: string, password: string){
                 userName,
                 password
             }
+        }
+    })
+}
+
+export function createUser(input: CreateUserInput){
+    return ApolloClientInstance.mutate<CreateUserMutation, CreateUserMutationVariables>({
+        mutation: gql`
+            mutation CreateUser($input: CreateUserInput) {
+                createUser(input: $input) {
+                    _id
+                    name
+                    userName
+                    email
+                }
+            }
+        `,
+        variables: {
+            input
         }
     })
 }

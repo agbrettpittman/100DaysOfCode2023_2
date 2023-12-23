@@ -17,6 +17,7 @@ import {
 import Character from "@routes/Character";
 import EditCharacter from "@routes/Edit";
 import { action as destroyAction } from "@routes/Destroy";
+import SignUp from "@routes/SignUp";
 import "./index.css";
 import ErrorPage from "./error-page";
 import Index from "@routes/Index";
@@ -27,24 +28,27 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 const router = createBrowserRouter( createRoutesFromElements(
-    <Route element={<Login />}>
-        <Route 
-            path="/" element={<Root />} errorElement={<ErrorPage />} 
-            loader={rootLoader} action={rootAction}
-        >
-            <Route errorElement={<ErrorPage />} >
-                <Route index={true} element={<Index />} />
-                <Route 
-                    path="Characters/:characterId" element={<Character />} 
-                    loader={characterLoader} action={characterAction} 
-                />
-                <Route 
-                    path="Characters/:characterId/edit" element={<EditCharacter />} 
-                    loader={characterLoader} 
-                />
-                <Route path="Characters/:characterId/destroy" action={destroyAction} />
+    <Route path="/" errorElement={<ErrorPage />}>
+        <Route element={<Login />}>
+            <Route 
+                element={<Root />} errorElement={<ErrorPage />} 
+                loader={rootLoader} action={rootAction}
+            >
+                <Route errorElement={<ErrorPage />} >
+                    <Route index={true} element={<Index />} />
+                    <Route 
+                        path="Characters/:characterId" element={<Character />} 
+                        loader={characterLoader} action={characterAction} 
+                    />
+                    <Route 
+                        path="Characters/:characterId/edit" element={<EditCharacter />} 
+                        loader={characterLoader} 
+                    />
+                    <Route path="Characters/:characterId/destroy" action={destroyAction} />
+                </Route>
             </Route>
         </Route>
+        <Route path="Signup" element={<SignUp />} />
     </Route>
 ));    
 

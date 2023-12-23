@@ -74,7 +74,6 @@ export default function EditCharacter() {
 
         if (CharacterDetails && CharacterDetails.length) {
             updates.details = CharacterDetails.map( (detail: Maybe<CharacterAttribute>) => {
-                console.log(detail)
                 if (!detail?.name || !detail?.value) {
                     return null;
                 }
@@ -99,8 +98,6 @@ export default function EditCharacter() {
         }
       
     }
-
-    console.log(CharacterDetails)
 
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>

@@ -16,8 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲
 
 ## Log
+
+### Day 41, December 23, 2023
+
+Today was getting user signups working. I had planned on working on refresh tokens, but decided I wanted to get user signups working first. Definitely loving Material UI... it magically makes everything look at least decent.
 
 ### Day 40, December 22, 2023
 

@@ -198,6 +198,7 @@ export function loginUser(userName: string, password: string){
             mutation loginUser($input: LoginUserInput!) {
                 loginUser(input: $input) {
                     accessToken
+                    refreshToken
                 }
             }
         `,
@@ -206,6 +207,22 @@ export function loginUser(userName: string, password: string){
                 userName,
                 password
             }
+        }
+    })
+}
+
+export function extendTokens(refreshToken: string){
+    return ApolloClientInstance.mutate({
+        mutation: gql`
+            mutation extendTokens($refreshToken: String!) {
+                extendTokens(refreshToken: $refreshToken) {
+                    accessToken
+                    refreshToken
+                }
+            }
+        `,
+        variables: {
+            refreshToken
         }
     })
 }

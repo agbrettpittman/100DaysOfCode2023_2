@@ -30,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "mmmagic": "^0.5.3",
     "mongoose": "^8.0.1",
+    "node-cron": "^3.0.3",
     "ws": "^8.14.2"
   },
   "devDependencies": {

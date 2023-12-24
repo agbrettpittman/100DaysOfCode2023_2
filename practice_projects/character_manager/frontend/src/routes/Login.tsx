@@ -11,6 +11,7 @@ import Alert from "@mui/material/Alert";
 import styled from "styled-components";
 import { Divider, Snackbar } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
+import { extendTokens } from "@/apiCalls";
 
 const FormWrapper = styled(Box)`
     display: flex;
@@ -26,8 +27,17 @@ export default function Login() {
     useEffect(() => {
         checkCurrentAuthStatus();
         const AuthInterval = setInterval(checkCurrentAuthStatus, 1000);
+        
+        function setLastAction() {
+            localStorage.setItem("lastAction", Date.now().toString());
+        }
+        window.addEventListener("keypress", setLastAction);
+        window.addEventListener("mousemove", setLastAction);
+
         return () => {
             clearInterval(AuthInterval);
+            window.removeEventListener("keypress", setLastAction);
+            window.removeEventListener("mousemove", setLastAction);
         }
     }, []);
 
@@ -40,7 +50,47 @@ export default function Login() {
             return;
         }
 
+        handleAccessTokenRefresh();
+
         setAuthorized(true);
+    }
+
+    function handleAccessTokenRefresh() {
+        // don't refresh if the user has been idle for more than 60 minutes
+        const lastAction = localStorage.getItem("lastAction");
+        if (lastAction && (Date.now() - parseInt(lastAction)) > 60 * 60 * 1000) return;
+
+        // parse and decode tokens
+        const lsToken = localStorage.getItem("accessToken");
+        const lsRefreshToken = localStorage.getItem("refreshToken");
+        if (!lsToken || !lsRefreshToken) return;
+
+        const DecodedAccessToken = JSON.parse(atob(lsToken.split('.')[1]));
+
+        // if the token is within 5 minutes of expiring, refresh it
+
+        if (new Date(DecodedAccessToken.expiration) < new Date(Date.now() + 5 * 60 * 1000)) {
+            extendTokens(lsRefreshToken).then( (response) => {
+                if (!response.data?.extendTokens?.accessToken) {
+                    setAuthorized(false);
+                    return;
+                }
+                const AccessToken = response.data.extendTokens.accessToken;
+                const RefreshToken = response.data.extendTokens.refreshToken;
+                if (!AccessToken || !isTokenValid(AccessToken)) {
+                    setAuthorized(false);
+                    return;
+                }
+                localStorage.setItem("accessToken", AccessToken);
+                if (RefreshToken) localStorage.setItem("refreshToken", RefreshToken);
+                setAuthorized(true);
+            }).catch( (error) => {
+                console.log(error);
+                setAuthorized(false);
+            });
+        }
+
+
     }
 
     function removeSearchParam(key: string) {
@@ -80,12 +130,16 @@ export default function Login() {
                 return;
             }
             const AccessToken = response.data.loginUser.accessToken;
+            const RefreshToken = response.data.loginUser.refreshToken;
             if (!AccessToken || !isTokenValid(AccessToken)) {
                 setAuthorized(false);
                 return;
             }
 
             localStorage.setItem("accessToken", AccessToken);
+
+            if (RefreshToken) localStorage.setItem("refreshToken", RefreshToken);
+
             setAuthorized(true);
         }).catch( (error) => {
             console.log(error);

@@ -52,7 +52,6 @@ export default function Root() {
     return (
       <>
         <div id="sidebar">
-            <h1>Character Manager</h1>
             <div>
                 <Form id="search-form" role="search">
                     <input

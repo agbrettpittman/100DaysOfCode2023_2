@@ -14,10 +14,21 @@ import resolvers from "./resolvers.js"
 import * as dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { graphqlUploadExpress } from "graphql-upload-ts";
+import cron from 'node-cron';
+import { RefreshTokensModel } from "./database/schemas.js";
 
 dotenv.config();
 const db = mongoose.connection
 mongoose.connect("mongodb://localhost:27017/Character-Manager");
+
+function deleteOldRefreshTokens(){
+    console.log("Deleting expired refresh tokens")
+    RefreshTokensModel.deleteMany({ expires: { $lt: new Date() } }).then(({ deletedCount }) => {
+        console.log(`Deleted ${deletedCount} refresh tokens`)
+    }).catch((err) => {
+        console.log(err)
+    })
+}
 
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('open', async () => {
@@ -101,6 +112,12 @@ db.once('open', async () => {
   
     // Modified server startup
     await new Promise(() => {
+
+        deleteOldRefreshTokens()
+        cron.schedule('0 0 * * *', () => {
+            deleteOldRefreshTokens()
+        })
+
         httpServer.listen({ port: 4000 })
         console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
     })

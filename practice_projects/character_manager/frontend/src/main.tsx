@@ -26,29 +26,32 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import ThemeWrapper from "./components/ThemeWrapper";
 
 const router = createBrowserRouter( createRoutesFromElements(
     <Route path="/" errorElement={<ErrorPage />}>
-        <Route element={<Login />}>
-            <Route 
-                element={<Root />} errorElement={<ErrorPage />} 
-                loader={rootLoader} action={rootAction}
-            >
-                <Route errorElement={<ErrorPage />} >
-                    <Route index={true} element={<Index />} />
-                    <Route 
-                        path="Characters/:characterId" element={<Character />} 
-                        loader={characterLoader} action={characterAction} 
-                    />
-                    <Route 
-                        path="Characters/:characterId/edit" element={<EditCharacter />} 
-                        loader={characterLoader} 
-                    />
-                    <Route path="Characters/:characterId/destroy" action={destroyAction} />
+        <Route element={<ThemeWrapper />}>
+            <Route element={<Login />}>
+                <Route 
+                    element={<Root />} errorElement={<ErrorPage />} 
+                    loader={rootLoader} action={rootAction}
+                >
+                    <Route errorElement={<ErrorPage />} >
+                        <Route index={true} element={<Index />} />
+                        <Route 
+                            path="Characters/:characterId" element={<Character />} 
+                            loader={characterLoader} action={characterAction} 
+                        />
+                        <Route 
+                            path="Characters/:characterId/edit" element={<EditCharacter />} 
+                            loader={characterLoader} 
+                        />
+                        <Route path="Characters/:characterId/destroy" action={destroyAction} />
+                    </Route>
                 </Route>
             </Route>
+            <Route path="Signup" element={<SignUp />} />
         </Route>
-        <Route path="Signup" element={<SignUp />} />
     </Route>
 ));    
 

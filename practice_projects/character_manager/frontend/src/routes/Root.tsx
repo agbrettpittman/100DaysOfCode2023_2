@@ -3,6 +3,7 @@ import { getCharacters, createCharacter } from "@/apiCalls";
 import { Character } from "@/__generated__/graphql";
 import { useState, useEffect } from "react";
 import { redirect } from "react-router-dom";
+import { Button } from "@mui/material";
 
 export async function action() {
     try {
@@ -76,7 +77,7 @@ export default function Root() {
                     ></div>
                 </Form>
                 <Form method="post">
-                    <button type="submit">New</button>
+                    <Button type="submit" variant="contained">New</Button>
                 </Form>
             </div>
           <nav>

@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲
+- 🐲🐲🐲
 
 ## Log
+
+### Day 43, December 25, 2023
+
+Got a few things done today. I altered the MUI theme colors. I made the backend logging more useful so that it displays in a simpler format what the request type was, what specific resolver was called, and if it was a success or failure. Lastly, I got the sidebar from the React Router tutorial into styled-components.
 
 ### Day 42, December 24, 2023
 

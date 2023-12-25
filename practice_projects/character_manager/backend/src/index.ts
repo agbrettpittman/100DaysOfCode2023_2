@@ -16,6 +16,7 @@ import jwt from 'jsonwebtoken';
 import { graphqlUploadExpress } from "graphql-upload-ts";
 import cron from 'node-cron';
 import { RefreshTokensModel } from "./database/schemas.js";
+import gql from "graphql-tag";
 
 dotenv.config();
 const db = mongoose.connection
@@ -43,16 +44,45 @@ db.once('open', async () => {
     // Same ApolloServer initialization as before, plus the drain plugin
     // for our httpServer.
     const schema = makeExecutableSchema({ typeDefs, resolvers });
+
+    // custom plugin for logging any graphql errors
+    const responseLogging = {
+        async requestDidStart() {
+          return {
+            async willSendResponse({ request, response }) {
+                if (request.operationName === 'IntrospectionQuery') return;
+                const GQLObject = gql`${request.query}`
+                let operation = "Unknown"
+                let operationName = "Unknown Operation"
+                let status = "Success"
+                if (GQLObject.definitions.length > 0) {
+                    if (GQLObject.definitions[0].kind === "OperationDefinition") {
+                        operation = GQLObject.definitions[0].operation
+                        operationName = GQLObject.definitions[0].name?.value || "Unknown Operation"
+                    }
+                }
+                if (response.errors) {
+                    status = "Error"
+                    const ErrorString = `[${operation}] ${operationName} -> ${status}`
+                    // log the error in red
+                    console.error("\x1b[31m%s\x1b[0m", ErrorString)
+                    console.error(response.errors)
+
+                } else {
+                    const SuccessString = `[${operation}] ${operationName} -> ${status}`
+                    // log the success in green
+                    console.log("\x1b[32m%s\x1b[0m", SuccessString)
+                }
+            },
+          };
+        },
+      };
+
     const server = new ApolloServer({
         schema,
         csrfPrevention: true,
         cache: 'bounded',
         context: ({ req, res }) => {
-            // log the query if it is a mutation
-            if (req.body.operationName !== 'IntrospectionQuery') {
-                console.log(req.body.query);
-                console.log(req.body.variables);
-            }
             const token = req.headers.authorization || null;
             if (token) {
                 try {
@@ -79,7 +109,8 @@ db.once('open', async () => {
                 };
                 },
             },
-            ApolloServerPluginLandingPageLocalDefault({ embed: true })
+            ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+            responseLogging
         ],
     });
 

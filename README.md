@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲
+- 🐲🐲
 
 ## Log
+
+### Day 42, December 24, 2023
+
+I believe refresh tokens are working at the moment. Tomorrow will be the real test. I'm not entirely sure why, but I've always found handling refresh tokens to be a bit complicated.
 
 ### Day 41, December 23, 2023
 

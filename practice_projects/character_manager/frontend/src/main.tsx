@@ -7,7 +7,6 @@ import {
   Route
 } from "react-router-dom";
 import Root, { 
-    loader as rootLoader,
     action as rootAction
 } from "@routes/Root";
 import { 
@@ -34,7 +33,7 @@ const router = createBrowserRouter( createRoutesFromElements(
             <Route element={<Login />}>
                 <Route 
                     element={<Root />} errorElement={<ErrorPage />} 
-                    loader={rootLoader} action={rootAction}
+                    action={rootAction}
                 >
                     <Route errorElement={<ErrorPage />} >
                         <Route index={true} element={<Index />} />
@@ -58,7 +57,7 @@ const router = createBrowserRouter( createRoutesFromElements(
 const RootElement = document.getElementById("root") as HTMLElement;
 
 ReactDOM.createRoot(RootElement).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>
 );

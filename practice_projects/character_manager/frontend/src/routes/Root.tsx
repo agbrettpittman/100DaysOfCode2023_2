@@ -3,6 +3,7 @@ import { getCharacters, createCharacter } from "@/apiCalls";
 import { redirect } from "react-router-dom";
 import styled from "styled-components";
 import SideBar from "@/components/SideBarComponents/SideBar";
+import HeaderBar from "@/components/HeaderBar";
 
 
 const CharacterDetails = styled.div`
@@ -14,6 +15,17 @@ const CharacterDetails = styled.div`
         transition: opacity 200ms;
         transition-delay: 200ms;
     `}
+`
+
+const Wrapper = styled.div`
+    display: grid;
+    grid-template-areas:
+        "sidebar header"
+        "sidebar content";
+    grid-template-columns: 22rem 1fr;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    width: 100vw;
 `
 
 export async function action() {
@@ -32,11 +44,12 @@ export default function Root() {
     const navigation = useNavigation();
     
     return (
-        <>
+        <Wrapper>
             <SideBar />
+            <HeaderBar />
             <CharacterDetails loading={navigation.state === "loading"}>
                 <Outlet />
             </CharacterDetails>
-        </>
+        </Wrapper>
     );
 }

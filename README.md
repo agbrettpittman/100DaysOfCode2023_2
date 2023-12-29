@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲
 
 ## Log
+
+### Day 45, December 28, 2023
+
+Didn't have any time at all yesterday to do the 100 Days yesterday. I still coded for work, but I try not to count that...this is for exploring new tech, not just getting work done haha. Today I converted the layout of the app to use CSS Grid instead of being static. I also added a nice header bar for the app. It doesn't really do anything, but I needed somewhere to stick a logout button hah.
 
 ### Day 44, December 26, 2023
 

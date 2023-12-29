@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲
+- 🐲🐲🐲🐲
 
 ## Log
+
+### Day 44, December 26, 2023
+
+Today was breaking the sidebar into it's own component. I'm a firm believer in separation of concerns, and I see no reason that the navigation's data handling should be tied in its entirety to the root route. So I set about making it a component. This meant I could no longer rely on some of the react router dom niceties like the loader. So I broke that into a function and side effect based on the change of the useSearchParams hook that react router has. down the road I can create a context for it if needed, but I doubt it. I suspect that subscriptions will help later on.
 
 ### Day 43, December 25, 2023
 

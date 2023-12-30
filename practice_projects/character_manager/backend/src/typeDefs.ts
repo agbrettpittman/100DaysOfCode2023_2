@@ -40,6 +40,13 @@ type Character {
     private: Boolean
 }
 
+input CharactersInput {
+    _id: ID
+    name: String
+    creatorId: String
+    ownerId: String
+}
+
 type LoginPayload {
     accessToken: String
     refreshToken: String
@@ -48,7 +55,7 @@ type LoginPayload {
 
 type Query {
     users: [User],
-    characters(name: String): [Character],
+    characters(input: CharactersInput): [Character],
     character(id: String!): Character
 }
 

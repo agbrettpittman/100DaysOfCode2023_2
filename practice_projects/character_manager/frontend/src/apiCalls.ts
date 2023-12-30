@@ -2,6 +2,7 @@ import { ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client
 import { 
     GetCharactersQuery, 
     QueryCharactersArgs,
+    CharactersInput,
     GetCharacterQuery,
     GetCharacterQueryVariables,
     CreateCharacterMutation,
@@ -42,11 +43,11 @@ const httpLink = createHttpLink({
     cache: new InMemoryCache(),
   });
 
-export function getCharacters(useCache = true, name = ""){
+export function getCharacters(useCache = true, input?: CharactersInput){
     return ApolloClientInstance.query<GetCharactersQuery, QueryCharactersArgs>({
         query: gql`
-            query getCharacters($name: String) {
-                characters(name: $name) {
+            query getCharacters($input: CharactersInput) {
+                characters(input: $input) {
                     _id
                     creatorId
                     ownerId
@@ -67,7 +68,7 @@ export function getCharacters(useCache = true, name = ""){
             }
         `,
         variables: {
-            name
+            input
         },
         fetchPolicy: useCache ? 'cache-first' : 'no-cache'
     })

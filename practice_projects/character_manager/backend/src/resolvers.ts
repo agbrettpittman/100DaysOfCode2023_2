@@ -4,6 +4,7 @@ import { GraphQLError } from "graphql";
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
 import { consumeFileStreams, hanldeCharacterImages, validateCharacterImages } from "./utils.js";
+import { CharactersInput } from "generated/graphql.js";
 import { Request } from "express";
 import fs from 'fs';
 import path from 'path';
@@ -13,10 +14,19 @@ const resolvers = {
         users: async () => {
             return await UsersModel.find();
         },
-        characters: async (obj:{}, { name }) => {
+        characters: async (obj:{}, { input }: { input: CharactersInput} ) => {
             let search = {};
-            if (name) {
-                search = { name: { $regex: name, $options: 'i' } }
+            if (input.name) {
+                search['name'] = { $regex: input.name, $options: 'i' }
+            }
+            if (input.creatorId) {
+                search['creatorId'] = input.creatorId
+            }
+            if (input.ownerId) {
+                search['ownerId'] = input.ownerId
+            }
+            if (input._id) {
+                search['_id'] = input._id
             }
             return await CharactersModel.find(search);
         },

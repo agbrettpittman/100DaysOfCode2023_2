@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { NavLink, useLoaderData, useNavigation, useSearchParams } from "react-router-dom";
-import { Character } from "@/__generated__/graphql";
+import { Character, CharactersInput } from "@/__generated__/graphql";
 import { useState, createContext, useEffect } from "react";
 import { getCharacters } from "@/apiCalls";
+import { parseAccessToken } from "@/utils/utilities";
 
 const StyledNav = styled.nav`
     flex: 1;
@@ -25,11 +26,11 @@ const StyledNavLink = styled(NavLink)`
         background: #e3e3e3;
     }
     &.active {
-        background: hsl(224, 98%, 58%);
+        background: ${({ theme }) => theme.palette.primary.main};
         color: white;
     }
     &.pending {
-        color: hsl(224, 98%, 58%);
+        color: ${({ theme }) => theme.palette.primary.light};
     }
 `
 
@@ -39,7 +40,11 @@ export default function SideBarNav() {
     const [searchParams, setSearchParams] = useSearchParams()
 
     async function getCharactersFromAPI() {
-        const query = searchParams.get("q") || ""
+        const query = {} as CharactersInput
+        if (searchParams.get("q")) query["name"] = searchParams.get("q")
+        const decodedAccessToken = parseAccessToken()
+        if (!decodedAccessToken) throw new Error("No access token")
+        query['ownerId'] = decodedAccessToken.userId
         const CharactersResponse = await getCharacters(false,query);
 
         if (!CharactersResponse?.data?.characters) throw new Error("No characters");

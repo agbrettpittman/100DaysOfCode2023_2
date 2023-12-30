@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲
+- 🐲🐲🐲🐲❌🐲🐲
 
 ## Log
+
+### Day 46, December 29, 2023
+
+User logout now works, I branded the landing page in the most basic way humanly possible, got type generation on the backend working, added some advanced searching for characters to the API, and used that to make the navbar on the side only list your characters (rather than all characters)
 
 ### Day 45, December 28, 2023
 

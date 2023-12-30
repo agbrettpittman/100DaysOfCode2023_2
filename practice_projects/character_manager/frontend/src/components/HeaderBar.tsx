@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState, MouseEvent} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -16,26 +16,7 @@ import styled from 'styled-components';
 import { Dragon } from 'styled-icons/fa-solid';
 import InputBase from '@mui/material/InputBase';
 import { Search as SearchIcon} from '@styled-icons/evaicons-solid/Search'
-
-const settings = [
-    {
-        title: 'Profile',
-        disabled: true,
-    },
-    {
-        title: 'Account',
-        disabled: true,
-    },
-    {
-        title: 'Dashboard',
-        disabled: true,
-    },
-    {
-        title: 'Logout',
-        disabled: false,
-
-    },
-]
+import { logoutUser } from '@/apiCalls';
 
 const StyledAppBar = styled(AppBar)`
     height: fit-content;
@@ -91,18 +72,38 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 export default function HeaderBar() {
-    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const settings = [
+        {
+            title: 'Profile',
+            disabled: true,
+        },
+        {
+            title: 'Account',
+            disabled: true,
+        },
+        {
+            title: 'Dashboard',
+            disabled: true,
+        },
+        {
+            title: 'Logout',
+            disabled: false,
+            action: async () => {
+                logoutUser().then(() => {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    window.location.href = '/';
+                }).catch((err) => {
+                    console.log(err);
+                    alert('Failed to logout');
+                });
+            }
+        },
+    ]
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
     };
 
     const handleCloseUserMenu = () => {
@@ -180,7 +181,12 @@ export default function HeaderBar() {
                         >
                         {settings.map((setting) => (
                             <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
-                                <ProfileDropdownItem textAlign="center" disabled={setting.disabled} aria-disabled={setting.disabled}>{setting.title}</ProfileDropdownItem>
+                                <ProfileDropdownItem 
+                                    textAlign="center" disabled={setting.disabled} aria-disabled={setting.disabled} 
+                                    onClick={setting.action}
+                                >
+                                    {setting.title}
+                                </ProfileDropdownItem>
                             </MenuItem>
                         ))}
                         </Menu>

@@ -15,6 +15,8 @@ import {
     CreateUserMutation,
     CreateUserMutationVariables,
     CreateUserInput,
+    LogoutUserMutation,
+    LogoutUserMutationVariables,
     CharacterCreateInput,
     CharacterUpdateInput,
 } from '@/__generated__/graphql';
@@ -241,6 +243,19 @@ export function createUser(input: CreateUserInput){
         `,
         variables: {
             input
+        }
+    })
+}
+
+export function logoutUser(){
+    return ApolloClientInstance.mutate<LogoutUserMutation, LogoutUserMutationVariables>({
+        mutation: gql`
+            mutation logoutUser($refreshToken: String!) {
+                logoutUser(refreshToken: $refreshToken)
+            }
+        `,
+        variables: {
+            refreshToken: localStorage.getItem('refreshToken') || ''
         }
     })
 }

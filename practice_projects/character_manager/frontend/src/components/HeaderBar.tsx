@@ -17,6 +17,7 @@ import { Dragon } from 'styled-icons/fa-solid';
 import InputBase from '@mui/material/InputBase';
 import { Search as SearchIcon} from '@styled-icons/evaicons-solid/Search'
 import { logoutUser } from '@/apiCalls';
+import { PaddingRight } from 'styled-icons/fluentui-system-filled';
 
 const StyledAppBar = styled(AppBar)`
     height: fit-content;
@@ -56,17 +57,25 @@ const SearchIconWrapper = MuiStyled('div')(({ theme }) => ({
     justifyContent: 'center',
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+const StyledInputBase = MuiStyled(InputBase)(({ theme }) => ({
     color: 'inherit',
+    width: '100%',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
+        PaddingRight: `calc(1em + ${theme.spacing(1)})`,
+        transition: theme.transitions.create(['width', 'padding']),
         width: '100%',
         [theme.breakpoints.up('md')]: {
-        width: '20ch',
+            width: '100%',
         },
+        ':focus': {
+            paddingLeft: `calc(1em + ${theme.spacing(1)})`,
+        },
+        ':not(:placeholder-shown)': {
+            paddingLeft: `calc(1em + ${theme.spacing(1)})`,
+        }
     },
 }));
 
@@ -150,11 +159,11 @@ export default function HeaderBar() {
                     </Typography>
                     <Search>
                         <SearchIconWrapper>
-                        <SearchIcon />
+                            <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
+                            inputProps={{ 'aria-label': 'search'}}
                         />
                     </Search>
                     <Box sx={{ flexGrow: 0 }}>

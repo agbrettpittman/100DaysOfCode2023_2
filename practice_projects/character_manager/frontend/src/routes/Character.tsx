@@ -3,6 +3,7 @@ import { getCharacter, updateCharacter } from "@/apiCalls";
 import { Character as CharacterType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff } from "@styled-icons/feather"
+import { Box, Button } from "@mui/material";
 
 export async function loader({ params }: { params:any}) {
     const NoCharacterError = new Response("No character returned", {
@@ -111,14 +112,26 @@ export default function Character() {
                         })}
                     </ul>
                 )}
-                <div>
-                <Form action="edit">
-                    <button type="submit">Edit</button>
-                </Form>
-                <Form method="post" action="destroy" onSubmit={handleDestroy}>
-                    <button type="submit">Delete</button>
-                </Form>
-                </div>
+                <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+                    <Form action="edit">
+                        <Button 
+                            type="submit"
+                            variant="contained"
+                            aria-label="Edit"
+                        >
+                            Edit
+                        </Button>
+                    </Form>
+                    <Form method="post" action="destroy" onSubmit={handleDestroy}>
+                        <Button
+                            type="submit"
+                            variant="outlined"
+                            aria-label="Delete"
+                        >
+                            Delete
+                        </Button>
+                    </Form>
+                </Box>
             </div>
         </div>
     );

@@ -54,10 +54,6 @@ html {
     color: #a4a4a4;
   }
   
-  form[action$="destroy"] button {
-    color: #f44250;
-  }
-  
   #root {
     display: flex;
     height: 100%;

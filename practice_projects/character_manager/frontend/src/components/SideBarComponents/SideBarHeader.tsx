@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { Form, useSubmit, useNavigation, useSearchParams } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
 import { useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
     display: flex;
@@ -106,9 +107,11 @@ export default function SideBarHeader() {
                     aria-live="polite"
                 ></SROnlyDiv>
             </Form>
-            <Form method="post">
-                <Button type="submit" variant="contained">New</Button>
-            </Form>
+            <Link to="/Characters/create">
+                <Button variant="contained">
+                    New
+                </Button>
+            </Link>
         </Wrapper>
     )
 }

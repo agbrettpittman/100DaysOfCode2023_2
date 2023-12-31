@@ -26,6 +26,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import ThemeWrapper from "./components/ThemeWrapper";
+import CharacterCreate from "@routes/CharacterCreate";
 
 const router = createBrowserRouter( createRoutesFromElements(
     <Route path="/" errorElement={<ErrorPage />}>
@@ -37,6 +38,7 @@ const router = createBrowserRouter( createRoutesFromElements(
                 >
                     <Route errorElement={<ErrorPage />} >
                         <Route index={true} element={<Index />} />
+                        <Route path="Characters/create" element={<CharacterCreate />} />
                         <Route 
                             path="Characters/:characterId" element={<Character />} 
                             loader={characterLoader} action={characterAction} 

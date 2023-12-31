@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { NavLink, useLoaderData, useNavigation, useSearchParams } from "react-router-dom";
 import { Character, CharactersInput } from "@/__generated__/graphql";
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useContext } from "react";
 import { getCharacters } from "@/apiCalls";
 import { parseAccessToken } from "@/utils/utilities";
+import { RootContext } from "@routes/Root";
 
 const StyledNav = styled.nav`
     flex: 1;
@@ -36,33 +37,14 @@ const StyledNavLink = styled(NavLink)`
 
 export default function SideBarNav() {
 
-    const [Characters, setCharacters] = useState([] as Character[])
+    const { OwnCharacters, getOwnCharacters } = useContext(RootContext)
     const [searchParams, setSearchParams] = useSearchParams()
-
-    async function getCharactersFromAPI() {
-        const query = {} as CharactersInput
-        if (searchParams.get("q")) query["name"] = searchParams.get("q")
-        const decodedAccessToken = parseAccessToken()
-        if (!decodedAccessToken) throw new Error("No access token")
-        query['ownerId'] = decodedAccessToken.userId
-        const CharactersResponse = await getCharacters(false,query);
-
-        if (!CharactersResponse?.data?.characters) throw new Error("No characters");
-
-        const NullFilteredCharacters = CharactersResponse.data.characters.filter((character) => character !== null)
-
-        setCharacters(NullFilteredCharacters as Character[]);
-    }
-
-    useEffect(() => {
-        getCharactersFromAPI()
-    }, [searchParams])
 
     const CurrentSearchParamsString = searchParams.toString()
 
     return (
         <StyledNav>
-            {Characters.map((character) => (
+            {OwnCharacters.map((character) => (
                 <StyledNavLink
                     key={character._id}
                     to={`/Characters/${character._id}?${CurrentSearchParamsString}`}

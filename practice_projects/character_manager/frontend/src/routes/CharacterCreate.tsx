@@ -2,9 +2,10 @@ import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
 import { Character as CharacterType, CharacterAttribute, Maybe, CharacterCreateInput } from "@/__generated__/graphql";
 import { createCharacter, updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import _ from "lodash";
 import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
+import { RootContext } from "@routes/Root";
 
 const StyledForm = styled(Form)`
     display: flex;
@@ -20,6 +21,7 @@ const StyledForm = styled(Form)`
 export default function CharacterCreate() {
 
     const [CharacterDetails, setCharacterDetails] = useState([{name: '', value: ''}]);
+    const { getOwnCharacters } = useContext(RootContext)
     const navigate = useNavigate();
 
     function changeCharacterDetail(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number, key: string) {
@@ -68,6 +70,7 @@ export default function CharacterCreate() {
             const NewCharacter = await createCharacter(inputValues);
             if (!NewCharacter?.data?.createCharacter) throw new Error("Character creation failed")
             const NewCharacterId = NewCharacter.data.createCharacter._id;
+            getOwnCharacters();
             navigate(`/Characters/${NewCharacterId}`);
         } catch (error) {
             console.log(error);

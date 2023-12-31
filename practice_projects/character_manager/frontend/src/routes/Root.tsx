@@ -1,10 +1,12 @@
 import { Outlet, useNavigation } from "react-router-dom";
 import { getCharacters, createCharacter } from "@/apiCalls";
-import { redirect } from "react-router-dom";
+import { redirect, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import SideBar from "@/components/SideBarComponents/SideBar";
 import HeaderBar from "@/components/HeaderBar";
-
+import { useState, createContext, useEffect } from "react";
+import { Character, CharactersInput } from "@/__generated__/graphql";
+import { parseAccessToken } from "@/utils/utilities";
 
 const CharacterDetails = styled.div`
     flex: 1;
@@ -28,28 +30,49 @@ const Wrapper = styled.div`
     width: 100vw;
 `
 
-export async function action() {
-    try {
-        const CharacterResponse = await createCharacter();
-        await getCharacters(false)
-        if (!CharacterResponse?.data?.createCharacter?._id) throw new Error("No characterId");
-        return redirect(`/Characters/${CharacterResponse.data.createCharacter._id}/edit`);
-    } catch (error) {
-        console.log(error);
-        return { character: {} }
-    }
-}
+export const RootContext = createContext({
+    OwnCharacters: [] as Character[],
+    getOwnCharacters: () => {}
+})
 
 export default function Root() {
     const navigation = useNavigation();
+    const [OwnCharacters, setOwnCharacters] = useState([] as Character[])
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    async function getCharactersFromAPI() {
+        const query = {} as CharactersInput
+        if (searchParams.get("q")) query["name"] = searchParams.get("q")
+        const decodedAccessToken = parseAccessToken()
+        if (!decodedAccessToken) throw new Error("No access token")
+        query['ownerId'] = decodedAccessToken.userId
+        const CharactersResponse = await getCharacters(false,query);
+
+        if (!CharactersResponse?.data?.characters) throw new Error("No characters");
+
+        const NullFilteredCharacters = CharactersResponse.data.characters.filter((character) => character !== null)
+
+        setOwnCharacters(NullFilteredCharacters as Character[]);
+    }
+
+    useEffect(() => {
+        getCharactersFromAPI()
+    }, [searchParams])
+
+    const ContextValue = {
+        OwnCharacters,
+        getOwnCharacters: getCharactersFromAPI
+    }
     
     return (
-        <Wrapper>
-            <SideBar />
-            <HeaderBar />
-            <CharacterDetails loading={navigation.state === "loading"}>
-                <Outlet />
-            </CharacterDetails>
-        </Wrapper>
+        <RootContext.Provider value={ContextValue}>
+            <Wrapper>
+                <SideBar />
+                <HeaderBar />
+                <CharacterDetails loading={navigation.state === "loading"}>
+                    <Outlet />
+                </CharacterDetails>
+            </Wrapper>
+        </RootContext.Provider>
     );
 }

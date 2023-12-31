@@ -6,9 +6,6 @@ import {
   createRoutesFromElements,
   Route
 } from "react-router-dom";
-import Root, { 
-    action as rootAction
-} from "@routes/Root";
 import { 
     loader as characterLoader,
     action as characterAction
@@ -21,6 +18,7 @@ import "./index.css";
 import ErrorPage from "./error-page";
 import Index from "@routes/Index";
 import Login from "@routes/Login";
+import Root from "@routes/Root";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -32,10 +30,7 @@ const router = createBrowserRouter( createRoutesFromElements(
     <Route path="/" errorElement={<ErrorPage />}>
         <Route element={<ThemeWrapper />}>
             <Route element={<Login />}>
-                <Route 
-                    element={<Root />} errorElement={<ErrorPage />} 
-                    action={rootAction}
-                >
+                <Route element={<Root />} errorElement={<ErrorPage />} >
                     <Route errorElement={<ErrorPage />} >
                         <Route index={true} element={<Index />} />
                         <Route path="Characters/create" element={<CharacterCreate />} />

@@ -2,55 +2,30 @@ import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
 import { Character as CharacterType, CharacterAttribute, Maybe } from "@/__generated__/graphql";
 import { updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import _ from "lodash";
-
-const NameInput = styled.input`
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-`;
+import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
+import { RootContext } from "@routes/Root";
 
 const StyledForm = styled(Form)`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 2rem;
     width: 100%;
     max-width: 40rem;
     padding: 0 1rem;
     box-sizing: border-box;
-`;
-
-const FormLabel = styled.label`
-    display: flex;
-    flex-direction: ${(props: {column?: boolean}) => props.column ? 'column' : 'row'};
-    align-items: ${(props: {column?: boolean}) => props.column ? 'flex-start' : 'center'};
-    width: 100%;
-    margin-bottom: 1rem;
-    gap: 1rem;
-`;
-
-const DescriptionInput = styled.textarea`
-    width: 100%;
-    resize: vertical;
-    box-shadow: 0px 0px 5px #0000004f;
-`;
-
-const ButtonBar = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    margin-top: 2rem;
-    gap: 1rem;
+    gap: 30px;
 `;
 
 export default function EditCharacter() {
 
     const { character } = useLoaderData() as {character: CharacterType};
+    const { getOwnCharacters } = useContext(RootContext)
     const [CharacterDetails, setCharacterDetails] = useState((character.details?.length) ? character.details : [{name: '', value: ''}]);
     const navigate = useNavigate();
 
-    function changeCharacterDetail(e: React.ChangeEvent<HTMLInputElement>, index: number, key: string) {
+    function changeCharacterDetail(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number, key: string) {
         if (!CharacterDetails || !CharacterDetails.length) return;
         if (index === undefined || !key) return;
         if (key !== 'name' && key !== 'value') return;
@@ -91,6 +66,7 @@ export default function EditCharacter() {
             }
             
             await updateCharacter(character._id, updates);
+            getOwnCharacters();
             navigate(`/Characters/${character._id}`);
         } catch (error) {
             console.log(error);
@@ -101,66 +77,86 @@ export default function EditCharacter() {
 
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
-        <FormLabel>
-            <h1>Name: </h1>
-            <NameInput
+        <TextField
                 placeholder="Name"
                 aria-label="Name"
-                type="text"
                 name="name"
-                defaultValue={character.name || ''}
+                variant="standard"
+                InputProps={{ style: { fontSize: '2rem' } }}
+                fullWidth
+                defaultValue={character.name}
             />
-        </FormLabel>
-        <FormLabel>
-            <h3>Subtitle: </h3>
-            <input
-                type="text"
+            <TextField
                 name="subTitle"
                 placeholder="Subtitle"
-                defaultValue={character.subTitle || ''}
+                aria-label="Subtitle"
+                variant="standard"
+                InputProps={{ style: { fontSize: '1.5rem' } }}
+                sx={{ width: '75%' }}
+                defaultValue={character.subTitle}
             />
-        </FormLabel>
-        <FormLabel column>
-            <h3>Description: </h3>
-            <DescriptionInput
+            <TextField
                 name="description"
-                defaultValue={character.description || ''}
+                multiline
                 rows={6}
+                placeholder="Description of the character..."
+                fullWidth
+                InputProps={{ style: { fontSize: '1rem', borderRadius: '8px' } }}
+                defaultValue={character.description}
             />
-        </FormLabel>
+            <Typography variant="h6">Details</Typography>
+            {CharacterDetails && CharacterDetails.map((detail: Maybe<CharacterAttribute>, index: number) => {
+                return (
+                    <Box key={index} alignContent={'center'} justifyContent={'center'} display={'flex'} flexDirection={'row'} gap={'1rem'}>
+                        <TextField
+                            size="small"
+                            placeholder="Attribute"
+                            aria-label={`Attribute ${index}`}
+                            defaultValue={detail?.name}
+                            onChange={(e) => changeCharacterDetail(e, index, 'name')}
+                        />
+                        <TextField
+                            size="small"
+                            placeholder="Value"
+                            aria-label={`Value ${index}`}
+                            defaultValue={detail?.value}
+                            onChange={(e) => changeCharacterDetail(e, index, 'value')}
+                        />
+                        <Button 
+                            variant="text"
+                            color="error"
+                            aria-label={`Remove ${index}`}
+                            onClick={() => {
+                                let newDetails = _.cloneDeep(CharacterDetails);
+                                newDetails.splice(index, 1);
+                                setCharacterDetails(newDetails);
+                            }}
+                        >Remove</Button>
+                    </Box>
+                )
+            })}
 
-        {CharacterDetails && CharacterDetails.map((detail: Maybe<CharacterAttribute>, index: number) => {
-            return (
-                <FormLabel key={index}>
-                    <input
-                        type="text"
-                        defaultValue={detail?.name || ''}
-                        onChange={(e) => changeCharacterDetail(e, index, 'name')}
-                    />
-                    <input
-                        type="text"
-                        defaultValue={detail?.value || ''}
-                        onChange={(e) => changeCharacterDetail(e, index, 'value')}
-                    />
-                    <button type="button" onClick={() => {
-                        let newDetails = _.cloneDeep(CharacterDetails);
-                        newDetails.splice(index, 1);
-                        setCharacterDetails(newDetails);
-                    }}>Remove</button>
-                </FormLabel>
-            )
-        })}
-
-        <ButtonBar>
-            <button type="button" onClick={() => setCharacterDetails([...CharacterDetails, {name: '', value: ''}])}>Add Detail</button>
-        </ButtonBar>
-
-        <ButtonBar>
-            <button type="submit">Save</button>
-            <button type="button"
-                onClick={() => navigate(-1)}
-            >Cancel</button>
-        </ButtonBar>
+            <Button 
+                variant="text"
+                color="primary"
+                aria-label="Add Detail"
+                onClick={() => setCharacterDetails([...CharacterDetails, {name: '', value: ''}])}
+            >Add Detail</Button>
+            <Divider sx={{ width: '100%' }} />
+            <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
+                <Button 
+                    type="submit"
+                    variant="contained"
+                    aria-label="Save"
+                >
+                    Save
+                </Button>
+                <Button
+                    variant="outlined"
+                    aria-label="Cancel"
+                    onClick={() => navigate(-1)}
+                >Cancel</Button>
+            </Box>
         </StyledForm>
     );
 }

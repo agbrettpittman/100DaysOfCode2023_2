@@ -104,21 +104,7 @@ export function getCharacter(id: string){
     })
 }
 
-export function createCharacter(){
-
-    const randomNumber = Math.floor(Math.random() * 1000)
-    const characterInput:CharacterCreateInput = {
-        description: "Blonde Hair Viking",
-        name: `Ragnar ${randomNumber}`,
-        subTitle: "Viking Leader",
-        details: [
-            {
-                name: "Equipment",
-                value: "Dual Axes"
-            }
-        ],
-    };
-
+export function createCharacter(input: CharacterCreateInput){
     return ApolloClientInstance.mutate<CreateCharacterMutation, CreateCharacterMutationVariables>({
         mutation: gql`
             mutation createCharacter($input: CharacterCreateInput!) {
@@ -143,7 +129,7 @@ export function createCharacter(){
             }
         `,
         variables: {
-            input: characterInput
+            input
         }
     })
 

@@ -1,6 +1,6 @@
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { Character as CharacterType, CharacterAttribute, Maybe } from "@/__generated__/graphql";
-import { updateCharacter } from "@/apiCalls";
+import { Character as CharacterType, CharacterAttribute, Maybe, CharacterCreateInput } from "@/__generated__/graphql";
+import { createCharacter, updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
 import { useState } from "react";
 import _ from "lodash";
@@ -33,20 +33,27 @@ export default function CharacterCreate() {
     }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-        /*
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData(form);
-        const updates: { [key: string]: any } = {};
+        const inputValues: CharacterCreateInput = {
+            name: validateFormInput('name'),
+            subTitle: validateFormInput('subTitle'),
+            description: validateFormInput('description'),
+            details: []
+        };
   
-        formData.forEach((value, key) => {
-            if (typeof value === 'string' || value instanceof File) {
-                updates[key] = value.toString();
-            }
-        });
+        function validateFormInput(input: string): string {
+            const Value = formData.get(input);
+            if (!Value) return '';
+            if (typeof Value !== 'string') return '';
+            return Value;
+        }
+
+        if (!inputValues.name) throw new Error("Name is required");
 
         if (CharacterDetails && CharacterDetails.length) {
-            updates.details = CharacterDetails.map( (detail: Maybe<CharacterAttribute>) => {
+            inputValues.details = CharacterDetails.map( (detail: Maybe<CharacterAttribute>) => {
                 if (!detail?.name || !detail?.value) {
                     return null;
                 }
@@ -58,18 +65,14 @@ export default function CharacterCreate() {
         }
 
         try {
-
-            if (!character._id) {
-                throw new Error("Missing characterId");
-            }
-            
-            await updateCharacter(character._id, updates);
-            navigate(`/Characters/${character._id}`);
+            const NewCharacter = await createCharacter(inputValues);
+            if (!NewCharacter?.data?.createCharacter) throw new Error("Character creation failed")
+            const NewCharacterId = NewCharacter.data.createCharacter._id;
+            navigate(`/Characters/${NewCharacterId}`);
         } catch (error) {
             console.log(error);
             return null;
         }
-        */
     }
 
     return (

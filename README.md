@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲
 
 ## Log
+
+### Day 47, December 30, 2023
+
+Today was probably a bit less productive than usual, but that was mainly due to me not knowing material UI well (but I'm getting used to it!). I created a "create character" page (no functionality yet, because I'll have to modify how that was being handled before). Then I changed out the Vite icon for a dragon from styled icons, and fixed a little bug in the search bar where the actual input wasn't extending to fit the container for it.
 
 ### Day 46, December 29, 2023
 

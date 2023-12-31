@@ -20,6 +20,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 48, December 31, 2023
+
+Got character creates working with the new character creation page, added a react context to make the nav bar on the side add characters and change their information. Lastly, I replaced the edit and delete buttons with Material UI ones. Struggled some more with Typescript today not properly interpreting the type safety of my code, but figured out a way around it that wasn't just using type assertions to make the error go away. So, I'm slowly getting to where I think I understand it a bit more and can "figure things out".
+
 ### Day 47, December 30, 2023
 
 Today was probably a bit less productive than usual, but that was mainly due to me not knowing material UI well (but I'm getting used to it!). I created a "create character" page (no functionality yet, because I'll have to modify how that was being handled before). Then I changed out the Vite icon for a dragon from styled icons, and fixed a little bug in the search bar where the actual input wasn't extending to fit the container for it.

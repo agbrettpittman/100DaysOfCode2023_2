@@ -12,6 +12,7 @@ const CharacterDetails = styled.div`
     flex: 1;
     padding: 2rem 4rem;
     width: 100%;
+    overflow-y: auto;
     ${({ loading }: { loading: boolean }) => loading && `
         opacity: 0.25;
         transition: opacity 200ms;

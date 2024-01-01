@@ -45,10 +45,13 @@ export default function Login() {
         const lsToken = localStorage.getItem("accessToken");
             
         if (!lsToken || !isTokenValid(lsToken)) {
+            console.log("No token found")
             localStorage.removeItem("accessToken");
             setAuthorized(false);
             return;
         }
+
+        console.log(isTokenValid(lsToken))
 
         handleAccessTokenRefresh();
 
@@ -87,6 +90,8 @@ export default function Login() {
             }).catch( (error) => {
                 console.log(error);
                 setAuthorized(false);
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
             });
         }
 

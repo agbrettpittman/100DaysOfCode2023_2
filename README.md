@@ -20,6 +20,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 49, January 01, 2024
+
+Today I started on what will likely be the most complicated part of the app: handling images. To save some time I used what appears to be a headless component (react-dropzone). I've built a file uploader in the past, so I'm not super interested in redoing that (or porting the code from it to this project). Got the HTML and CSS tied to the hook for that. After that I squashed a couple of bugs. One was with the nav bar scrolling when it shouldn't. The other was due to not deleting the Access Token and Refresh Token when reauthenticating with a refresh token fails.
+
 ### Day 48, December 31, 2023
 
 Got character creates working with the new character creation page, added a react context to make the nav bar on the side add characters and change their information. Lastly, I replaced the edit and delete buttons with Material UI ones. Struggled some more with Typescript today not properly interpreting the type safety of my code, but figured out a way around it that wasn't just using type assertions to make the error go away. So, I'm slowly getting to where I think I understand it a bit more and can "figure things out".

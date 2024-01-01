@@ -6,6 +6,7 @@ import { useState, useContext } from "react";
 import _ from "lodash";
 import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
 import { RootContext } from "@routes/Root";
+import FileUploader from "@/components/FileUploader";
 
 const StyledForm = styled(Form)`
     display: flex;
@@ -140,6 +141,8 @@ export default function CharacterCreate() {
                 aria-label="Add Detail"
                 onClick={() => setCharacterDetails([...CharacterDetails, {name: '', value: ''}])}
             >Add Detail</Button>
+            <Divider sx={{ width: '100%' }} />
+            <FileUploader />
             <Divider sx={{ width: '100%' }} />
             <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
                 <Button 

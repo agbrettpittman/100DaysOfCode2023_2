@@ -22,6 +22,11 @@ const StyledForm = styled(Form)`
 export default function CharacterCreate() {
 
     const [CharacterDetails, setCharacterDetails] = useState([{name: '', value: ''}]);
+    const [CharacterImages, setCharacterImages] = useState([{
+        mainPhoto: true,
+        caption: "",
+        file: null as File | null
+    }]);
     const { getOwnCharacters } = useContext(RootContext)
     const navigate = useNavigate();
 
@@ -33,6 +38,33 @@ export default function CharacterCreate() {
         let newDetails = _.cloneDeep(CharacterDetails);
         newDetails[index]![key] = e.target.value;
         setCharacterDetails(newDetails);
+    }
+
+    function changeCharacterImage(index: number, key: string, value: any) {
+        if (!CharacterImages || !CharacterImages.length) return;
+        if (index === undefined || !key) return;
+        if (key !== 'mainPhoto' && key !== 'caption' && key !== 'file') return;
+        if (!CharacterImages?.[index]) return;
+        let newImages = _.cloneDeep(CharacterImages);
+        if (key === 'file') {
+            if (value.length) {
+                newImages[index]![key] = value[0];
+            } else {
+                newImages[index]![key] = null;
+            }
+        } else if (key === 'mainPhoto') {
+            if (typeof value !== 'boolean') return;
+            if (value === true) {
+                newImages = newImages.map((image) => {
+                    image.mainPhoto = false;
+                    return image;
+                });
+            }
+            newImages[index]![key] = value;
+        } else {
+            if (typeof value !== 'string') return;
+            newImages[index]![key] = value;
+        }
     }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -141,8 +173,45 @@ export default function CharacterCreate() {
                 aria-label="Add Detail"
                 onClick={() => setCharacterDetails([...CharacterDetails, {name: '', value: ''}])}
             >Add Detail</Button>
-            <Divider sx={{ width: '100%' }} />
-            <FileUploader />
+            <Typography variant="h6">Pictures</Typography>
+            {
+                CharacterImages.map((image, index) => {
+                    return (
+                        <Box key={index} alignContent={'center'} justifyContent={'center'} display={'flex'} flexDirection={'row'} gap={'1rem'}>
+                            <FileUploader
+                                label={`Image ${index}`}
+                                onChange={(files) => changeCharacterImage(index, 'file', files)}
+                            />
+                            <TextField
+                                size="small"
+                                placeholder="Caption"
+                                aria-label={`Caption ${index}`}
+                                onChange={(e) => changeCharacterImage(index, 'caption', e.target.value)}
+                            />
+                            <Button 
+                                variant="text"
+                                color="error"
+                                aria-label={`Remove ${index}`}
+                                onClick={() => {
+                                    let newImages = _.cloneDeep(CharacterImages);
+                                    newImages.splice(index, 1);
+                                    setCharacterImages(newImages);
+                                }}
+                            >Remove</Button>
+                        </Box>
+                    )
+                })
+            }
+            <Button 
+                variant="text"
+                color="primary"
+                aria-label="Add Picture"
+                onClick={() => setCharacterImages([...CharacterImages, {
+                    mainPhoto: false,
+                    caption: "",
+                    file: null
+                }])}
+            >Add Picture</Button>
             <Divider sx={{ width: '100%' }} />
             <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
                 <Button 

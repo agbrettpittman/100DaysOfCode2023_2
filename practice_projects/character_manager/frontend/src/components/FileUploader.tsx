@@ -3,7 +3,12 @@ import {useDropzone} from 'react-dropzone';
 import styled from 'styled-components';
 import { Box } from '@mui/material';
 
-const Wrapper = styled(Box)`
+type WrapperProps = {
+    hasContents: boolean
+    singleFile: boolean
+}
+
+const Wrapper = styled(Box)<WrapperProps>`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,12 +19,12 @@ const Wrapper = styled(Box)`
     background-color: #f9f9f9;
     color: #4d4d4d;
     opacity: ${({ hasContents }:{ hasContents: boolean }) => hasContents ? 1 : 0.5};
+    position: ${({ singleFile }:{ singleFile: boolean }) => singleFile ? 'relative' : 'unset'};
     outline: none;
     transition: border .24s ease-in-out;
     border-radius: 8px;
     width: 10vw;
     aspect-ratio: 1;
-    cursor: pointer;
     :hover {
         opacity: 1;
     }
@@ -32,16 +37,17 @@ const ThumbsContainer = styled.aside`
 `;
 
 const Thumb = styled.div`
-  display: 'inline-flex';
-  border-radius: 2;
-  border: '1px solid #eaeaea';
-  margin-bottom: 8;
-  margin-right: 8;
-  width: 100;
-  height: 100;
-  padding: 4;
-  box-sizing: 'border-box';
-`
+    display: 'inline-flex';
+    border-radius: 2;
+    border: '1px solid #eaeaea';
+    margin-bottom: 8;
+    margin-right: 8;
+    width: 100;
+    height: 100;
+    padding: 4;
+    box-sizing: 'border-box';
+    position: ${({ singleFile }:{ singleFile: boolean }) => singleFile ? 'unset' : 'relative'};
+    `
 
 const ThumbInner = styled.div`
     display: flex;
@@ -52,8 +58,10 @@ const ThumbInner = styled.div`
 
 const PreviewImg = styled.img`
     display: block;
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
+    max-width: calc(10vw - 16px);
+    max-height: calc(10vw - 16px);
 `;
 
 const FileDropzone = styled.div`
@@ -62,10 +70,29 @@ const FileDropzone = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 `
 
+const RemoveButton = styled.button`
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    opacity: 0.7;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 1.5em;
+    aspect-ratio: 1;
+    background-color: ${({ theme }) => theme.palette.error.main};
+    color: ${({ theme }) => theme.palette.error.contrastText};
+    border-radius: 4px;
+    :hover {
+        opacity: 1;
+    }
+`;
 
-export default function FileUploader({maxFiles = 0}) {
+export default function FileUploader({maxFiles = 1, onChange, label = "Add an image"}: {maxFiles?: number, onChange?: (files: (File & {preview:string})[]) => void, label?: string}) {
     const [files, setFiles] = useState<(File & {preview:string})[]>([]);
     const {getRootProps, getInputProps} = useDropzone({
         accept: {
@@ -77,28 +104,36 @@ export default function FileUploader({maxFiles = 0}) {
             })));
         }
     });
+
     useEffect(() => {
         // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
         return () => files.forEach(file => URL.revokeObjectURL(file.preview));
     }, []);
+
+    useEffect(() => {
+        if (onChange) onChange(files);
+    }, [files])
+
+    console.log(maxFiles)
     
     const FilePreviews = files.map(file => (
-        <Thumb key={file.name}>
+        <Thumb key={file.name} singleFile={maxFiles === 1}>
             <ThumbInner>
                 <PreviewImg
                     src={file.preview}
                     onLoad={() => { URL.revokeObjectURL(file.preview) }}
                 />
             </ThumbInner>
+            <RemoveButton onClick={() => setFiles(files.filter(f => f.name !== file.name))}>X</RemoveButton>
         </Thumb>
     ));
 
     const CanAddMoreFiles = !files || !files.length || files.length < maxFiles;
 
     return (
-        <Wrapper hasContents={files.length > 0}>
+        <Wrapper hasContents={files.length > 0} singleFile={maxFiles === 1}>
             {CanAddMoreFiles &&
-                <FileDropzone {...getRootProps({className: 'dropzone'})} filesUploaded={files.length}>
+                <FileDropzone {...getRootProps({className: 'dropzone'})} filesUploaded={files.length} aria-label={label}>
                     <input {...getInputProps()} />
                     <p>Add an image</p>
                 </FileDropzone>

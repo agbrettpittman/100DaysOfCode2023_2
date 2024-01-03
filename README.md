@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 49, January 01, 2024
+
+Today I started on what will likely be the most complicated part of the app: handling images. To save some time I used what appears to be a headless component (react-dropzone). I've built a file uploader in the past, so I'm not super interested in redoing that (or porting the code from it to this project). Got the HTML and CSS tied to the hook for that. After that I squashed a couple of bugs. One was with the nav bar scrolling when it shouldn't. The other was due to not deleting the Access Token and Refresh Token when reauthenticating with a refresh token fails.
 
 ### Day 48, December 31, 2023
 

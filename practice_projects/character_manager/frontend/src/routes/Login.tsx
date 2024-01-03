@@ -51,8 +51,6 @@ export default function Login() {
             return;
         }
 
-        console.log(isTokenValid(lsToken))
-
         handleAccessTokenRefresh();
 
         setAuthorized(true);

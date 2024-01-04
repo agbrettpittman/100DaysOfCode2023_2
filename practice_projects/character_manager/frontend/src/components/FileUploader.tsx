@@ -92,7 +92,7 @@ const RemoveButton = styled.button`
     }
 `;
 
-export default function FileUploader({maxFiles = 1, onChange, label = "Add an image"}: {maxFiles?: number, onChange?: (files: (File & {preview:string})[]) => void, label?: string}) {
+export default function FileUploader({maxFiles = 1, onChange, label = "Add an image", ...props}: {maxFiles?: number, onChange?: (files: (File & {preview:string})[]) => void, label?: string}) {
     const [files, setFiles] = useState<(File & {preview:string})[]>([]);
     const {getRootProps, getInputProps} = useDropzone({
         accept: {
@@ -131,7 +131,7 @@ export default function FileUploader({maxFiles = 1, onChange, label = "Add an im
     const CanAddMoreFiles = !files || !files.length || files.length < maxFiles;
 
     return (
-        <Wrapper hasContents={files.length > 0} singleFile={maxFiles === 1}>
+        <Wrapper hasContents={files.length > 0} singleFile={maxFiles === 1} {...props}>
             {CanAddMoreFiles &&
                 <FileDropzone {...getRootProps({className: 'dropzone'})} filesUploaded={files.length} aria-label={label}>
                     <input {...getInputProps()} />

@@ -1,12 +1,12 @@
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { Character as CharacterType, CharacterAttribute, Maybe, CharacterCreateInput } from "@/__generated__/graphql";
+import { Character as CharacterType, CharacterAttribute, Maybe, CharacterCreateInput, CharacterImageDetailsInput } from "@/__generated__/graphql";
 import { createCharacter, updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
 import { useState, useContext } from "react";
 import _ from "lodash";
 import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
 import { RootContext } from "@routes/Root";
-import FileUploader from "@/components/FileUploader";
+import CharacterImageInput from "@components/CharacterImageInput";
 
 const StyledForm = styled(Form)`
     display: flex;
@@ -65,6 +65,7 @@ export default function CharacterCreate() {
             if (typeof value !== 'string') return;
             newImages[index]![key] = value;
         }
+        setCharacterImages(newImages);
     }
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -75,7 +76,8 @@ export default function CharacterCreate() {
             name: validateFormInput('name'),
             subTitle: validateFormInput('subTitle'),
             description: validateFormInput('description'),
-            details: []
+            details: [],
+            imageDetails: [] as CharacterImageDetailsInput[],
         };
   
         function validateFormInput(input: string): string {
@@ -99,16 +101,33 @@ export default function CharacterCreate() {
             }).filter( (detail: Maybe<CharacterAttribute>) => detail !== null);
         }
 
-        try {
-            const NewCharacter = await createCharacter(inputValues);
-            if (!NewCharacter?.data?.createCharacter) throw new Error("Character creation failed")
-            const NewCharacterId = NewCharacter.data.createCharacter._id;
-            getOwnCharacters();
-            navigate(`/Characters/${NewCharacterId}`);
-        } catch (error) {
-            console.log(error);
-            return null;
+        if (CharacterImages && CharacterImages.length) {
+            let newImageDetails = [] as CharacterImageDetailsInput[];
+            let iterator = 0;
+            CharacterImages.forEach((image) => {
+                if (!image.file) return;
+                newImageDetails.push({
+                    mainPhoto: image.mainPhoto,
+                    caption: image.caption,
+                    filename: `file-${iterator}`,
+                })
+                iterator++;
+            })
+            inputValues.imageDetails = newImageDetails;
         }
+
+        console.log(inputValues);
+
+        //try {
+        //    const NewCharacter = await createCharacter(inputValues);
+        //    if (!NewCharacter?.data?.createCharacter) throw new Error("Character creation failed")
+        //    const NewCharacterId = NewCharacter.data.createCharacter._id;
+        //    getOwnCharacters();
+        //    navigate(`/Characters/${NewCharacterId}`);
+        //} catch (error) {
+        //    console.log(error);
+        //    return null;
+        //}
     }
 
     return (
@@ -177,28 +196,14 @@ export default function CharacterCreate() {
             {
                 CharacterImages.map((image, index) => {
                     return (
-                        <Box key={index} alignContent={'center'} justifyContent={'center'} display={'flex'} flexDirection={'row'} gap={'1rem'}>
-                            <FileUploader
-                                label={`Image ${index}`}
-                                onChange={(files) => changeCharacterImage(index, 'file', files)}
-                            />
-                            <TextField
-                                size="small"
-                                placeholder="Caption"
-                                aria-label={`Caption ${index}`}
-                                onChange={(e) => changeCharacterImage(index, 'caption', e.target.value)}
-                            />
-                            <Button 
-                                variant="text"
-                                color="error"
-                                aria-label={`Remove ${index}`}
-                                onClick={() => {
-                                    let newImages = _.cloneDeep(CharacterImages);
-                                    newImages.splice(index, 1);
-                                    setCharacterImages(newImages);
-                                }}
-                            >Remove</Button>
-                        </Box>
+                        <CharacterImageInput 
+                            key={index} index={index} imageDetails={image} onChange={changeCharacterImage} 
+                            onRemove={(index) => {
+                                let newImages = _.cloneDeep(CharacterImages);
+                                newImages.splice(index, 1);
+                                setCharacterImages(newImages);
+                            }
+                        }/>
                     )
                 })
             }

@@ -3,7 +3,7 @@ import { getCharacter, updateCharacter } from "@/apiCalls";
 import { Character as CharacterType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff } from "@styled-icons/feather"
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 export async function loader({ params }: { params:any}) {
     const NoCharacterError = new Response("No character returned", {
@@ -71,6 +71,8 @@ const PrivateButton = styled.button`
 export default function Character() {
     const { character } = useLoaderData() as {character: CharacterType};
 
+    console.log(character)
+
     function handleDestroy(event: React.FormEvent<HTMLFormElement>) {
         if (
             !confirm(
@@ -112,6 +114,16 @@ export default function Character() {
                         })}
                     </ul>
                 )}
+                <Typography variant="h6">Pictures</Typography>
+                <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'1rem'}>
+                    { character && character.images && character.images.map((image, index) => {
+                        const DownloadURL = `http://localhost:4000/download/${image?.filename}`;
+                        const FallBackAlt = `Image ${index + 1}`;
+                        return (
+                            <img key={image?.filename} src={DownloadURL} alt={FallBackAlt} />
+                        )
+                    })}
+                </Box>
                 <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
                     <Form action="edit">
                         <Button 

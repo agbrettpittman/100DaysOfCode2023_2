@@ -22,26 +22,33 @@ import {
     CharacterUpdateInput,
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import { ApolloLink } from '@apollo/client';
 
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:4000/',
-  });
+    uri: 'http://localhost:4000/graphql',
+});
+
+const uploadLink = createUploadLink({
+    uri: 'http://localhost:4000/graphql', // Replace with your file upload endpoint
+});
   
-  const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, { headers }) => {
     // Add your headers here
     return {
-      headers: {
+        headers: {
         ...headers,
         'Authorization': localStorage.getItem('accessToken') || '',
-      },
+        'Apollo-Require-Preflight': 'true',
+        },
     };
-  });
-  
-  const ApolloClientInstance = new ApolloClient({
-    link: authLink.concat(httpLink),
+});
+
+const ApolloClientInstance = new ApolloClient({
+    link: ApolloLink.from([authLink, uploadLink, httpLink  ]),
     cache: new InMemoryCache(),
-  });
+});
 
 export function getCharacters(useCache = true, input?: CharactersInput){
     return ApolloClientInstance.query<GetCharactersQuery, QueryCharactersArgs>({
@@ -104,11 +111,11 @@ export function getCharacter(id: string){
     })
 }
 
-export function createCharacter(input: CharacterCreateInput){
+export function createCharacter(input: CharacterCreateInput, images: File[]){
     return ApolloClientInstance.mutate<CreateCharacterMutation, CreateCharacterMutationVariables>({
         mutation: gql`
-            mutation createCharacter($input: CharacterCreateInput!) {
-                createCharacter(input: $input) {
+            mutation createCharacter($input: CharacterCreateInput!, $images: [Upload]) {
+                createCharacter(input: $input, images: $images) {
                     _id
                     creatorId
                     ownerId
@@ -129,7 +136,8 @@ export function createCharacter(input: CharacterCreateInput){
             }
         `,
         variables: {
-            input
+            input,
+            images
         }
     })
 

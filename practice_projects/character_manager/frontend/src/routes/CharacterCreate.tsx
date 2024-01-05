@@ -79,6 +79,7 @@ export default function CharacterCreate() {
             details: [],
             imageDetails: [] as CharacterImageDetailsInput[],
         };
+        let images = [] as File[];
   
         function validateFormInput(input: string): string {
             const Value = formData.get(input);
@@ -106,28 +107,34 @@ export default function CharacterCreate() {
             let iterator = 0;
             CharacterImages.forEach((image) => {
                 if (!image.file) return;
+                const NewFileName = `file-${iterator}`;
                 newImageDetails.push({
                     mainPhoto: image.mainPhoto,
                     caption: image.caption,
-                    filename: `file-${iterator}`,
+                    filename: NewFileName
                 })
+                // change the name of the file to be uploaded
+                const NewFile = new File([image.file], NewFileName, {type: image.file.type});
+                console.log(NewFile);
+                images.push(NewFile);
                 iterator++;
             })
             inputValues.imageDetails = newImageDetails;
         }
 
         console.log(inputValues);
+        console.log(images);
 
-        //try {
-        //    const NewCharacter = await createCharacter(inputValues);
-        //    if (!NewCharacter?.data?.createCharacter) throw new Error("Character creation failed")
-        //    const NewCharacterId = NewCharacter.data.createCharacter._id;
-        //    getOwnCharacters();
-        //    navigate(`/Characters/${NewCharacterId}`);
-        //} catch (error) {
-        //    console.log(error);
-        //    return null;
-        //}
+        try {
+            const NewCharacter = await createCharacter(inputValues, images);
+            if (!NewCharacter?.data?.createCharacter) throw new Error("Character creation failed")
+            const NewCharacterId = NewCharacter.data.createCharacter._id;
+            getOwnCharacters();
+            navigate(`/Characters/${NewCharacterId}`);
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
     }
 
     return (

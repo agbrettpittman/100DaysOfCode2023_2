@@ -17,6 +17,10 @@ import { graphqlUploadExpress } from "graphql-upload-ts";
 import cron from 'node-cron';
 import { RefreshTokensModel } from "./database/schemas.js";
 import gql from "graphql-tag";
+import mmm from 'mmmagic'
+import { promisify } from "util";
+
+const { Magic, MAGIC_MIME_TYPE } = mmm;
 
 dotenv.config();
 const db = mongoose.connection
@@ -120,7 +124,7 @@ db.once('open', async () => {
         server: httpServer,
         // Pass a different path here if your ApolloServer serves at
         // a different path.
-        path: '/',
+        path: '/graphql',
     });
 
     // Hand in the schema we just created and have the
@@ -138,8 +142,25 @@ db.once('open', async () => {
       // By default, apollo-server hosts its GraphQL endpoint at the
       // server root. However, *other* Apollo Server packages host it at
       // /graphql. Optionally provide this to match apollo-server.
-      path: '/',
+      path: '/graphql',
     });
+
+    app.get('/download/:filename', async (req, res) => {
+        const filename = req.params.filename;
+        const filePath = `./uploads/${filename}`;
+        console.log("got download request for file: " + filename)
+        const magic = new Magic(MAGIC_MIME_TYPE);
+        const detectFilePromise = promisify(magic.detectFile.bind(magic));
+        const DetectedMIME = await detectFilePromise(filePath);
+        console.log(`file type detected as ${DetectedMIME}`)
+        const newFileName = filename.split('.')[0] + '.' + DetectedMIME.split('/')[1]
+        res.download(filePath, newFileName, (err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send('Error downloading the file');
+          }
+        });
+      });
   
     // Modified server startup
     await new Promise(() => {

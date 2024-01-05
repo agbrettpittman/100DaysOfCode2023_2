@@ -18,6 +18,7 @@
     "@graphql-typed-document-node/core": "^3.2.0",
     "@mui/material": "^5.15.1",
     "@mui/styled-engine-sc": "^6.0.0-alpha.9",
+    "@types/apollo-upload-client": "^18.0.0",
     "@types/lodash": "^4.14.202",
     "apollo-upload-client": "^18.0.1",
     "graphql": "^16.8.1",

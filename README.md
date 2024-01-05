@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 52, January 04, 2024
+
+Got pretty frustrated today with the lack of progress, so I spent a while this evening and after much research eventually figured out both uploading images for a character and downloading (viewing) them. It is pretty rough and needs major cleanup, security tightening, and optimization. But image upload and download work. And I know where to go from here. In my humble and unknowledgeable opinion, it's a bit...odd...that graphql doesn't seem to have a good solution for file download beyond "use a separate service". I rigged it up by creating a separate express route that serves files. So it works, and it isn't technically a separate service. However, it isn't integrated directly with graphql, which I'm not a fan of. It doesn't turn me away from graphql, but it certainly is not what I would expect from an API spec.
 
 ### Day 51, January 03, 2024
 

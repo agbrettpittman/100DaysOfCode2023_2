@@ -19,6 +19,7 @@ import { RefreshTokensModel } from "./database/schemas.js";
 import gql from "graphql-tag";
 import mmm from 'mmmagic'
 import { promisify } from "util";
+import cors from 'cors';
 
 const { Magic, MAGIC_MIME_TYPE } = mmm;
 
@@ -151,6 +152,22 @@ db.once('open', async () => {
     );
 
     app.get('/download/:filename', async (req, res) => {
+        const token = req.headers.authorization || null;
+        if (!token) {
+            res.status(401).send('Unauthorized');
+            return;
+        } else {
+            try {
+                const { userId, expiration } = jwt.verify(token, process.env.JWT_SECRET);
+                if (new Date(expiration) < new Date()) {
+                    res.status(401).send('Unauthorized');
+                    return;
+                }
+            } catch (err) {
+                console.log(err.message);
+            }
+        }
+        console.log(req.headers)
         const filename = req.params.filename;
         const filePath = `./uploads/${filename}`;
         console.log("got download request for file: " + filename)

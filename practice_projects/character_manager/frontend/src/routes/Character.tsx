@@ -4,6 +4,7 @@ import { Character as CharacterType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff } from "@styled-icons/feather"
 import { Box, Button, Typography } from "@mui/material";
+import ProtectedImage from "@components/ProtectedImage";
 
 export async function loader({ params }: { params:any}) {
     const NoCharacterError = new Response("No character returned", {
@@ -117,10 +118,10 @@ export default function Character() {
                 <Typography variant="h6">Pictures</Typography>
                 <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'1rem'}>
                     { character && character.images && character.images.map((image, index) => {
-                        const DownloadURL = `http://localhost:4000/download/${image?.filename}`;
                         const FallBackAlt = `Image ${index + 1}`;
+                        const Alt = image?.caption || FallBackAlt;
                         return (
-                            <img key={image?.filename} src={DownloadURL} alt={FallBackAlt} />
+                            <ProtectedImage fileId={image?.filename || ""} alt={Alt} key={index} />
                         )
                     })}
                 </Box>

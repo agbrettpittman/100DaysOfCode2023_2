@@ -24,7 +24,17 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { ApolloLink } from '@apollo/client';
+import axios, { AxiosRequestConfig } from 'axios';
 
+export function getFile(fileId: string){
+    const Options: AxiosRequestConfig = {
+        headers: {
+            'Authorization': localStorage.getItem('accessToken') || '',
+        },
+        responseType: 'blob'
+    }
+    return axios.get(`http://localhost:4000/download/${fileId}`, Options);
+}
 
 const httpLink = createHttpLink({
     uri: 'http://localhost:4000/graphql',

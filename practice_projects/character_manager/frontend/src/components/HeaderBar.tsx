@@ -137,7 +137,7 @@ export default function HeaderBar() {
                         textDecoration: 'none',
                         }}
                     >
-                        <Dragon size="30" />
+                        <img src="/LotA.png" alt="Logo" width="40px" height="40px" />
                     </Typography>
                     <Typography
                         variant="h5"

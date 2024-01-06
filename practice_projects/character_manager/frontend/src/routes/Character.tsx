@@ -2,9 +2,10 @@ import { Form, useFetcher, useLoaderData } from "react-router-dom";
 import { getCharacter, updateCharacter } from "@/apiCalls";
 import { Character as CharacterType } from "@/__generated__/graphql";
 import styled from "styled-components";
-import { Eye, EyeOff } from "@styled-icons/feather"
+import { Eye, EyeOff, Trash2 } from "@styled-icons/feather"
 import { Box, Button, Typography } from "@mui/material";
 import ProtectedImage from "@components/ProtectedImage";
+import { Edit } from "@styled-icons/fluentui-system-regular/Edit";
 
 export async function loader({ params }: { params:any}) {
     const NoCharacterError = new Response("No character returned", {
@@ -43,7 +44,7 @@ const CharacterTitle = styled.h1`
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 
     form {
         display: flex;
@@ -63,11 +64,35 @@ const PrivateButton = styled.button`
     cursor: pointer;
     padding: 0;
     width: 1.5em;
-    color: #0074c9;
+    color: #b9b9b9;
     :hover {
-        color: #60829b;
+        color: ${({ theme }) => theme.palette.info.main};
     }
 `;
+
+const EditButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 1.5em;
+    color: #cfcfcf;
+    :hover {
+        color: ${({ theme }) => theme.palette.primary.main};
+    }
+`
+
+const DestroyButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 1.5em;
+    color: #cfcfcf;
+    :hover {
+        color: ${({ theme }) => theme.palette.error.main};
+    }
+`
 
 export default function Character() {
     const { character } = useLoaderData() as {character: CharacterType};
@@ -90,6 +115,22 @@ export default function Character() {
                 <CharacterTitle>
                     {character.name || <i>No Name</i>}
                     <Favorite character={character} />
+                    <Form action="edit">
+                        <EditButton
+                            name="edit"
+                            aria-label="edit"
+                        >
+                            <Edit/>
+                        </EditButton>
+                    </Form>
+                    <Form action="destroy" onSubmit={handleDestroy}>
+                        <DestroyButton
+                            name="destroy"
+                            aria-label="destroy"
+                        >
+                            <Trash2/>
+                        </DestroyButton>
+                    </Form>
                 </CharacterTitle>
 
                 {character.subTitle && (
@@ -124,26 +165,6 @@ export default function Character() {
                             <ProtectedImage fileId={image?.filename || ""} alt={Alt} key={index} />
                         )
                     })}
-                </Box>
-                <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
-                    <Form action="edit">
-                        <Button 
-                            type="submit"
-                            variant="contained"
-                            aria-label="Edit"
-                        >
-                            Edit
-                        </Button>
-                    </Form>
-                    <Form method="post" action="destroy" onSubmit={handleDestroy}>
-                        <Button
-                            type="submit"
-                            variant="outlined"
-                            aria-label="Delete"
-                        >
-                            Delete
-                        </Button>
-                    </Form>
                 </Box>
             </div>
         </div>

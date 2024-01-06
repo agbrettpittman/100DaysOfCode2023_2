@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { useState, useEffect } from "react";
-import { loginUser } from "@/apiCalls";
+import { loginUser, extendTokens } from "@/apiCalls";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -11,7 +11,6 @@ import Alert from "@mui/material/Alert";
 import styled from "styled-components";
 import { Divider, Snackbar } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
-import { extendTokens } from "@/apiCalls";
 
 const FormWrapper = styled(Box)`
     display: flex;

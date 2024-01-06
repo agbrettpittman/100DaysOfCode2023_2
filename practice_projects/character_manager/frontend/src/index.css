@@ -50,9 +50,6 @@ html {
     box-shadow: none;
     padding: 0;
   }
-  #character h1 form button[value="true"] {
-    color: #a4a4a4;
-  }
   
   #root {
     display: flex;
@@ -86,15 +83,6 @@ html {
   }
   #character a[href*="twitter"]:hover {
     text-decoration: underline;
-  }
-  
-  #character img {
-    width: 12rem;
-    height: 12rem;
-    background: #c8c8c8;
-    margin-right: 2rem;
-    border-radius: 1.5rem;
-    object-fit: cover;
   }
   
   #character h1 ~ div {
@@ -132,13 +120,6 @@ html {
   
   #character-form-avatar {
     margin-right: 2rem;
-  }
-  
-  #character-form-avatar img {
-    width: 12rem;
-    height: 12rem;
-    background: hsla(0, 0%, 0%, 0.2);
-    border-radius: 1rem;
   }
   
   #character-form-avatar input {

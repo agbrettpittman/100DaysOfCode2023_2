@@ -31,7 +31,8 @@
     "react-router-dom": "^6.21.0",
     "styled-components": "^5.3.11",
     "styled-icons": "^10.47.0",
-    "vite-tsconfig-paths": "^4.2.2"
+    "vite-tsconfig-paths": "^4.2.2",
+    "yet-another-react-lightbox": "^3.15.6"
   },
   "devDependencies": {
     "@types/node": "^20.10.4",

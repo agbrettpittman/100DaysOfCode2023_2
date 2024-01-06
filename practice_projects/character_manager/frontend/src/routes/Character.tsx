@@ -1,11 +1,19 @@
 import { Form, useFetcher, useLoaderData } from "react-router-dom";
 import { getCharacter, updateCharacter } from "@/apiCalls";
-import { Character as CharacterType } from "@/__generated__/graphql";
+import { Character as CharacterType, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff, Trash2 } from "@styled-icons/feather"
 import { Box, Button, Typography } from "@mui/material";
 import ProtectedImage from "@components/ProtectedImage";
 import { Edit } from "@styled-icons/fluentui-system-regular/Edit";
+import Lightbox from "yet-another-react-lightbox";
+import {Captions, Thumbnails} from "yet-another-react-lightbox/plugins";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import { useEffect, useState } from "react";
+import { getProtectedFileProps } from "@utils/utilities";
+
 
 export async function loader({ params }: { params:any}) {
     const NoCharacterError = new Response("No character returned", {
@@ -36,6 +44,13 @@ export async function action({ request, params }: { request: any, params: any })
         console.log(error);
         return { character: {} };
     }
+}
+
+type CharacterImagePropsType = CharacterImageType & {
+    src: string;
+    alt: string;
+    title: string;
+    onClick: () => void;
 }
 
 const CharacterTitle = styled.h1`
@@ -94,10 +109,47 @@ const DestroyButton = styled.button`
     }
 `
 
+const CharacterImage = styled.img`
+    max-height: 50vh;
+    cursor: pointer;
+
+    border: 2px solid ${({ theme }) => theme.palette.background.default};
+    padding: 2px;
+    box-sizing: border-box;
+    :hover {
+        border-color: ${({ theme }) => theme.palette.primary.main};
+    }
+`
+
 export default function Character() {
     const { character } = useLoaderData() as {character: CharacterType};
+    const [LightboxPosition, setLightboxPosition] = useState(-1);
+    const [CharacterImages, setCharacterImages] = useState([] as CharacterImagePropsType[]);
 
-    console.log(character)
+    useEffect(() => {
+        updateCharacterImages();
+    }, [character])
+
+    async function updateCharacterImages() {
+        let newCharacterImages = [] as CharacterImagePropsType[];
+        if (!character || !character.images) {
+            setCharacterImages(newCharacterImages);
+            return;
+        }
+        for (const [index, image] of character.images.entries()) {
+            const FallBackAlt = `Image ${index + 1}`;
+            const Alt = image?.caption || FallBackAlt;
+            const ProtectedFileProps = await getProtectedFileProps(image?.filename || "", Alt);
+            const onClick = () => setLightboxPosition(index);
+            newCharacterImages.push({
+                ...image,
+                ...ProtectedFileProps,
+                onClick,
+                title: Alt,
+            })
+        }
+        setCharacterImages(newCharacterImages);
+    }
 
     function handleDestroy(event: React.FormEvent<HTMLFormElement>) {
         if (
@@ -117,7 +169,6 @@ export default function Character() {
                     <Favorite character={character} />
                     <Form action="edit">
                         <EditButton
-                            name="edit"
                             aria-label="edit"
                         >
                             <Edit/>
@@ -125,7 +176,6 @@ export default function Character() {
                     </Form>
                     <Form action="destroy" onSubmit={handleDestroy}>
                         <DestroyButton
-                            name="destroy"
                             aria-label="destroy"
                         >
                             <Trash2/>
@@ -158,15 +208,18 @@ export default function Character() {
                 )}
                 <Typography variant="h6">Pictures</Typography>
                 <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'1rem'}>
-                    { character && character.images && character.images.map((image, index) => {
-                        const FallBackAlt = `Image ${index + 1}`;
-                        const Alt = image?.caption || FallBackAlt;
-                        return (
-                            <ProtectedImage fileId={image?.filename || ""} alt={Alt} key={index} />
-                        )
-                    })}
+                    { CharacterImages.length > 0 && CharacterImages.map((image, index) => 
+                        <CharacterImage {...image} />
+                    )}
                 </Box>
             </div>
+            <Lightbox
+                open={LightboxPosition > -1}
+                plugins={[Captions, Thumbnails]}
+                index={LightboxPosition}
+                close={() => setLightboxPosition(-1)}
+                slides={CharacterImages}
+            />
         </div>
     );
 }

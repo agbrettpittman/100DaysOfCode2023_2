@@ -30,7 +30,7 @@ Got pretty frustrated today with the lack of progress, so I spent a while this e
 
 ### Day 51, January 03, 2024
 
-D51Y2 / #100DaysOfCode Today I locked down the input UI for images and their details and started working on how exactly to get the images to upload. If I can get it working for creation, I suspect updates will be easier. Then I'll need to figure out returning images from the api.
+Today I locked down the input UI for images and their details and started working on how exactly to get the images to upload. If I can get it working for creation, I suspect updates will be easier. Then I'll need to figure out returning images from the api.
 
 ### Day 50, January 02, 2024
 

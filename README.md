@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 54, January 06, 2024
+
+Today was a bit simpler than the past few. The view for uploaded images was driving me crazy, so I tweaked it to size a bit better, setup a lightbox, and had AI generate a little dragon logo to replace the emoji I had been using.
 
 ### Day 53, January 05, 2024
 

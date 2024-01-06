@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲
 
 ## Log
+
+### Day 53, January 05, 2024
+
+Made some progress on cleaning things up for the image handling. Got CORS setup for the express route for downloading files. Set that route up to validate that a user has a valid auth token in their authorization header. Then I created a component for rendering images from said newly protected route. This was needed (or at least helpful to break into a separate component) because the authorization header needed to be set. Lastly, I improved the Character view page's UI a bit by converting the buttons to some little icons that share a common design style. 
 
 ### Day 52, January 04, 2024
 

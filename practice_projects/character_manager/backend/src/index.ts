@@ -145,6 +145,11 @@ db.once('open', async () => {
       path: '/graphql',
     });
 
+    app.use(
+        '/download',
+        cors({origin: 'http://127.0.0.1:3000', credentials: true}),
+    );
+
     app.get('/download/:filename', async (req, res) => {
         const filename = req.params.filename;
         const filePath = `./uploads/${filename}`;

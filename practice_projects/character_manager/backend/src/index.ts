@@ -148,7 +148,11 @@ db.once('open', async () => {
 
     app.use(
         '/download',
-        cors({origin: 'http://127.0.0.1:3000', credentials: true}),
+        cors({
+            origin: 'http://127.0.0.1:3000', 
+            credentials: true,
+            allowedHeaders: ['Content-Disposition', 'Authorization']
+        }),
     );
 
     app.get('/download/:filename', async (req, res) => {
@@ -176,6 +180,8 @@ db.once('open', async () => {
         const DetectedMIME = await detectFilePromise(filePath);
         console.log(`file type detected as ${DetectedMIME}`)
         const newFileName = filename.split('.')[0] + '.' + DetectedMIME.split('/')[1]
+        res.setHeader("Access-Control-Expose-Headers", "X-Suggested-Filename");
+        res.setHeader("X-Suggested-Filename", newFileName);
         res.download(filePath, newFileName, (err) => {
           if (err) {
             console.error(err);

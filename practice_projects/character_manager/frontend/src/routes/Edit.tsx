@@ -1,11 +1,18 @@
 import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
-import { Character as CharacterType, CharacterAttribute, Maybe } from "@/__generated__/graphql";
-import { updateCharacter } from "@/apiCalls";
+import { 
+    Character as CharacterType, 
+    CharacterImage as CharacterImageType,
+    CharacterAttribute, Maybe,  
+} from "@/__generated__/graphql";
+import { getFile, updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import _ from "lodash";
 import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
 import { RootContext } from "@routes/Root";
+import { getProtectedFileProps } from "@utils/utilities";
+import axios from "axios";
+import CharacterImageInput from "@components/CharacterImageInput";
 
 const StyledForm = styled(Form)`
     display: flex;
@@ -18,12 +25,75 @@ const StyledForm = styled(Form)`
     gap: 30px;
 `;
 
+type CharacterImagePropsType = CharacterImageType & {
+    file: File | null;
+}
+
 export default function EditCharacter() {
 
     const { character } = useLoaderData() as {character: CharacterType};
     const { getOwnCharacters } = useContext(RootContext)
     const [CharacterDetails, setCharacterDetails] = useState((character.details?.length) ? character.details : [{name: '', value: ''}]);
+    const [CharacterImages, setCharacterImages] = useState([] as CharacterImagePropsType[]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        updateCharacterImages();
+    }, [character])
+
+    async function updateCharacterImages() {
+        let newCharacterImages = [] as CharacterImagePropsType[];
+        if (!character || !character.images) {
+            setCharacterImages(newCharacterImages);
+            return;
+        }
+        for (const [index, image] of character.images.entries()) {
+            if (!image?.filename) continue;
+            const FallBackAlt = `Image ${index + 1}`;
+            const Alt = image?.caption || FallBackAlt;
+            const ProtectedFileProps = await getProtectedFileProps(image?.filename || "", Alt);
+            console.log(ProtectedFileProps)
+            const RetrievedFile = await getFile(image.filename);
+            if (!RetrievedFile.data) continue;
+            const SuggestedFileName = RetrievedFile.headers['x-suggested-filename'];
+            const CreatedFile = new File([RetrievedFile.data], SuggestedFileName, { type: RetrievedFile.headers['content-type'] });
+            console.log(CreatedFile)
+            // verify data is a file
+            newCharacterImages.push({
+                ...image,
+                file: CreatedFile,
+            })
+        }
+        setCharacterImages(newCharacterImages);
+    }
+
+    function changeCharacterImage(index: number, key: string, value: any) {
+        if (!CharacterImages || !CharacterImages.length) return;
+        if (index === undefined || !key) return;
+        if (key !== 'mainPhoto' && key !== 'caption' && key !== 'file') return;
+        if (!CharacterImages?.[index]) return;
+        let newImages = _.cloneDeep(CharacterImages);
+        if (key === 'file') {
+            if (value.length) {
+                newImages[index]![key] = value[0];
+            } else {
+                newImages[index]![key] = null;
+            }
+        } else if (key === 'mainPhoto') {
+            if (typeof value !== 'boolean') return;
+            if (value === true) {
+                newImages = newImages.map((image) => {
+                    image.mainPhoto = false;
+                    return image;
+                });
+            }
+            newImages[index]![key] = value;
+        } else {
+            if (typeof value !== 'string') return;
+            newImages[index]![key] = value;
+        }
+        setCharacterImages(newImages);
+    }
 
     function changeCharacterDetail(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number, key: string) {
         if (!CharacterDetails || !CharacterDetails.length) return;
@@ -74,6 +144,8 @@ export default function EditCharacter() {
         }
       
     }
+
+    console.log(CharacterImages)
 
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
@@ -135,13 +207,32 @@ export default function EditCharacter() {
                     </Box>
                 )
             })}
-
             <Button 
                 variant="text"
                 color="primary"
                 aria-label="Add Detail"
                 onClick={() => setCharacterDetails([...CharacterDetails, {name: '', value: ''}])}
             >Add Detail</Button>
+            <Typography variant="h6">Pictures</Typography>
+            {
+                CharacterImages.map((image, index) => {
+                    const CurrImageDetails = {
+                        ...image,
+                        mainPhoto: image.mainPhoto || false,
+                        caption: image.caption || '',
+                    }
+                    return (
+                        <CharacterImageInput
+                            key={index} index={index} imageDetails={CurrImageDetails} onChange={changeCharacterImage} 
+                            onRemove={(index) => {
+                                let newImages = _.cloneDeep(CharacterImages);
+                                newImages.splice(index, 1);
+                                setCharacterImages(newImages);
+                            }
+                        }/>
+                    )
+                })
+            }
             <Divider sx={{ width: '100%' }} />
             <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
                 <Button 

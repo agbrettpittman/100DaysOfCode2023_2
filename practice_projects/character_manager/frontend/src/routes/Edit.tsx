@@ -7,7 +7,7 @@ import {
 import { getFile, updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
-import _ from "lodash";
+import _, { initial } from "lodash";
 import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
 import { RootContext } from "@routes/Root";
 import { getProtectedFileProps } from "@utils/utilities";
@@ -228,11 +228,22 @@ export default function EditCharacter() {
                                 let newImages = _.cloneDeep(CharacterImages);
                                 newImages.splice(index, 1);
                                 setCharacterImages(newImages);
-                            }
-                        }/>
+                            }}
+                            initialImage={image.file || undefined}
+                        />
                     )
                 })
             }
+            <Button 
+                variant="text"
+                color="primary"
+                aria-label="Add Picture"
+                onClick={() => setCharacterImages([...CharacterImages, {
+                    mainPhoto: false,
+                    caption: "",
+                    file: null
+                }])}
+            >Add Picture</Button>
             <Divider sx={{ width: '100%' }} />
             <Box display={'flex'} flexDirection={'row'} gap={'1rem'}>
                 <Button 

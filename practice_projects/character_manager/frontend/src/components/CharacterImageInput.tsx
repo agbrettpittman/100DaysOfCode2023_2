@@ -12,6 +12,7 @@ type ComponentProps = {
     }
     onChange: (index: number, key: string, value: any) => void
     onRemove: (index: number) => void
+    initialImage?: File & {preview?:string}
 }
 
 const Wrapper = styled(Box)`
@@ -43,12 +44,13 @@ const RemoveButton = styled(Button)`
 `;
 
 
-export default function CharacterImageInput({ index, imageDetails, onChange, onRemove }: ComponentProps) {
+export default function CharacterImageInput({ index, imageDetails, onChange, onRemove, initialImage }: ComponentProps) {
     return (
         <Wrapper>
             <StyledFileUploader
                 label={`Image ${index}`}
                 onChange={(files) => onChange(index, 'file', files)}
+                initialFiles={initialImage ? [initialImage] : undefined}
             />
             <CaptionField
                 size="small"
@@ -56,6 +58,7 @@ export default function CharacterImageInput({ index, imageDetails, onChange, onR
                 placeholder="Caption"
                 aria-label={`Caption ${index}`}
                 onChange={(e) => onChange(index, 'caption', e.target.value)}
+                value={imageDetails.caption}
             />
             <FormControlLabel label="Main Photo" control={
                 <MainPhotoSwitch

@@ -8,6 +8,17 @@ type WrapperProps = {
     singleFile: boolean
 }
 
+type FilesType = (File & {preview?:string})[];
+
+type ComponentProps = {
+    maxFiles?: number
+    onChange?: (files: FilesType) => void
+    label?: string
+    initialFiles?: FilesType
+}
+
+
+
 const Wrapper = styled(Box)<WrapperProps>`
     display: flex;
     flex-direction: column;
@@ -92,8 +103,8 @@ const RemoveButton = styled.button`
     }
 `;
 
-export default function FileUploader({maxFiles = 1, onChange, label = "Add an image", ...props}: {maxFiles?: number, onChange?: (files: (File & {preview:string})[]) => void, label?: string}) {
-    const [files, setFiles] = useState<(File & {preview:string})[]>([]);
+export default function FileUploader({maxFiles = 1, onChange, label = "Add an image", initialFiles = [], ...props}: ComponentProps) {
+    const [files, setFiles] = useState<FilesType>([]);
     const {getRootProps, getInputProps} = useDropzone({
         accept: {
         'image/*': []
@@ -106,8 +117,27 @@ export default function FileUploader({maxFiles = 1, onChange, label = "Add an im
     });
 
     useEffect(() => {
+        if (initialFiles.length) {
+            let FileWithoutPreviewFound = false;
+            const NewFiles = initialFiles.map(file => {
+                if (!file.preview) {
+                    FileWithoutPreviewFound = true;
+                    return Object.assign(file, {
+                        preview: URL.createObjectURL(file)
+                    });
+                }
+                return file;
+            });
+            if (FileWithoutPreviewFound) setFiles(NewFiles);
+            else return;
+        }
+    }, [initialFiles])
+
+    useEffect(() => {
         // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-        return () => files.forEach(file => URL.revokeObjectURL(file.preview));
+        return () => files.forEach(file => {
+            if (file.preview) URL.revokeObjectURL(file.preview)
+        });
     }, []);
 
     useEffect(() => {
@@ -121,7 +151,7 @@ export default function FileUploader({maxFiles = 1, onChange, label = "Add an im
             <ThumbInner>
                 <PreviewImg
                     src={file.preview}
-                    onLoad={() => { URL.revokeObjectURL(file.preview) }}
+                    onLoad={() => { if (file.preview) URL.revokeObjectURL(file.preview) }}
                 />
             </ThumbInner>
             <RemoveButton onClick={() => setFiles(files.filter(f => f.name !== file.name))}>X</RemoveButton>

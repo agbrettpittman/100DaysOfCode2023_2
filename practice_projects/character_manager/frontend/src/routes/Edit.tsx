@@ -2,7 +2,8 @@ import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
 import { 
     Character as CharacterType, 
     CharacterImage as CharacterImageType,
-    CharacterAttribute, Maybe,  
+    CharacterAttribute, Maybe, CharacterUpdateInput,
+    CharacterImageDetailsInput
 } from "@/__generated__/graphql";
 import { getFile, updateCharacter } from "@/apiCalls";
 import styled from "styled-components";
@@ -109,16 +110,26 @@ export default function EditCharacter() {
         e.preventDefault();
         const form = e.currentTarget;
         const formData = new FormData(form);
-        const updates: { [key: string]: any } = {};
-  
-        formData.forEach((value, key) => {
-            if (typeof value === 'string' || value instanceof File) {
-                updates[key] = value.toString();
-            }
-        });
+        const inputValues: CharacterUpdateInput = {
+            name: validateFormInput('name'),
+            subTitle: validateFormInput('subTitle'),
+            description: validateFormInput('description'),
+            details: [],
+            imageDetails: [] as CharacterImageDetailsInput[],
+        };
+        let images = [] as File[];
 
+        if (!inputValues.name) throw new Error("Name is required");
+
+        function validateFormInput(input: string): string {
+            const Value = formData.get(input);
+            if (!Value) return '';
+            if (typeof Value !== 'string') return '';
+            return Value;
+        }
+  
         if (CharacterDetails && CharacterDetails.length) {
-            updates.details = CharacterDetails.map( (detail: Maybe<CharacterAttribute>) => {
+            inputValues.details = CharacterDetails.map( (detail: Maybe<CharacterAttribute>) => {
                 if (!detail?.name || !detail?.value) {
                     return null;
                 }
@@ -129,13 +140,36 @@ export default function EditCharacter() {
             }).filter( (detail: Maybe<CharacterAttribute>) => detail !== null);
         }
 
+        if (CharacterImages && CharacterImages.length) {
+            let newImageDetails = [] as CharacterImageDetailsInput[];
+            let iterator = 0;
+            CharacterImages.forEach((image) => {
+                if (!image.file) return;
+                const NewFileName = `file-${iterator}`;
+                newImageDetails.push({
+                    mainPhoto: image.mainPhoto,
+                    caption: image.caption,
+                    filename: NewFileName
+                })
+                // change the name of the file to be uploaded
+                const NewFile = new File([image.file], NewFileName, {type: image.file.type});
+                console.log(NewFile);
+                images.push(NewFile);
+                iterator++;
+            })
+            inputValues.imageDetails = newImageDetails;
+        }
+
+        console.log(inputValues);
+        console.log(images);
+
         try {
 
             if (!character._id) {
                 throw new Error("Missing characterId");
             }
             
-            await updateCharacter(character._id, updates);
+            await updateCharacter(character._id, inputValues, images);
             getOwnCharacters();
             navigate(`/Characters/${character._id}`);
         } catch (error) {

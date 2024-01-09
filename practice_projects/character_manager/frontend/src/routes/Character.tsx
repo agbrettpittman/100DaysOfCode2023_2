@@ -32,18 +32,8 @@ export async function loader({ params }: { params:any}) {
     }
 }
 
-export async function action({ request, params }: { request: any, params: any }) {
-    try {
-        let formData = await request.formData();
-        const UpdatedCharacter = await updateCharacter(params.characterId, {
-            private: formData.get("private") === "true",
-        });
-        if (!UpdatedCharacter?.data?.updateCharacter?._id) throw new Error("No character returned");
-        return { character: UpdatedCharacter.data.updateCharacter };
-    } catch (error) {
-        console.log(error);
-        return { character: {} };
-    }
+export async function action() {
+    console.log("need to make this work");
 }
 
 type CharacterImagePropsType = CharacterImageType & {

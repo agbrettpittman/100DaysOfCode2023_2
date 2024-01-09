@@ -104,6 +104,7 @@ input CharacterUpdateInput {
     description: String
     private: Boolean
     details: [CharacterAttributeInput]
+    imageDetails: [CharacterImageDetailsInput]
 }
 
 type Mutation {
@@ -112,7 +113,7 @@ type Mutation {
     logoutUser(refreshToken: String): Boolean
     extendTokens(refreshToken: String): LoginPayload
     createCharacter(input: CharacterCreateInput, images: [Upload]): Character
-    updateCharacter(characterId: String!, input: CharacterUpdateInput): Character
+    updateCharacter(characterId: String!, input: CharacterUpdateInput, images: [Upload]): Character
     uploadCharacterImages(characterId: String!, images: [Upload]): Character
     updateCharacterImageDetails(input: UpdateCharacterImageDetailsInput): Character
     deleteCharacter(characterId: String!): Boolean

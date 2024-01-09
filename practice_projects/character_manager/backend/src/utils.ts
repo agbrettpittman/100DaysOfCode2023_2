@@ -5,6 +5,7 @@ import fs from 'fs';
 import { GraphQLError } from "graphql";
 import { CharactersModel } from "./database/schemas.js";
 import { Types as MonTypes} from "mongoose";
+import _ from "lodash";
 
 const { Magic, MAGIC_MIME_TYPE } = mmm;
 
@@ -139,8 +140,43 @@ export async function validateCharacterImages(
     }
 }
 
+export async function deleteAllCharacterImages(CharacterId:MonTypes.ObjectId) {
+    const CurrentCharacter = await CharactersModel.findById(CharacterId)
+    let imagesArray = CurrentCharacter?.images || [];
+    let newImagesArray = _.cloneDeep(imagesArray);
 
-export async function hanldeCharacterImages(CharacterId:MonTypes.ObjectId, tempDirectory:string, imageDetails:[any?] = []){
+    for (let [index, image] of imagesArray.entries()) {
+        try {
+            const FilePath = `uploads/${image.filename}`;
+            fs.unlinkSync(FilePath);
+            newImagesArray.splice(index, 1);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    try {
+        const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(
+            CharacterId, 
+            { images: newImagesArray }, 
+            { new: true }
+        );
+        return UpdatedCharacter;
+    } catch (err) {
+        throw new GraphQLError(err.message, {
+            extensions: {
+                code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                http: { status: err.extensions?.http?.status || 500 }
+            }
+        });
+    }
+
+}
+
+
+export async function hanldeCharacterImages(
+    CharacterId:MonTypes.ObjectId, tempDirectory:string, imageDetails:[any?] = []
+){
     
     const CurrentCharacter = await CharactersModel.findById(CharacterId)
     let imagesArray = CurrentCharacter?.images || [];

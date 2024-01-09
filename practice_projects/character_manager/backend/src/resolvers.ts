@@ -3,7 +3,10 @@ import { UsersModel, RefreshTokensModel, CharactersModel } from "./database/sche
 import { GraphQLError } from "graphql";
 import jwt from 'jsonwebtoken';
 import { GraphQLUpload } from "graphql-upload-ts";
-import { consumeFileStreams, hanldeCharacterImages, validateCharacterImages } from "./utils.js";
+import { 
+    consumeFileStreams, hanldeCharacterImages, 
+    validateCharacterImages, deleteAllCharacterImages 
+} from "./utils.js";
 import { CharactersInput } from "generated/graphql.js";
 import { Request } from "express";
 import fs from 'fs';
@@ -193,28 +196,79 @@ const resolvers = {
                 }
             }
         },
-        updateCharacter: async (obj:{}, { characterId, input }, { userId }) => {
-            if (!userId) throw new GraphQLError('Unauthorized', {
-                extensions: {
-                    code: 'UNAUTHORIZED',
-                    http: { status: 401 }
+        updateCharacter: async (obj:{}, { characterId, input, images }, { userId }) => {
+
+            const { imageDetails, ...rest } = input;
+            let tempDirectory: string | null = null;
+            let consumedFiles = { directory: null, files: [] };
+            let remappedImageDetails = imageDetails;
+
+            try {
+
+                if (images?.length){
+                    consumedFiles = await consumeFileStreams(images)
+                    tempDirectory = consumedFiles.directory;
                 }
-            });
-            const character = await CharactersModel.findById(characterId);
-            if (!character) throw new GraphQLError('Character not found', {
-                extensions: {
-                    code: 'NOT_FOUND',
-                    http: { status: 404 }
+
+                if (!userId) throw new GraphQLError('Unauthorized', {
+                    extensions: {
+                        code: 'UNAUTHORIZED',
+                        http: { status: 401 }
+                    }
+                });
+
+                if (images?.length) {
+                    remappedImageDetails = await validateCharacterImages(
+                        tempDirectory, consumedFiles.files, imageDetails
+                    );
                 }
-            });
-            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
-                extensions: {
-                    code: 'UNAUTHORIZED',
-                    http: { status: 401 }
+
+                const character = await CharactersModel.findById(characterId);
+
+                if (!character) throw new GraphQLError('Character not found', {
+                    extensions: {
+                        code: 'NOT_FOUND',
+                        http: { status: 404 }
+                    }
+                });
+                if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                    extensions: {
+                        code: 'UNAUTHORIZED',
+                        http: { status: 401 }
+                    }
+                });
+
+                console.log("Updating character")
+                const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
+
+                if (images?.length) {
+
+                    try {
+                        await deleteAllCharacterImages(characterId);
+                        const ImgUpdatedCharacter = await hanldeCharacterImages(
+                            characterId, tempDirectory, remappedImageDetails
+                        );
+                        return ImgUpdatedCharacter;
+                    }
+                    catch (err) {
+                        throw err;                
+                    }
+                } else {
+                    return UpdatedCharacter;
                 }
-            });
-            const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
-            return UpdatedCharacter
+
+            } catch (err) {
+                throw new GraphQLError(err.message, {
+                    extensions: {
+                        code: err.extensions?.code || 'INTERNAL_SERVER_ERROR',
+                        http: { status: err.extensions?.http?.status || 500 }
+                    }
+                });
+            } finally {
+                if (tempDirectory) {
+                    fs.rmSync(tempDirectory, { recursive: true });
+                }
+            }
         },
         uploadCharacterImages: async (obj:{}, { characterId, images }, { userId, req, res }) => {
 

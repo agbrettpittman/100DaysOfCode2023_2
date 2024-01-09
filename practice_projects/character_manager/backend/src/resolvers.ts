@@ -241,14 +241,18 @@ const resolvers = {
                 console.log("Updating character")
                 const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
 
-                if (images?.length) {
+                if (images !== undefined) {
 
                     try {
-                        await deleteAllCharacterImages(characterId);
-                        const ImgUpdatedCharacter = await hanldeCharacterImages(
-                            characterId, tempDirectory, remappedImageDetails
-                        );
-                        return ImgUpdatedCharacter;
+                        const ImgDeletedCharacter = await deleteAllCharacterImages(characterId);
+                        if (images?.length) {
+                            const ImgUpdatedCharacter = await hanldeCharacterImages(
+                                characterId, tempDirectory, remappedImageDetails
+                            );
+                            return ImgUpdatedCharacter;
+                        } else {
+                            return ImgDeletedCharacter;
+                        }
                     }
                     catch (err) {
                         throw err;                

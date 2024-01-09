@@ -20,6 +20,7 @@ import gql from "graphql-tag";
 import mmm from 'mmmagic'
 import { promisify } from "util";
 import cors from 'cors';
+import fs from 'fs';
 
 const { Magic, MAGIC_MIME_TYPE } = mmm;
 
@@ -175,6 +176,17 @@ db.once('open', async () => {
         const filename = req.params.filename;
         const filePath = `./uploads/${filename}`;
         console.log("got download request for file: " + filename)
+
+        // verify existence of file
+
+        try {
+            fs.accessSync(filePath, fs.constants.R_OK);
+        } catch (err) {
+            console.log(err);
+            res.status(404).send('File not found');
+            return;
+        }
+
         const magic = new Magic(MAGIC_MIME_TYPE);
         const detectFilePromise = promisify(magic.detectFile.bind(magic));
         const DetectedMIME = await detectFilePromise(filePath);

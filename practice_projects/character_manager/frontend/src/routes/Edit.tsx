@@ -54,16 +54,26 @@ export default function EditCharacter() {
             const Alt = image?.caption || FallBackAlt;
             const ProtectedFileProps = await getProtectedFileProps(image?.filename || "", Alt);
             console.log(ProtectedFileProps)
-            const RetrievedFile = await getFile(image.filename);
-            if (!RetrievedFile.data) continue;
-            const SuggestedFileName = RetrievedFile.headers['x-suggested-filename'];
-            const CreatedFile = new File([RetrievedFile.data], SuggestedFileName, { type: RetrievedFile.headers['content-type'] });
-            console.log(CreatedFile)
-            // verify data is a file
-            newCharacterImages.push({
-                ...image,
-                file: CreatedFile,
-            })
+            try {
+                const RetrievedFile = await getFile(image.filename);
+                if (!RetrievedFile.data) continue;
+                const SuggestedFileName = RetrievedFile.headers['x-suggested-filename'];
+                const CreatedFile = new File([RetrievedFile.data], SuggestedFileName, { type: RetrievedFile.headers['content-type'] });
+                console.log(CreatedFile)
+                // verify data is a file
+                newCharacterImages.push({
+                    ...image,
+                    file: CreatedFile,
+                })
+
+            } catch (error) {
+                console.log(error);
+                newCharacterImages.push({
+                    ...image,
+                    file: null,
+                })
+                continue;
+            }
         }
         setCharacterImages(newCharacterImages);
     }

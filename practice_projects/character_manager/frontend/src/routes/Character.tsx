@@ -153,7 +153,7 @@ export default function Character() {
 
     return (
         <div id="character">
-            <div>
+            <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
                 <CharacterTitle>
                     {character.name || <i>No Name</i>}
                     <Favorite character={character} />
@@ -173,11 +173,9 @@ export default function Character() {
                     </Form>
                 </CharacterTitle>
 
-                {character.subTitle && (
-                    <SubTitle>
-                        {character.subTitle}
-                    </SubTitle>
-                )}
+                {/*character.subTitle && <SubTitle>{character.subTitle}</SubTitle>*/}
+                {character.subTitle && <Typography variant={'h5'} component={'h2'} color={'textSecondary'} sx={{mt: -1}}
+                >{character.subTitle}</Typography>}
 
                 {character.description && (
                     <p>{character.description}</p>
@@ -196,13 +194,12 @@ export default function Character() {
                         })}
                     </ul>
                 )}
-                <Typography variant="h6">Pictures</Typography>
-                <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'1rem'}>
-                    { CharacterImages.length > 0 && CharacterImages.map((image, index) => 
-                        <CharacterImage {...image} />
-                    )}
-                </Box>
-            </div>
+                { CharacterImages.length > 0 &&
+                    <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'0px'}>
+                        {CharacterImages.map((image, index) => <CharacterImage {...image} />)}
+                    </Box>
+                }
+            </Box>
             <Lightbox
                 open={LightboxPosition > -1}
                 plugins={[Captions, Thumbnails]}

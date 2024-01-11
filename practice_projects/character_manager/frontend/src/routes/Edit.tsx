@@ -267,7 +267,7 @@ export default function EditCharacter() {
                     }
                     return (
                         <CharacterImageInput
-                            key={index} index={index} imageDetails={CurrImageDetails} onChange={changeCharacterImage} 
+                            key={image.filename} index={index} imageDetails={CurrImageDetails} onChange={changeCharacterImage} 
                             onRemove={(index) => {
                                 let newImages = _.cloneDeep(CharacterImages);
                                 newImages.splice(index, 1);

@@ -143,17 +143,23 @@ export async function validateCharacterImages(
 export async function deleteAllCharacterImages(CharacterId:MonTypes.ObjectId) {
     const CurrentCharacter = await CharactersModel.findById(CharacterId)
     let imagesArray = CurrentCharacter?.images || [];
-    let newImagesArray = _.cloneDeep(imagesArray);
-
-    for (let [index, image] of imagesArray.entries()) {
+    let newImagesArray = imagesArray.filter((image, index) => {
         try {
             const FilePath = `uploads/${image.filename}`;
-            fs.unlinkSync(FilePath);
-            newImagesArray.splice(index, 1);
+            try {
+                fs.unlinkSync(FilePath);
+            } catch (err) {
+                // if the file doesn't exist, that's fine
+                if (err.code !== 'ENOENT') throw err;
+                else console.log(`file ${FilePath} doesn't exist`);
+            } 
+            console.log(`deleting file details for image ${index}`)
+            return false;
         } catch (err) {
             console.log(err);
+            return true;
         }
-    }
+    })
 
     try {
         const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(

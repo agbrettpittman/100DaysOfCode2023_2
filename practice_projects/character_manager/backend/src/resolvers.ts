@@ -198,7 +198,7 @@ const resolvers = {
         },
         updateCharacter: async (obj:{}, { characterId, input, images }, { userId }) => {
 
-            const { imageDetails, ...rest } = input;
+            const { imageDetails, ...otherInputValues } = input;
             let tempDirectory: string | null = null;
             let consumedFiles = { directory: null, files: [] };
             let remappedImageDetails = imageDetails;
@@ -239,7 +239,7 @@ const resolvers = {
                 });
 
                 console.log("Updating character")
-                const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, input, { new: true });
+                const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, otherInputValues, { new: true });
 
                 if (images !== undefined) {
 

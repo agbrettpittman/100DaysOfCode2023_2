@@ -172,11 +172,8 @@ db.once('open', async () => {
                 console.log(err.message);
             }
         }
-        console.log(req.headers)
         const filename = req.params.filename;
         const filePath = `./uploads/${filename}`;
-        console.log("got download request for file: " + filename)
-
         // verify existence of file
 
         try {
@@ -190,10 +187,10 @@ db.once('open', async () => {
         const magic = new Magic(MAGIC_MIME_TYPE);
         const detectFilePromise = promisify(magic.detectFile.bind(magic));
         const DetectedMIME = await detectFilePromise(filePath);
-        console.log(`file type detected as ${DetectedMIME}`)
         const newFileName = filename.split('.')[0] + '.' + DetectedMIME.split('/')[1]
         res.setHeader("Access-Control-Expose-Headers", "X-Suggested-Filename");
         res.setHeader("X-Suggested-Filename", newFileName);
+        console.log(`sending file ${filePath} as ${newFileName}`)
         res.download(filePath, newFileName, (err) => {
           if (err) {
             console.error(err);

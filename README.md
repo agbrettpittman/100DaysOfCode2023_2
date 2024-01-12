@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲
 
 ## Log
+
+### Day 57, January 11, 2024
+
+Missed the last 2 days because our crawlspace flooded (video below of our property), so we've been spending a good bit of time the last couple days getting all of that bailed out and mopped up. Got back to the challenge today and got modifying character images working along with the proper error handling. I spent a bit of time improving the look of the character page as well. Tomorrow I'll start working on the global search bar. Definitely feels like I'm on the homestretch of the app itself as a learning tool for GraphQL and TS. Which is good, because I was hoping to spend some time on some other technologies as well.
 
 ### Day 56, January 08, 2024
 

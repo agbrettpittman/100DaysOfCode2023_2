@@ -16,9 +16,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 
 ## Log
+
+### Day 58, January 12, 2024
+
+I had planned on working on global search today, but remembered I had not properly reintegrated setting a character as private or public. I fixed that and in the process converted the page to no longer load data from a React router data loader. I just don't like the disjointed nature of those. I prefer to have everything related to a component in the same file. However, I got stuck on a litany of TS errors in the process.
 
 ### Day 57, January 11, 2024
 

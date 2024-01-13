@@ -42,9 +42,19 @@ export default function SideBarNav() {
 
     const CurrentSearchParamsString = searchParams.toString()
 
+    const FilteredCharacters = OwnCharacters.filter((character) => {
+        if (searchParams.get("ownSearch")) {
+            const searchRegex = new RegExp(searchParams.get("ownSearch")!, "i")
+            if (!character.name) return false
+            return searchRegex.test(character.name)
+        } else return true
+    })
+
+    console.log(FilteredCharacters)
+
     return (
         <StyledNav>
-            {OwnCharacters.map((character) => (
+            {FilteredCharacters.map((character) => (
                 <StyledNavLink
                     key={character._id}
                     to={`/Characters/${character._id}?${CurrentSearchParamsString}`}

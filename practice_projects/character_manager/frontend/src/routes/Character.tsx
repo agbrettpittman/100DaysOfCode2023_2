@@ -1,4 +1,4 @@
-import { Form, useFetcher, useLoaderData } from "react-router-dom";
+import { Form, useFetcher, useLoaderData, useParams } from "react-router-dom";
 import { getCharacter, updateCharacter } from "@/apiCalls";
 import { Character as CharacterType, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import styled from "styled-components";
@@ -13,6 +13,7 @@ import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { useEffect, useState } from "react";
 import { getProtectedFileProps } from "@utils/utilities";
+import _ from "lodash";
 
 
 export async function loader({ params }: { params:any}) {
@@ -41,6 +42,10 @@ type CharacterImagePropsType = CharacterImageType & {
     alt: string;
     title: string;
     onClick: () => void;
+}
+
+type CharacterStateType = CharacterType & {
+    images: CharacterImagePropsType[]
 }
 
 const CharacterTitle = styled.h1`
@@ -102,7 +107,6 @@ const DestroyButton = styled.button`
 const CharacterImage = styled.img`
     max-height: 50vh;
     cursor: pointer;
-
     border: 2px solid ${({ theme }) => theme.palette.background.default};
     padding: 2px;
     box-sizing: border-box;
@@ -112,20 +116,29 @@ const CharacterImage = styled.img`
 `
 
 export default function Character() {
-    const { character } = useLoaderData() as {character: CharacterType};
+    const { characterId } = useParams();
     const [LightboxPosition, setLightboxPosition] = useState(-1);
-    const [CharacterImages, setCharacterImages] = useState([] as CharacterImagePropsType[]);
+    const [character, setCharacter] = useState<CharacterStateType>({} as CharacterStateType);
 
     useEffect(() => {
-        updateCharacterImages();
-    }, [character])
+        getCharacterData();
+    }, [characterId])
 
-    async function updateCharacterImages() {
-        let newCharacterImages = [] as CharacterImagePropsType[];
-        if (!character || !character.images) {
-            setCharacterImages(newCharacterImages);
-            return;
+    async function getCharacterData() {
+        if (!characterId) return;
+        const CharacterResponse = await getCharacter(characterId);
+        if (CharacterResponse?.data?.character?._id) {
+            let character = CharacterResponse.data.character;
+            setCharacter({
+                ...character,
+                images: await processCharacterImages(character),
+            });
         }
+    }
+
+    async function processCharacterImages(character: CharacterType): Promise<CharacterImagePropsType[]> {
+        if (!character.images?.length) return [];
+        let newCharacterImages = [];
         for (const [index, image] of character.images.entries()) {
             const FallBackAlt = `Image ${index + 1}`;
             const Alt = image?.caption || FallBackAlt;
@@ -138,7 +151,7 @@ export default function Character() {
                 title: Alt,
             })
         }
-        setCharacterImages(newCharacterImages);
+        return newCharacterImages
     }
 
     function handleDestroy(event: React.FormEvent<HTMLFormElement>) {
@@ -151,12 +164,33 @@ export default function Character() {
         }
     }
 
+    async function toggleCharacterPrivacy() {
+        const newCharacterResponse = await updateCharacter(character._id, { private: !character.private });
+        if (newCharacterResponse?.data?.updateCharacter?.private !== undefined) {
+            const newCharacter = newCharacterResponse.data.updateCharacter;
+            setCharacter({
+                ...newCharacter,
+                images: await processCharacterImages(newCharacter),
+            })
+        }
+    }
+
     return (
         <div id="character">
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
                 <CharacterTitle>
                     {character.name || <i>No Name</i>}
-                    <Favorite character={character} />
+                    <PrivateButton
+                        name="private"
+                        onClick={toggleCharacterPrivacy}
+                        aria-label={
+                            character.private
+                            ? "Make Public"
+                            : "Make Private"
+                        }
+                    >
+                        {character.private ? <Eye /> : <EyeOff />}
+                    </PrivateButton>
                     <Form action="edit">
                         <EditButton
                             aria-label="edit"
@@ -194,9 +228,18 @@ export default function Character() {
                         })}
                     </ul>
                 )}
-                { CharacterImages.length > 0 &&
+                
+                {character.images?.length > 0 &&
                     <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'0px'}>
-                        {CharacterImages.map((image, index) => <CharacterImage {...image} />)}
+                        {character.images.map((image:CharacterImagePropsType, index) => {
+                            const CharacterImageProps = {
+                                src: image.src,
+                                alt: image.alt,
+                                title: image.title,
+                                onClick: image.onClick,
+                            }
+                            return <CharacterImage {...CharacterImageProps} />
+                        })}
                     </Box>
                 }
             </Box>
@@ -205,33 +248,8 @@ export default function Character() {
                 plugins={[Captions, Thumbnails]}
                 index={LightboxPosition}
                 close={() => setLightboxPosition(-1)}
-                slides={CharacterImages}
+                slides={character.images || []}
             />
         </div>
-    );
-}
-
-function Favorite({ character }: { character: CharacterType }) {
-    const { Form:FetcherForm, formData:FetcherFormData } = useFetcher()
-    let characterIsPrivate = character.private;
-
-    if (FetcherFormData) {
-        characterIsPrivate = FetcherFormData.get("private") === "true";
-    }
-
-    return (
-        <FetcherForm method="post">
-            <PrivateButton
-                name="private"
-                value={characterIsPrivate ? "false" : "true"}
-                aria-label={
-                    characterIsPrivate
-                    ? "Make Public"
-                    : "Make Private"
-                }
-            >
-                {characterIsPrivate ? <Eye /> : <EyeOff />}
-            </PrivateButton>
-        </FetcherForm>
     );
 }

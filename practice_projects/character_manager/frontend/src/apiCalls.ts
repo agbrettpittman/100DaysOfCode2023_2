@@ -153,7 +153,7 @@ export function createCharacter(input: CharacterCreateInput, images: File[]){
 
 }
 
-export function updateCharacter(characterId: string, input: CharacterUpdateInput, images: File[]){
+export function updateCharacter(characterId: string, input: CharacterUpdateInput, images?: File[]){
     return ApolloClientInstance.mutate<UpdateCharacterMutation, UpdateCharacterMutationVariables>({
         mutation: gql`
             mutation updateCharacter($characterId: String!, $input: CharacterUpdateInput!, $images: [Upload]) {

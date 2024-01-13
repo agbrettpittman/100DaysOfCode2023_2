@@ -18,18 +18,35 @@ const resolvers = {
             return await UsersModel.find();
         },
         characters: async (obj:{}, { input }: { input: CharactersInput} ) => {
+            const { include, exclude } = input;
             let search = {};
-            if (input.name) {
-                search['name'] = { $regex: input.name, $options: 'i' }
+            if (include) {
+                if (include._id) {
+                    search['_id'] = include._id
+                }
+                if (include.name) {
+                    search['name'] = { $regex: include.name, $options: 'i' }
+                }
+                if (include.creatorId) {
+                    search['creatorId'] = include.creatorId
+                }
+                if (include.ownerId) {
+                    search['ownerId'] = include.ownerId
+                }
             }
-            if (input.creatorId) {
-                search['creatorId'] = input.creatorId
-            }
-            if (input.ownerId) {
-                search['ownerId'] = input.ownerId
-            }
-            if (input._id) {
-                search['_id'] = input._id
+            if (exclude) {
+                if (exclude._id) {
+                    search['_id'] = { $ne: exclude._id }
+                }
+                if (exclude.name) {
+                    search['name'] = { $not: { $regex: exclude.name, $options: 'i' } }
+                }
+                if (exclude.creatorId) {
+                    search['creatorId'] = { $ne: exclude.creatorId }
+                }
+                if (exclude.ownerId) {
+                    search['ownerId'] = { $ne: exclude.ownerId }
+                }
             }
             return await CharactersModel.find(search);
         },

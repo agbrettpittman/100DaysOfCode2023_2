@@ -451,6 +451,22 @@
             "deprecationReason": null
           },
           {
+            "name": "imageDetails",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "CharacterImageDetailsInput",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "name",
             "description": null,
             "type": {
@@ -494,6 +510,41 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "CharactersInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "exclude",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CharactersInputFilters",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "include",
+            "description": null,
+            "type": {
+              "kind": "INPUT_OBJECT",
+              "name": "CharactersInputFilters",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CharactersInputFilters",
         "description": null,
         "fields": null,
         "inputFields": [
@@ -1072,6 +1123,22 @@
                   "ofType": {
                     "kind": "SCALAR",
                     "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "images",
+                "description": null,
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Upload",
                     "ofType": null
                   }
                 },

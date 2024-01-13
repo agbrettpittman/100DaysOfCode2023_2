@@ -88,8 +88,8 @@ export default function SideBarHeader() {
             <Form id="search-form" role="search">
                 <SearchInput
                     id="q"
-                    aria-label="Search contacts"
-                    placeholder="Search"
+                    aria-label="Filter..."
+                    placeholder="Filter..."
                     type="search"
                     name="q"
                     defaultValue={searchParams.get("q") || ""}

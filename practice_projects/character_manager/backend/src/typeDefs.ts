@@ -40,11 +40,16 @@ type Character {
     private: Boolean
 }
 
-input CharactersInput {
+input CharactersInputFilters {
     _id: ID
     name: String
     creatorId: String
     ownerId: String
+}
+
+input CharactersInput {
+    include: CharactersInputFilters
+    exclude: CharactersInputFilters
 }
 
 type LoginPayload {

@@ -42,11 +42,14 @@ export default function Root() {
     const [searchParams, setSearchParams] = useSearchParams()
 
     async function getCharactersFromAPI() {
-        const query = {} as CharactersInput
-        if (searchParams.get("q")) query["name"] = searchParams.get("q")
+        const query = {
+            include: {},
+            exclude: {},
+        } as CharactersInput
+        if (searchParams.get("q")) query.include!.name = searchParams.get("q")
         const decodedAccessToken = parseAccessToken()
         if (!decodedAccessToken) throw new Error("No access token")
-        query['ownerId'] = decodedAccessToken.userId
+        query.include!.ownerId = decodedAccessToken.userId
         const CharactersResponse = await getCharacters(false,query);
 
         if (!CharactersResponse?.data?.characters) throw new Error("No characters");

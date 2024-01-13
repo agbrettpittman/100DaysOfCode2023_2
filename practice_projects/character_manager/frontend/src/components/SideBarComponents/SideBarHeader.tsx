@@ -70,14 +70,14 @@ export default function SideBarHeader() {
     useEffect(() => {
         const SearchInput = document.getElementById("q") as HTMLInputElement;
         if (!SearchInput) return;
-        SearchInput.value = searchParams.get("q") || "";
+        SearchInput.value = searchParams.get("ownSearch") || "";
     }, [searchParams]);
 
     const DecodedSearchParams = navigation.location && new URLSearchParams(navigation.location.search)
-    const Searching =  DecodedSearchParams && DecodedSearchParams.get("q") !== null;
+    const Searching =  DecodedSearchParams && DecodedSearchParams.get("ownSearch") !== null;
 
     function searchSubmit(e: React.ChangeEvent<HTMLInputElement>) {
-        const isFirstSearch = searchParams.get("q") === null;
+        const isFirstSearch = searchParams.get("ownSearch") === null;
         submit(e.currentTarget.form, {
             replace: !isFirstSearch,
         });
@@ -87,12 +87,12 @@ export default function SideBarHeader() {
         <Wrapper>
             <Form id="search-form" role="search">
                 <SearchInput
-                    id="q"
+                    id="ownSearch"
                     aria-label="Filter..."
                     placeholder="Filter..."
                     type="search"
-                    name="q"
-                    defaultValue={searchParams.get("q") || ""}
+                    name="ownSearch"
+                    defaultValue={searchParams.get("ownSearch") || ""}
                     onChange={searchSubmit}
                     loading={Boolean(Searching)}
                 />

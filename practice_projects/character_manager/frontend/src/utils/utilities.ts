@@ -1,4 +1,5 @@
 import { getFile } from "@/apiCalls"
+import { useLocation, useNavigate } from "react-router-dom"
 
 export function parseAccessToken(){
     const accessToken = localStorage.getItem('accessToken')
@@ -21,5 +22,22 @@ export async function getProtectedFileProps(fileId="", alt=""): Promise<{src: st
             src: "",
             alt: "Failed To Load Image"
         }
+    }
+}
+
+export function useCustomNavigate() {
+    const ReactRouterNavigate = useNavigate()
+    const location = useLocation()
+
+    function navigate(path = "", options = { preserveSearch: true }) {
+        const { preserveSearch, ...otherOptions} = options
+        let newPath = path
+        if (preserveSearch) newPath += location.search
+        ReactRouterNavigate(newPath, otherOptions)
+    }
+
+    return {
+        location,
+        navigate
     }
 }

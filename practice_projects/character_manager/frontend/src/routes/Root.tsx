@@ -46,7 +46,7 @@ export default function Root() {
             include: {},
             exclude: {},
         } as CharactersInput
-        if (searchParams.get("q")) query.include!.name = searchParams.get("q")
+        if (searchParams.get("ownSearch")) query.include!.name = searchParams.get("ownSearch")
         const decodedAccessToken = parseAccessToken()
         if (!decodedAccessToken) throw new Error("No access token")
         query.include!.ownerId = decodedAccessToken.userId

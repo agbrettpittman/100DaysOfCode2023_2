@@ -17,9 +17,13 @@ const resolvers = {
         users: async () => {
             return await UsersModel.find();
         },
-        characters: async (obj:{}, { input }: { input: CharactersInput} ) => {
+        characters: async (obj:{}, { input }: { input: CharactersInput}, { userId }) => {
             const { include, exclude } = input;
             let search = {};
+
+            if (!userId || include?.ownerId !== userId) {
+                search['private'] = false;
+            }
             if (include) {
                 if (include._id) {
                     search['_id'] = include._id

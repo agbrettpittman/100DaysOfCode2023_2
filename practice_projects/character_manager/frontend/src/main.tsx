@@ -14,6 +14,7 @@ import Character from "@routes/Character";
 import EditCharacter from "@routes/Edit";
 import { action as destroyAction } from "@routes/Destroy";
 import SignUp from "@routes/SignUp";
+import SearchResults from "@routes/SearchResults";
 import "./index.css";
 import ErrorPage from "./error-page";
 import Index from "@routes/Index";
@@ -43,6 +44,7 @@ const router = createBrowserRouter( createRoutesFromElements(
                             loader={characterLoader} 
                         />
                         <Route path="Characters/:characterId/destroy" action={destroyAction} />
+                        <Route path="SearchResults" element={<SearchResults />} />
                     </Route>
                 </Route>
             </Route>

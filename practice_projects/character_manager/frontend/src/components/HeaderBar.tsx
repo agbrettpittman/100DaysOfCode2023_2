@@ -1,4 +1,4 @@
-import {useState, MouseEvent} from 'react';
+import {useState, MouseEvent, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,6 +18,8 @@ import InputBase from '@mui/material/InputBase';
 import { Search as SearchIcon} from '@styled-icons/evaicons-solid/Search'
 import { logoutUser } from '@/apiCalls';
 import { PaddingRight } from 'styled-icons/fluentui-system-filled';
+import { useSearchParams } from 'react-router-dom';
+import { useCustomNavigate } from '@utils/utilities';
 
 const StyledAppBar = styled(AppBar)`
     height: fit-content;
@@ -82,6 +84,9 @@ const StyledInputBase = MuiStyled(InputBase)(({ theme }) => ({
 
 export default function HeaderBar() {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [searchParams, setSearchParams] = useSearchParams()
+    const { navigate: Navigate, location } = useCustomNavigate();
+    
     const settings = [
         {
             title: 'Profile',
@@ -118,6 +123,13 @@ export default function HeaderBar() {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    function handleSearchSubmit(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            Navigate('/SearchResults');
+        }
+    }
 
     return (
         <StyledAppBar position="static" elevation={0}>
@@ -164,6 +176,12 @@ export default function HeaderBar() {
                         <StyledInputBase
                             placeholder="Search other's characters..."
                             inputProps={{ 'aria-label': 'search'}}
+                            value={searchParams.get("globalSearch") || ""}
+                            onChange={(e) => {
+                                searchParams.set("globalSearch", e.target.value);
+                                setSearchParams(searchParams);
+                            }}
+                            onKeyDown={handleSearchSubmit}
                         />
                     </Search>
                     <Box sx={{ flexGrow: 0 }}>
@@ -173,20 +191,20 @@ export default function HeaderBar() {
                         </IconButton>
                         </Tooltip>
                         <Menu
-                        sx={{ mt: '45px' }}
-                        id="menu-appbar"
-                        anchorEl={anchorElUser}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        open={Boolean(anchorElUser)}
-                        onClose={handleCloseUserMenu}
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
                         >
                         {settings.map((setting) => (
                             <MenuItem key={setting.title} onClick={handleCloseUserMenu}>

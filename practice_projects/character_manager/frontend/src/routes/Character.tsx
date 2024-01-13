@@ -175,6 +175,8 @@ export default function Character() {
         }
     }
 
+    console.log(character)
+
     return (
         <div id="character">
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
@@ -189,7 +191,7 @@ export default function Character() {
                             : "Make Private"
                         }
                     >
-                        {character.private ? <Eye /> : <EyeOff />}
+                        {!character.private ? <Eye /> : <EyeOff />}
                     </PrivateButton>
                     <Form action="edit">
                         <EditButton

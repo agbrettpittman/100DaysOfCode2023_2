@@ -16,9 +16,17 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
-- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 
 ## Log
+
+### Day 58, January 12, 2024
+
+I had planned on working on global search today, but remembered I had not properly reintegrated setting a character as private or public. I fixed that and in the process converted the page to no longer load data from a React router data loader. I just don't like the disjointed nature of those. I prefer to have everything related to a component in the same file. However, I got stuck on a litany of TS errors in the process.
+
+### Day 57, January 11, 2024
+
+Missed the last 2 days because our crawlspace flooded (video below of our property), so we've been spending a good bit of time the last couple days getting all of that bailed out and mopped up. Got back to the challenge today and got modifying character images working along with the proper error handling. I spent a bit of time improving the look of the character page as well. Tomorrow I'll start working on the global search bar. Definitely feels like I'm on the homestretch of the app itself as a learning tool for GraphQL and TS. Which is good, because I was hoping to spend some time on some other technologies as well.
 
 ### Day 56, January 08, 2024
 

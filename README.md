@@ -17,8 +17,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
+- 🐲
 
 ## Log
+
+### Day 60, January 14, 2024
+
+Decided to have some frontend fun today and got dark mode working! Took a bit to understand extending the MaterialUI color palette (docs could be a bit better here). But after that, it wasn't difficult at all! MUI definitely made it easier than it would have been homebrewing everything.
 
 ### Day 59, January 13, 2024
 

@@ -20,6 +20,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 59, January 13, 2024
+
+not going to lie, was not in the mood to work on code today, but I went ahead and started on global searching. Turned out to be easier than I expected. I had to tweak the current searching, and I actually ended up turning that into a simple filter on the frontend. So the frontend will filter your current characters on the sidebar, while the top bar will do a global search of all non-private characters based on the term you entered.
+
 ### Day 58, January 12, 2024
 
 I had planned on working on global search today, but remembered I had not properly reintegrated setting a character as private or public. I fixed that and in the process converted the page to no longer load data from a React router data loader. I just don't like the disjointed nature of those. I prefer to have everything related to a component in the same file. However, I got stuck on a litany of TS errors in the process.

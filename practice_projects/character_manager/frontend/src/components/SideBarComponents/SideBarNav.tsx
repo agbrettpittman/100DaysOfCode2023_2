@@ -20,11 +20,11 @@ const StyledNavLink = styled(NavLink)`
     white-space: pre;
     padding: 0.5rem;
     border-radius: 8px;
-    color: inherit;
+    color: ${({ theme }) => theme.palette.text.secondary};
     text-decoration: none;
     gap: 1rem;
     &:hover {
-        background: #e3e3e3;
+        background: ${({ theme }) => theme.palette.extendedBackground.contrastMedium};
     }
     &.active {
         background: ${({ theme }) => theme.palette.primary.main};
@@ -49,8 +49,6 @@ export default function SideBarNav() {
             return searchRegex.test(character.name)
         } else return true
     })
-
-    console.log(FilteredCharacters)
 
     return (
         <StyledNav>

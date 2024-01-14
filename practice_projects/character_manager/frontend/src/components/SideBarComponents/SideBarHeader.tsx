@@ -10,10 +10,11 @@ const Wrapper = styled.div`
     gap: 0.5rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid #e3e3e3;
+    border-bottom: 1px solid ${({ theme }) => theme.palette.divider};
 
     form {
         position: relative;
+        background-color: ${({ theme }) => theme.palette.extendedBackground.contrastLow};
     }
 `
 
@@ -27,6 +28,7 @@ const SearchInput = styled.input`
     background-repeat: no-repeat;
     background-position: 0.625rem 0.75rem;
     background-size: 1rem;
+    background-color: ${({ theme }) => theme.palette.extendedBackground.main};
     position: relative;
 `
 

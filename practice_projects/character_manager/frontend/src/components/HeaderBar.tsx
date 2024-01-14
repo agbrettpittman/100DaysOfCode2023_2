@@ -1,4 +1,4 @@
-import {useState, MouseEvent, useEffect} from 'react';
+import {useState, MouseEvent, useEffect, useContext} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,11 +18,22 @@ import InputBase from '@mui/material/InputBase';
 import { Search as SearchIcon} from '@styled-icons/evaicons-solid/Search'
 import { logoutUser } from '@/apiCalls';
 import { PaddingRight } from 'styled-icons/fluentui-system-filled';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import { useSearchParams } from 'react-router-dom';
 import { useCustomNavigate } from '@utils/utilities';
+import { ColorModeContext } from './ThemeWrapper';
+import { useTheme } from '@mui/material/styles';
+import { Sun, Moon, ArrowRight } from 'styled-icons/feather';
 
 const StyledAppBar = styled(AppBar)`
     height: fit-content;
+    background-color: ${({ theme }) => theme.palette.primary.main};
+`
+
+const Logo = styled.img`
+    filter: ${({ theme }) => theme.palette.mode === 'dark' ? 'invert(1)' : 'invert(0)'};
+    height: 40px;
+    width: 40px;
 `
 
 const StyledToolBar = styled(Toolbar)`
@@ -86,7 +97,8 @@ export default function HeaderBar() {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [searchParams, setSearchParams] = useSearchParams()
     const { navigate: Navigate, location } = useCustomNavigate();
-    
+    const Theme = useTheme();
+    const ColorMode = useContext(ColorModeContext);
     const settings = [
         {
             title: 'Profile',
@@ -113,7 +125,7 @@ export default function HeaderBar() {
                     alert('Failed to logout');
                 });
             }
-        },
+        }
     ]
 
     const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
@@ -149,7 +161,7 @@ export default function HeaderBar() {
                         textDecoration: 'none',
                         }}
                     >
-                        <img src="/LotA.png" alt="Logo" width="40px" height="40px" />
+                        <Logo src="/LotA.png" alt="Logo" />
                     </Typography>
                     <Typography
                         variant="h5"
@@ -187,7 +199,7 @@ export default function HeaderBar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar alt="Profile Icon" sx={{ bgcolor: 'primary.contrastText', color: 'primary.main' }}/>
+                            <Avatar alt="Profile Icon" sx={{ bgcolor: 'background.default', color: 'primary.main' }}/>
                         </IconButton>
                         </Tooltip>
                         <Menu
@@ -216,6 +228,20 @@ export default function HeaderBar() {
                                 </ProfileDropdownItem>
                             </MenuItem>
                         ))}
+                            <MenuItem onClick={() => ColorMode.toggleColorMode()}>
+                                <ListItemIcon>
+                                    {Theme.palette.mode === 'light' ?
+                                         <Sun width={24} height={24} />
+                                         : <Moon width={24} height={24} />
+                                    }
+                                    <ArrowRight width={24} height={24} />
+                                    {Theme.palette.mode === 'dark' ?
+                                         <Sun width={24} height={24} />
+                                         : <Moon width={24} height={24} />
+                                    }
+                                </ListItemIcon>
+
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </StyledToolBar>

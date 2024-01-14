@@ -3,8 +3,7 @@ import SideBarHeader from "@/components/SideBarComponents/SideBarHeader";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-    background-color: #f7f7f7;
-    border-right: solid 1px #e3e3e3;
+    background-color: ${({ theme }) => theme.palette.extendedBackground.contrastLow};
     display: flex;
     flex-direction: column;
     padding-left: 2rem;

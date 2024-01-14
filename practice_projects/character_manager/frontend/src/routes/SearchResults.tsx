@@ -1,12 +1,34 @@
-import { Outlet, useNavigation } from "react-router-dom";
-import { getCharacters, createCharacter } from "@/apiCalls";
-import { redirect, useSearchParams } from "react-router-dom";
-import styled from "styled-components";
-import SideBar from "@/components/SideBarComponents/SideBar";
-import HeaderBar from "@/components/HeaderBar";
-import { useState, createContext, useEffect } from "react";
+import { getCharacters } from "@/apiCalls";
+import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Character, CharactersInput } from "@/__generated__/graphql";
 import { parseAccessToken } from "@/utils/utilities";
+import { Box } from "@mui/material";
+import styled from "styled-components";
+
+const ResultList = styled(Box)`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+    max-height: 50vh;
+    overflow-y: auto;
+`
+
+const SearchItem = styled(Box)`
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background: ${({ theme }) => theme.palette.extendedBackground.contrastMedium};
+    color: ${({ theme }) => theme.palette.text.primary};
+    cursor: pointer;
+    &:hover {
+        background: ${({ theme }) => theme.palette.primary.main};
+        color: ${({ theme }) => theme.palette.primary.contrastText};
+    }
+`
 
 function SearchResults() {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -43,14 +65,14 @@ function SearchResults() {
     if (Loading) return <div>Loading...</div>
     else if (FoundCharacters.length === 0) return <div>No characters found</div>
     else return (
-        <ul>
+        <ResultList>
             {FoundCharacters.map((character) => (
-                <li key={character._id}>
+                <SearchItem key={character._id}>
                     <div>{character.name}</div>
                     <div>{character.ownerId}</div>
-                </li>
+                </SearchItem>
             ))}
-        </ul>
+        </ResultList>
     )
 }
 export default SearchResults

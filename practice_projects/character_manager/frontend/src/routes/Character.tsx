@@ -48,6 +48,10 @@ type CharacterStateType = CharacterType & {
     images: CharacterImagePropsType[]
 }
 
+const Wrapper = styled.div`
+    color: ${({ theme }) => theme.palette.text.primary};
+`
+
 const CharacterTitle = styled.h1`
     font-size: 2rem;
     font-weight: bold;
@@ -60,12 +64,6 @@ const CharacterTitle = styled.h1`
         display: flex;
         align-items: center;
     }
-`;
-
-const SubTitle = styled.h2`
-    font-size: 1.5rem;
-    font-weight: normal;
-    margin: 0;
 `;
 
 const PrivateButton = styled.button`
@@ -175,10 +173,8 @@ export default function Character() {
         }
     }
 
-    console.log(character)
-
     return (
-        <div id="character">
+        <Wrapper id="character">
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
                 <CharacterTitle>
                     {character.name || <i>No Name</i>}
@@ -252,6 +248,6 @@ export default function Character() {
                 close={() => setLightboxPosition(-1)}
                 slides={character.images || []}
             />
-        </div>
+        </Wrapper>
     );
 }

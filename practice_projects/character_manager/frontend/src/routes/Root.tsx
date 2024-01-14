@@ -13,6 +13,7 @@ const CharacterDetails = styled.div`
     padding: 2rem 4rem;
     width: 100%;
     overflow-y: auto;
+    background: ${({ theme }) => theme.palette.background.default};
     ${({ loading }: { loading: boolean }) => loading && `
         opacity: 0.25;
         transition: opacity 200ms;
@@ -29,6 +30,7 @@ const Wrapper = styled.div`
     grid-template-rows: auto 1fr;
     height: 100vh;
     width: 100vw;
+    background-color: ${({ theme }) => theme.palette.background.default};
 `
 
 export const RootContext = createContext({

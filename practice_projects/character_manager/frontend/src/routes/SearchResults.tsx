@@ -62,7 +62,7 @@ function SearchResults() {
             include: {},
             exclude: {},
         } as CharactersInput
-        if (searchParams.get("globalSearch")) query.include!.name = searchParams.get("ownSearch")
+        if (searchParams.get("globalSearch")) query.include!.name = searchParams.get("globalSearch")
         const decodedAccessToken = parseAccessToken()
         if (!decodedAccessToken) throw new Error("No access token")
         query.exclude!.ownerId = decodedAccessToken.userId
@@ -87,7 +87,7 @@ function SearchResults() {
 
     useEffect(() => {
         getCharactersFromAPI()
-    }, [])
+    }, [searchParams])
 
     //TODO: only get the file props for the main photo, not all of them
     //TODO: Bring in the owner's name

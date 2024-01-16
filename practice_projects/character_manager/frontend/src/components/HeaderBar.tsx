@@ -44,7 +44,7 @@ const ProfileDropdownItem = styled(Typography)`
     text-decoration: ${({ disabled }:{ disabled: boolean}) => disabled ? 'line-through' : 'none'};
 `
 
-const Search = MuiStyled('div')(({ theme }) => ({
+const Search = MuiStyled('form')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -95,6 +95,7 @@ const StyledInputBase = MuiStyled(InputBase)(({ theme }) => ({
 
 export default function HeaderBar() {
     const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+    const [SearchTerm, setSearchTerm] = useState<string>('');
     const [searchParams, setSearchParams] = useSearchParams()
     const { navigate: Navigate, location } = useCustomNavigate();
     const Theme = useTheme();
@@ -136,10 +137,20 @@ export default function HeaderBar() {
         setAnchorElUser(null);
     };
 
+
+    useEffect(() => {
+        if (searchParams.get("globalSearch") !== SearchTerm) {
+            setSearchTerm(searchParams.get("globalSearch") || '');
+        }
+    }, [searchParams])
+
     function handleSearchSubmit(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === 'Enter') {
             e.preventDefault();
-            Navigate('/SearchResults');
+            searchParams.set("globalSearch", SearchTerm);
+            setSearchParams(searchParams);
+            // if we aren't on the search results page, navigate to it
+            if (location.pathname !== '/SearchResults') Navigate('/SearchResults');
         }
     }
 
@@ -153,12 +164,12 @@ export default function HeaderBar() {
                         component="a"
                         href="/"
                         sx={{
-                        mr: 2,
-                        display: { xs: 'none', md: 'flex' },
-                        fontWeight: 'lighter',
-                        letterSpacing: '.3rem',
-                        color: 'inherit',
-                        textDecoration: 'none',
+                            mr: 2,
+                            display: { xs: 'none', md: 'flex' },
+                            fontWeight: 'lighter',
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
                         }}
                     >
                         <Logo src="/LotA.png" alt="Logo" />
@@ -169,14 +180,14 @@ export default function HeaderBar() {
                         component="a"
                         href="#app-bar-with-responsive-menu"
                         sx={{
-                        mr: 2,
-                        display: { xs: 'flex', md: 'none' },
-                        flexGrow: 1,
-                        fontFamily: 'monospace',
-                        fontWeight: 700,
-                        letterSpacing: '.3rem',
-                        color: 'inherit',
-                        textDecoration: 'none',
+                            mr: 2,
+                            display: { xs: 'flex', md: 'none' },
+                            flexGrow: 1,
+                            fontFamily: 'monospace',
+                            fontWeight: 700,
+                            letterSpacing: '.3rem',
+                            color: 'inherit',
+                            textDecoration: 'none',
                         }}
                     >
                         <Dragon size="30" />
@@ -188,11 +199,8 @@ export default function HeaderBar() {
                         <StyledInputBase
                             placeholder="Search other's characters..."
                             inputProps={{ 'aria-label': 'search'}}
-                            value={searchParams.get("globalSearch") || ""}
-                            onChange={(e) => {
-                                searchParams.set("globalSearch", e.target.value);
-                                setSearchParams(searchParams);
-                            }}
+                            value={SearchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyDown={handleSearchSubmit}
                         />
                     </Search>

@@ -17,9 +17,13 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲
+- 🐲🐲
 
 ## Log
+
+### Day 61, January 15, 2024 
+
+Today I made character's main photos show up in the search results and the character's main page. Also started exploring how to handle cropping / zooming / etc. of the main pic. I think I'm going to move main pic setting from the pic list to it's own input. I am starting to struggle a bit with at what point I want to call this example project done. I'm slowly concluding that I could keep adding things and improving them in perpetuity, but at some point I also want to learn new technologies. So I think I need to better define the remaining points to accomplish. 
 
 ### Day 60, January 14, 2024
 

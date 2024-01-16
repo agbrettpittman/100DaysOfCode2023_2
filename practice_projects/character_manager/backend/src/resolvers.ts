@@ -55,7 +55,7 @@ const resolvers = {
             return await CharactersModel.find(search);
         },
         character: async (obj:{}, { id }) => {
-            return await CharactersModel.findById(id);
+            return await CharactersModel.findById(id).populate('creator').populate('owner');
         }
     },
 

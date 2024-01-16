@@ -30,8 +30,8 @@ type CharacterImage {
 
 type Character {
     _id: ID!
-    creatorId: String
-    ownerId: String
+    creator: User
+    owner: User
     name: String
     subTitle: String
     description: String

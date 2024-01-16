@@ -66,8 +66,8 @@ export function getCharacters(useCache = true, input?: CharactersInput){
             query getCharacters($input: CharactersInput) {
                 characters(input: $input) {
                     _id
-                    creatorId
-                    ownerId
+                    creator
+                    owner 
                     name
                     subTitle
                     description
@@ -97,8 +97,8 @@ export function getCharacter(id: string){
             query getCharacter($id: String!) {
                 character(id: $id) {
                     _id
-                    creatorId
-                    ownerId
+                    creator
+                    owner
                     name
                     subTitle
                     description
@@ -127,8 +127,8 @@ export function createCharacter(input: CharacterCreateInput, images: File[]){
             mutation createCharacter($input: CharacterCreateInput!, $images: [Upload]) {
                 createCharacter(input: $input, images: $images) {
                     _id
-                    creatorId
-                    ownerId
+                    creator
+                    owner
                     name
                     subTitle
                     description
@@ -159,8 +159,8 @@ export function updateCharacter(characterId: string, input: CharacterUpdateInput
             mutation updateCharacter($characterId: String!, $input: CharacterUpdateInput!, $images: [Upload]) {
                 updateCharacter(characterId: $characterId, input: $input, images: $images) {
                     _id
-                    creatorId
-                    ownerId
+                    creator
+                    owner
                     name
                     subTitle
                     description

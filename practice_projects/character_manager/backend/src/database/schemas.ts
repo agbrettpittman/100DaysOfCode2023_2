@@ -16,7 +16,9 @@ const RefreshTokensSchema = new mongoose.Schema({
 
 const CharactersSchema = new mongoose.Schema({
     creatorId: String,
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     ownerId: String,
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
     name: String,
     subTitle: String,
     description: String,

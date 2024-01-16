@@ -191,6 +191,8 @@ export default function EditCharacter() {
 
     console.log(CharacterImages)
 
+    //TODO: Add ability to specify main photo in react-avatar-editor
+
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
         <TextField

@@ -13,6 +13,7 @@ import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { useEffect, useState } from "react";
 import { getProtectedFileProps } from "@utils/utilities";
+import { CharacterMainPhoto } from "@components/StyleLib";
 import _ from "lodash";
 
 
@@ -52,6 +53,21 @@ const Wrapper = styled.div`
     color: ${({ theme }) => theme.palette.text.primary};
 `
 
+const StyledCharacterMainPhoto = styled(CharacterMainPhoto)`
+    grid-area: mainPhoto;
+`
+
+const CharacterHeader = styled.div`
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        "mainPhoto characterTitle"
+        "mainPhoto characterSubTitle";
+    align-items: center;
+    column-gap: 1rem;
+`;
+
 const CharacterTitle = styled.h1`
     font-size: 2rem;
     font-weight: bold;
@@ -59,7 +75,7 @@ const CharacterTitle = styled.h1`
     display: flex;
     align-items: center;
     gap: 20px;
-
+    grid-area: characterTitle;
     form {
         display: flex;
         align-items: center;
@@ -173,41 +189,55 @@ export default function Character() {
         }
     }
 
+    const MainPhoto = character.images?.length > 0 && character.images.find((image:CharacterImagePropsType) => image?.mainPhoto && image.src);
+
     return (
         <Wrapper id="character">
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
-                <CharacterTitle>
-                    {character.name || <i>No Name</i>}
-                    <PrivateButton
-                        name="private"
-                        onClick={toggleCharacterPrivacy}
-                        aria-label={
-                            character.private
-                            ? "Make Public"
-                            : "Make Private"
-                        }
-                    >
-                        {!character.private ? <Eye /> : <EyeOff />}
-                    </PrivateButton>
-                    <Form action="edit">
-                        <EditButton
-                            aria-label="edit"
+                <CharacterHeader>
+                    {MainPhoto && 
+                        <StyledCharacterMainPhoto {...{
+                            src: MainPhoto.src,
+                            alt: MainPhoto.alt,
+                            title: MainPhoto.title,
+                            onClick: MainPhoto.onClick,
+                        }} />
+                    }
+                    <CharacterTitle>
+                        {character.name || <i>No Name</i>}
+                        <PrivateButton
+                            name="private"
+                            onClick={toggleCharacterPrivacy}
+                            aria-label={
+                                character.private
+                                ? "Make Public"
+                                : "Make Private"
+                            }
                         >
-                            <Edit/>
-                        </EditButton>
-                    </Form>
-                    <Form action="destroy" onSubmit={handleDestroy}>
-                        <DestroyButton
-                            aria-label="destroy"
-                        >
-                            <Trash2/>
-                        </DestroyButton>
-                    </Form>
-                </CharacterTitle>
+                            {!character.private ? <Eye /> : <EyeOff />}
+                        </PrivateButton>
+                        <Form action="edit">
+                            <EditButton
+                                aria-label="edit"
+                            >
+                                <Edit/>
+                            </EditButton>
+                        </Form>
+                        <Form action="destroy" onSubmit={handleDestroy}>
+                            <DestroyButton
+                                aria-label="destroy"
+                            >
+                                <Trash2/>
+                            </DestroyButton>
+                        </Form>
+                    </CharacterTitle>
 
-                {/*character.subTitle && <SubTitle>{character.subTitle}</SubTitle>*/}
-                {character.subTitle && <Typography variant={'h5'} component={'h2'} color={'textSecondary'} sx={{mt: -1}}
-                >{character.subTitle}</Typography>}
+                    {character.subTitle && 
+                        <Typography variant={'h5'} component={'h2'} color={'textSecondary'} sx={{mt: -1, gridArea: 'characterSubTitle'}}>
+                            {character.subTitle}
+                        </Typography>
+                    }
+                </CharacterHeader>
 
                 {character.description && (
                     <p>{character.description}</p>

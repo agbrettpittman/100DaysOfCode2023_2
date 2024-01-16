@@ -12,7 +12,7 @@ import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import { useEffect, useState } from "react";
-import { getProtectedFileProps } from "@utils/utilities";
+import { getProtectedFileProps, parseAccessToken } from "@utils/utilities";
 import { CharacterMainPhoto } from "@components/StyleLib";
 import _ from "lodash";
 
@@ -133,6 +133,9 @@ export default function Character() {
     const { characterId } = useParams();
     const [LightboxPosition, setLightboxPosition] = useState(-1);
     const [character, setCharacter] = useState<CharacterStateType>({} as CharacterStateType);
+    const ParsedAccessToken = parseAccessToken();
+
+    console.log(ParsedAccessToken);
 
     useEffect(() => {
         getCharacterData();
@@ -205,31 +208,35 @@ export default function Character() {
                     }
                     <CharacterTitle>
                         {character.name || <i>No Name</i>}
-                        <PrivateButton
-                            name="private"
-                            onClick={toggleCharacterPrivacy}
-                            aria-label={
-                                character.private
-                                ? "Make Public"
-                                : "Make Private"
-                            }
-                        >
-                            {!character.private ? <Eye /> : <EyeOff />}
-                        </PrivateButton>
-                        <Form action="edit">
-                            <EditButton
-                                aria-label="edit"
-                            >
-                                <Edit/>
-                            </EditButton>
-                        </Form>
-                        <Form action="destroy" onSubmit={handleDestroy}>
-                            <DestroyButton
-                                aria-label="destroy"
-                            >
-                                <Trash2/>
-                            </DestroyButton>
-                        </Form>
+                        {character.ownerId === ParsedAccessToken?.userId && (
+                            <>
+                                <PrivateButton
+                                    name="private"
+                                    onClick={toggleCharacterPrivacy}
+                                    aria-label={
+                                        character.private
+                                        ? "Make Public"
+                                        : "Make Private"
+                                    }
+                                >
+                                    {!character.private ? <Eye /> : <EyeOff />}
+                                </PrivateButton>
+                                <Form action="edit">
+                                    <EditButton
+                                        aria-label="edit"
+                                    >
+                                        <Edit/>
+                                    </EditButton>
+                                </Form>
+                                <Form action="destroy" onSubmit={handleDestroy}>
+                                    <DestroyButton
+                                        aria-label="destroy"
+                                    >
+                                        <Trash2/>
+                                    </DestroyButton>
+                                </Form>
+                            </>
+                        )}
                     </CharacterTitle>
 
                     {character.subTitle && 

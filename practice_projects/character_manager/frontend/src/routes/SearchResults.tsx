@@ -7,6 +7,7 @@ import { Box, Typography } from "@mui/material";
 import styled from "styled-components";
 import { getProtectedFileProps } from "@utils/utilities";
 import { CharacterMainPhoto } from "@components/StyleLib";
+import { useCustomNavigate } from "@/utils/utilities";
 
 const ResultList = styled(Box)`
     display: flex;
@@ -56,6 +57,7 @@ function SearchResults() {
     const [searchParams, setSearchParams] = useSearchParams()
     const [FoundCharacters, setFoundCharacters] = useState([] as CharacterStateType[])
     const [Loading, setLoading] = useState(true)
+    const { navigate } = useCustomNavigate()
 
     async function getCharactersFromAPI() {
         const query = {
@@ -115,7 +117,7 @@ function SearchResults() {
             {FoundCharacters.map((character) => {
                 const MainPhoto = character.images?.length > 0 && character.images.find((image: CharacterImagePropsType) => image?.mainPhoto && image.src);
                 return (
-                    <SearchItem key={character._id}>
+                    <SearchItem key={character._id} onClick={() => navigate(`/Characters/${character._id}`)}>
                         {MainPhoto && <StyledCharacterMainPhoto src={MainPhoto.src} alt={MainPhoto.alt} title={MainPhoto.title} size="50px" />}
                         {/*<div>{character.name}</div>*/}
                         <Typography variant="h6">{character.name}</Typography>

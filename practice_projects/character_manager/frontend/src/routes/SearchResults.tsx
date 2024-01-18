@@ -15,7 +15,6 @@ const ResultList = styled(Box)`
     gap: 1rem;
     padding: 1rem;
     width: 100%;
-    max-height: 50vh;
     overflow-y: auto;
 `
 

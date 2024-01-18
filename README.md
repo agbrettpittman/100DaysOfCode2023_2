@@ -21,6 +21,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 62, January 16, 2024 
+
+Squashed a bug today where the search was not actually sending the search term. Removed the ability for anyone other than a character's owner to modify said character. Lastly, started working on being able to "join" or "populate" the creator and owner info for a character with the Users collection. Up until now, they were just strings that matched the particular user's ID. This of course is a very "SQL" way of handling it (because that's what I'm used to 😅). However, after much research, it seems what I actually want to do is create a "creator" and "owner" field in the character's collection, then stick an "ObjectID" reference to that user and use the Mongoose "Populate" method. This is still similar to how I would handle it in SQL, but it feels like predefining a "join". I'm concerned about how flexible that is, but I'll let it be for now.
+
 ### Day 61, January 15, 2024 
 
 Today I made character's main photos show up in the search results and the character's main page. Also started exploring how to handle cropping / zooming / etc. of the main pic. I think I'm going to move main pic setting from the pic list to it's own input. I am starting to struggle a bit with at what point I want to call this example project done. I'm slowly concluding that I could keep adding things and improving them in perpetuity, but at some point I also want to learn new technologies. So I think I need to better define the remaining points to accomplish. 

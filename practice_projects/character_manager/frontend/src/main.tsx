@@ -6,13 +6,8 @@ import {
   createRoutesFromElements,
   Route
 } from "react-router-dom";
-import { 
-    loader as characterLoader,
-    action as characterAction
-} from "@routes/Character";
 import Character from "@routes/Character";
-import EditCharacter from "@routes/Edit";
-import { action as destroyAction } from "@routes/Destroy";
+import EditCharacter from "@routes/CharacterEdit";
 import SignUp from "@routes/SignUp";
 import SearchResults from "@routes/SearchResults";
 import "./index.css";
@@ -35,15 +30,8 @@ const router = createBrowserRouter( createRoutesFromElements(
                     <Route errorElement={<ErrorPage />} >
                         <Route index={true} element={<Index />} />
                         <Route path="Characters/create" element={<CharacterCreate />} />
-                        <Route 
-                            path="Characters/:characterId" element={<Character />} 
-                            loader={characterLoader} action={characterAction} 
-                        />
-                        <Route 
-                            path="Characters/:characterId/edit" element={<EditCharacter />} 
-                            loader={characterLoader} 
-                        />
-                        <Route path="Characters/:characterId/destroy" action={destroyAction} />
+                        <Route path="Characters/:characterId" element={<Character />} />
+                        <Route path="Characters/:characterId/edit" element={<EditCharacter />} />
                         <Route path="SearchResults" element={<SearchResults />} />
                     </Route>
                 </Route>

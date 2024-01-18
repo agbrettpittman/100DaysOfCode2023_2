@@ -1,5 +1,5 @@
 import { Form, useFetcher, useLoaderData, useParams } from "react-router-dom";
-import { getCharacter, updateCharacter } from "@/apiCalls";
+import { deleteCharacter, getCharacter, updateCharacter } from "@/apiCalls";
 import { Character as CharacterType, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff, Trash2 } from "@styled-icons/feather"
@@ -15,28 +15,6 @@ import { useEffect, useState } from "react";
 import { getProtectedFileProps, parseAccessToken } from "@utils/utilities";
 import { CharacterMainPhoto } from "@components/StyleLib";
 import _ from "lodash";
-
-
-export async function loader({ params }: { params:any}) {
-    const NoCharacterError = new Response("No character returned", {
-        status: 404,
-        statusText: "Character Not Found",
-    });
-    try {
-        const CharacterResponse = await getCharacter(params.characterId);
-        if (!CharacterResponse?.data?.character?._id) {
-            throw NoCharacterError
-        }
-        return { character: CharacterResponse.data.character };
-    } catch (error) {
-        console.log(error);
-        throw NoCharacterError
-    }
-}
-
-export async function action() {
-    console.log("need to make this work");
-}
 
 type CharacterImagePropsType = CharacterImageType & {
     src: string;
@@ -135,8 +113,6 @@ export default function Character() {
     const [character, setCharacter] = useState<CharacterStateType>({} as CharacterStateType);
     const ParsedAccessToken = parseAccessToken();
 
-    console.log(ParsedAccessToken);
-
     useEffect(() => {
         getCharacterData();
     }, [characterId])
@@ -171,13 +147,16 @@ export default function Character() {
         return newCharacterImages
     }
 
-    function handleDestroy(event: React.FormEvent<HTMLFormElement>) {
-        if (
-            !confirm(
-            "Please confirm you want to delete this record."
-            )
-        ) {
-            event.preventDefault();
+    async function handleDeletion() {
+        const ConfirmationText = `Please confirm you want to delete ${character.name || "This Character"}.`;
+        if (confirm(ConfirmationText)) {
+            const CharacterDeletion = await deleteCharacter(character._id);
+            if (CharacterDeletion?.data?.deleteCharacter) {
+                alert("Character Deleted");
+                window.location.href = "/";
+            } else {
+                alert("Failed to delete character");
+            }
         }
     }
 
@@ -208,7 +187,7 @@ export default function Character() {
                     }
                     <CharacterTitle>
                         {character.name || <i>No Name</i>}
-                        {character.ownerId === ParsedAccessToken?.userId && (
+                        {character.owner?._id === ParsedAccessToken?.userId && (
                             <>
                                 <PrivateButton
                                     name="private"
@@ -228,13 +207,13 @@ export default function Character() {
                                         <Edit/>
                                     </EditButton>
                                 </Form>
-                                <Form action="destroy" onSubmit={handleDestroy}>
-                                    <DestroyButton
-                                        aria-label="destroy"
-                                    >
-                                        <Trash2/>
-                                    </DestroyButton>
-                                </Form>
+                                <DestroyButton
+                                    aria-label="delete"
+                                    onClick={handleDeletion}
+                                    name="delete"
+                                >
+                                    <Trash2/>
+                                </DestroyButton>
                             </>
                         )}
                     </CharacterTitle>
@@ -265,7 +244,7 @@ export default function Character() {
                 )}
                 
                 {character.images?.length > 0 &&
-                    <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'0px'}>
+                    <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'0px'} alignItems={'center'}>
                         {character.images.map((image:CharacterImagePropsType, index) => {
                             const CharacterImageProps = {
                                 src: image.src,

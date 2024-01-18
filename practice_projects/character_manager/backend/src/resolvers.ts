@@ -32,10 +32,10 @@ const resolvers = {
                     search['name'] = { $regex: include.name, $options: 'i' }
                 }
                 if (include.creatorId) {
-                    search['creatorId'] = include.creatorId
+                    search['creator'] = include.creatorId
                 }
                 if (include.ownerId) {
-                    search['ownerId'] = include.ownerId
+                    search['owner'] = include.ownerId
                 }
             }
             if (exclude) {
@@ -46,10 +46,10 @@ const resolvers = {
                     search['name'] = { $not: { $regex: exclude.name, $options: 'i' } }
                 }
                 if (exclude.creatorId) {
-                    search['creatorId'] = { $ne: exclude.creatorId }
+                    search['creator'] = { $ne: exclude.creatorId }
                 }
                 if (exclude.ownerId) {
-                    search['ownerId'] = { $ne: exclude.ownerId }
+                    search['owner'] = { $ne: exclude.ownerId }
                 }
             }
             return await CharactersModel.find(search);
@@ -182,8 +182,8 @@ const resolvers = {
 
                 console.log("Creating character")
                 const character = new CharactersModel({
-                    creatorId: userId,
-                    ownerId: userId,
+                    creator: userId,
+                    owner: userId,
                     ...rest
                 });
                 await character.save();
@@ -252,7 +252,7 @@ const resolvers = {
                         http: { status: 404 }
                     }
                 });
-                if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                if (character.owner != userId) throw new GraphQLError('Unauthorized', {
                     extensions: {
                         code: 'UNAUTHORIZED',
                         http: { status: 401 }
@@ -316,7 +316,7 @@ const resolvers = {
                             http: { status: 404 }
                         }
                     });
-                    if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+                    if (character.owner != userId) throw new GraphQLError('Unauthorized', {
                         extensions: {
                             code: 'UNAUTHORIZED',
                             http: { status: 401 }
@@ -347,6 +347,7 @@ const resolvers = {
         },
         updateCharacterImageDetails: async (obj:{}, { input }, { userId }) => {
             const { characterId, imageId, ...newDetails } = input;
+            console.log(userId)
             if (!userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
                     code: 'UNAUTHORIZED',
@@ -360,7 +361,8 @@ const resolvers = {
                     http: { status: 404 }
                 }
             });
-            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+            console.log(character.owner, userId)
+            if (character.owner != userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
                     code: 'UNAUTHORIZED',
                     http: { status: 401 }
@@ -403,7 +405,7 @@ const resolvers = {
                     http: { status: 404 }
                 }
             });
-            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+            if (character.owner != userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
                     code: 'UNAUTHORIZED',
                     http: { status: 401 }
@@ -432,7 +434,8 @@ const resolvers = {
                     http: { status: 404 }
                 }
             });
-            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+            console.log(character.owner, userId)
+            if (character.owner != userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
                     code: 'UNAUTHORIZED',
                     http: { status: 401 }
@@ -473,13 +476,13 @@ const resolvers = {
                     http: { status: 404 }
                 }
             });
-            if (character.ownerId !== userId) throw new GraphQLError('Unauthorized', {
+            if (character.owner != userId) throw new GraphQLError('Unauthorized', {
                 extensions: {
                     code: 'UNAUTHORIZED',
                     http: { status: 401 }
                 }
             });
-            const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { ownerId: newOwnerId }, { new: true });
+            const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { owner: newOwnerId }, { new: true });
             return UpdatedCharacter;
         },
     }

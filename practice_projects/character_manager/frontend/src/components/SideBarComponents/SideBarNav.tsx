@@ -50,6 +50,8 @@ export default function SideBarNav() {
         } else return true
     })
 
+    console.log(OwnCharacters)
+
     return (
         <StyledNav>
             {FilteredCharacters.map((character) => (

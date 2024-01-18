@@ -1,11 +1,11 @@
-import { Form, useLoaderData, redirect, useNavigate } from "react-router-dom";
+import { Form, useLoaderData, redirect, useNavigate, useParams } from "react-router-dom";
 import { 
     Character as CharacterType, 
     CharacterImage as CharacterImageType,
     CharacterAttribute, Maybe, CharacterUpdateInput,
     CharacterImageDetailsInput
 } from "@/__generated__/graphql";
-import { getFile, updateCharacter } from "@/apiCalls";
+import { getFile, updateCharacter, getCharacter } from "@/apiCalls";
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
 import _, { initial } from "lodash";
@@ -32,23 +32,43 @@ type CharacterImagePropsType = CharacterImageType & {
 
 export default function EditCharacter() {
 
-    const { character } = useLoaderData() as {character: CharacterType};
+    const { characterId } = useParams();
+    const [character, setCharacter] = useState({} as CharacterType);
     const { getOwnCharacters } = useContext(RootContext)
-    const [CharacterDetails, setCharacterDetails] = useState((character.details?.length) ? character.details : [{name: '', value: ''}]);
+    const [CharacterDetails, setCharacterDetails] = useState([{name: '', value: ''}] as CharacterAttribute[]);
     const [CharacterImages, setCharacterImages] = useState([] as CharacterImagePropsType[]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        updateCharacterImages();
-    }, [character])
+        getCharacterData();
+    }, [characterId])
 
-    async function updateCharacterImages() {
+    async function getCharacterData() {
+        if (!characterId) return;
+        const CharacterResponse = await getCharacter(characterId);
+        if (!CharacterResponse?.data?.character?._id) return
+        let character = CharacterResponse.data.character;
         let newCharacterImages = [] as CharacterImagePropsType[];
-        if (!character || !character.images) {
-            setCharacterImages(newCharacterImages);
-            return;
-        }
-        for (const [index, image] of character.images.entries()) {
+        let newCharacterDetails = [] as CharacterAttribute[];
+        if (character.images?.length) {
+            newCharacterImages = await getCharacterImagesFromServer(character.images);
+        } 
+        if (character.details?.length) {
+            const NullReplacedCharacterAttributes = character.details.map((detail) => {
+                if (detail === null) return {name: '', value: ''};
+                return detail;
+            }) as CharacterAttribute[];
+            newCharacterDetails = NullReplacedCharacterAttributes;
+        } 
+
+        setCharacter(character);
+        setCharacterDetails(newCharacterDetails);
+        setCharacterImages(newCharacterImages);
+    }
+
+    async function getCharacterImagesFromServer(imagesFromCharacter = [] as Maybe<CharacterImageType>[]) {
+        let newCharacterImages = [] as CharacterImagePropsType[];
+        for (const [index, image] of imagesFromCharacter.entries()) {
             if (!image?.filename) continue;
             const FallBackAlt = `Image ${index + 1}`;
             const Alt = image?.caption || FallBackAlt;
@@ -75,7 +95,7 @@ export default function EditCharacter() {
                 continue;
             }
         }
-        setCharacterImages(newCharacterImages);
+        return newCharacterImages
     }
 
     function changeCharacterImage(index: number, key: string, value: any) {
@@ -170,9 +190,6 @@ export default function EditCharacter() {
             inputValues.imageDetails = newImageDetails;
         }
 
-        console.log(inputValues);
-        console.log(images);
-
         try {
 
             if (!character._id) {
@@ -189,20 +206,21 @@ export default function EditCharacter() {
       
     }
 
-    console.log(CharacterImages)
+    console.log(character);
 
     //TODO: Add ability to specify main photo in react-avatar-editor
 
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
-        <TextField
+            <TextField
                 placeholder="Name"
                 aria-label="Name"
                 name="name"
                 variant="standard"
                 InputProps={{ style: { fontSize: '2rem' } }}
                 fullWidth
-                defaultValue={character.name}
+                value={character.name}
+                onChange={(e) => setCharacter({...character, name: e.target.value})}
             />
             <TextField
                 name="subTitle"
@@ -211,7 +229,8 @@ export default function EditCharacter() {
                 variant="standard"
                 InputProps={{ style: { fontSize: '1.5rem' } }}
                 sx={{ width: '75%' }}
-                defaultValue={character.subTitle}
+                value={character.subTitle}
+                onChange={(e) => setCharacter({...character, subTitle: e.target.value})}
             />
             <TextField
                 name="description"
@@ -220,7 +239,8 @@ export default function EditCharacter() {
                 placeholder="Description of the character..."
                 fullWidth
                 InputProps={{ style: { fontSize: '1rem', borderRadius: '8px' } }}
-                defaultValue={character.description}
+                value={character.description}
+                onChange={(e) => setCharacter({...character, description: e.target.value})}
             />
             <Typography variant="h6">Details</Typography>
             {CharacterDetails && CharacterDetails.map((detail: Maybe<CharacterAttribute>, index: number) => {
@@ -230,14 +250,14 @@ export default function EditCharacter() {
                             size="small"
                             placeholder="Attribute"
                             aria-label={`Attribute ${index}`}
-                            defaultValue={detail?.name}
+                            value={detail?.name}
                             onChange={(e) => changeCharacterDetail(e, index, 'name')}
                         />
                         <TextField
                             size="small"
                             placeholder="Value"
                             aria-label={`Value ${index}`}
-                            defaultValue={detail?.value}
+                            value={detail?.value}
                             onChange={(e) => changeCharacterDetail(e, index, 'value')}
                         />
                         <Button 

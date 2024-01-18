@@ -52,9 +52,8 @@ export default function Root() {
         if (!decodedAccessToken) throw new Error("No access token")
         query.include!.ownerId = decodedAccessToken.userId
         const CharactersResponse = await getCharacters(false,query);
-
         if (!CharactersResponse?.data?.characters) throw new Error("No characters");
-
+        console.log(CharactersResponse.data.characters)
         const NullFilteredCharacters = CharactersResponse.data.characters.filter((character) => character !== null)
 
         setOwnCharacters(NullFilteredCharacters as Character[]);

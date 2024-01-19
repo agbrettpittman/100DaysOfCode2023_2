@@ -1,6 +1,6 @@
 import { getCharacters } from "@/apiCalls";
 import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Character as CharacterType, CharactersInput, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import { parseAccessToken } from "@/utils/utilities";
 import { Box, Typography } from "@mui/material";
@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { getProtectedFileProps } from "@utils/utilities";
 import { CharacterMainPhoto } from "@components/StyleLib";
 import { useCustomNavigate } from "@/utils/utilities";
+import { TypographyProps } from "@mui/material";
 
 const ResultList = styled(Box)`
     display: flex;
@@ -18,7 +19,7 @@ const ResultList = styled(Box)`
     overflow-y: auto;
 `
 
-const OwnerNameDisplay = styled(Typography)`
+const OwnerNameDisplay = styled(Typography)<TypographyProps & {component: React.ElementType}>`
     color: ${({ theme }) => theme.palette.text.secondary};
 `
 

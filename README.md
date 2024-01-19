@@ -17,9 +17,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲
 
-## Log
+### Day 64, January 18, 2024
+
+D64Y2 / #100DaysOfCode Got the username of the character's owner into the search results and character view page. Spent more time than I'd like fiddling with the look. Still not super happy with it, but maybe something will come to me. Sometimes you just have to move on to bigger fish that need frying. Tomorrow I want to work on character forking. I've noticed sticking a goal for the next day in these posts helps keep me on task and from deviating too much.
 
 ### Day 63, January 17, 2024
 

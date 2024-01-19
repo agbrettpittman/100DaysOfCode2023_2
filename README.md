@@ -21,6 +21,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 
 ## Log
 
+### Day 63, January 17, 2024
+
+Finished integrating the new schema where owners and creators for characters are referenced objects (and therefore can be populated for characters. I also removed the last of the react-router loaders in favor of use effect queries on the actual component being rendered. Tomorrow I'll work on displaying the owner of a character and maybe transferring ownership of a character to someone else.
+
 ### Day 62, January 16, 2024 
 
 Squashed a bug today where the search was not actually sending the search term. Removed the ability for anyone other than a character's owner to modify said character. Lastly, started working on being able to "join" or "populate" the creator and owner info for a character with the Users collection. Up until now, they were just strings that matched the particular user's ID. This of course is a very "SQL" way of handling it (because that's what I'm used to 😅). However, after much research, it seems what I actually want to do is create a "creator" and "owner" field in the character's collection, then stick an "ObjectID" reference to that user and use the Mongoose "Populate" method. This is still similar to how I would handle it in SQL, but it feels like predefining a "join". I'm concerned about how flexible that is, but I'll let it be for now.

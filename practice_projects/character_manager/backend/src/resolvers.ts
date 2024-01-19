@@ -52,7 +52,7 @@ const resolvers = {
                     search['owner'] = { $ne: exclude.ownerId }
                 }
             }
-            return await CharactersModel.find(search);
+            return await CharactersModel.find(search).populate('creator').populate('owner');
         },
         character: async (obj:{}, { id }) => {
             return await CharactersModel.findById(id).populate('creator').populate('owner');

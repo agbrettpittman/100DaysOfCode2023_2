@@ -35,7 +35,7 @@ const StyledCharacterMainPhoto = styled(CharacterMainPhoto)`
     grid-area: mainPhoto;
 `
 
-const CharacterHeader = styled.div`
+const CharacterHeaderWrapper = styled.div`
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto;
@@ -44,20 +44,6 @@ const CharacterHeader = styled.div`
         "mainPhoto characterSubTitle";
     align-items: center;
     column-gap: 1rem;
-`;
-
-const CharacterTitle = styled.h1`
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    grid-area: characterTitle;
-    form {
-        display: flex;
-        align-items: center;
-    }
 `;
 
 const PrivateButton = styled.button`
@@ -111,7 +97,6 @@ export default function Character() {
     const { characterId } = useParams();
     const [LightboxPosition, setLightboxPosition] = useState(-1);
     const [character, setCharacter] = useState<CharacterStateType>({} as CharacterStateType);
-    const ParsedAccessToken = parseAccessToken();
 
     useEffect(() => {
         getCharacterData();
@@ -147,88 +132,11 @@ export default function Character() {
         return newCharacterImages
     }
 
-    async function handleDeletion() {
-        const ConfirmationText = `Please confirm you want to delete ${character.name || "This Character"}.`;
-        if (confirm(ConfirmationText)) {
-            const CharacterDeletion = await deleteCharacter(character._id);
-            if (CharacterDeletion?.data?.deleteCharacter) {
-                alert("Character Deleted");
-                window.location.href = "/";
-            } else {
-                alert("Failed to delete character");
-            }
-        }
-    }
-
-    async function toggleCharacterPrivacy() {
-        const newCharacterResponse = await updateCharacter(character._id, { private: !character.private });
-        if (newCharacterResponse?.data?.updateCharacter?.private !== undefined) {
-            const newCharacter = newCharacterResponse.data.updateCharacter;
-            setCharacter({
-                ...newCharacter,
-                images: await processCharacterImages(newCharacter),
-            })
-        }
-    }
-
-    const MainPhoto = character.images?.length > 0 && character.images.find((image:CharacterImagePropsType) => image?.mainPhoto && image.src);
-
     return (
         <Wrapper id="character">
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
-                <CharacterHeader>
-                    {MainPhoto && 
-                        <StyledCharacterMainPhoto {...{
-                            src: MainPhoto.src,
-                            alt: MainPhoto.alt,
-                            title: MainPhoto.title,
-                            onClick: MainPhoto.onClick,
-                        }} />
-                    }
-                    <CharacterTitle>
-                        {character.name || <i>No Name</i>}
-                        {character.owner?._id === ParsedAccessToken?.userId && (
-                            <>
-                                <PrivateButton
-                                    name="private"
-                                    onClick={toggleCharacterPrivacy}
-                                    aria-label={
-                                        character.private
-                                        ? "Make Public"
-                                        : "Make Private"
-                                    }
-                                >
-                                    {!character.private ? <Eye /> : <EyeOff />}
-                                </PrivateButton>
-                                <Form action="edit">
-                                    <EditButton
-                                        aria-label="edit"
-                                    >
-                                        <Edit/>
-                                    </EditButton>
-                                </Form>
-                                <DestroyButton
-                                    aria-label="delete"
-                                    onClick={handleDeletion}
-                                    name="delete"
-                                >
-                                    <Trash2/>
-                                </DestroyButton>
-                            </>
-                        )}
-                    </CharacterTitle>
-
-                    {character.subTitle && 
-                        <Typography variant={'h5'} component={'h2'} color={'textSecondary'} sx={{mt: -1, gridArea: 'characterSubTitle'}}>
-                            {character.subTitle}
-                        </Typography>
-                    }
-                </CharacterHeader>
-
-                {character.description && (
-                    <p>{character.description}</p>
-                )}
-
+                <CharacterHeader character={character} onChange={getCharacterData} />
+                {character.description && <p>{character.description}</p>}
                 {character.details?.length && (
                     <ul>
                         {character.details.map((detail) => {
@@ -266,4 +174,88 @@ export default function Character() {
             />
         </Wrapper>
     );
+}
+
+function CharacterHeader({ character, onChange }: { character: CharacterStateType, onChange: () => void }) {
+    const ParsedAccessToken = parseAccessToken();
+    const MainPhoto = (character.images?.length > 0) ? character.images.find((image:CharacterImagePropsType) => image?.mainPhoto && image.src) : undefined;
+    const MainPhotoProps = {
+        src: MainPhoto?.src,
+        alt: MainPhoto?.alt,
+        title: MainPhoto?.title,
+        onClick: MainPhoto?.onClick,
+    }
+
+    return (
+        <CharacterHeaderWrapper>
+            {MainPhoto && <StyledCharacterMainPhoto {...MainPhotoProps} />}
+            <Box display={'flex'} flexDirection={'row'} gap={'1rem'} gridArea={'characterTitle'} alignItems={'center'} sx={{ mb: 2}}>
+                <Typography component="h1" variant="h4" fontStyle={(character.name) ? "normal" : "italic"}>
+                    {character.name || "No Name"}</Typography>
+                {(character.owner?._id === ParsedAccessToken?.userId) ? 
+                    <CharacterMainControls character={character} onChange={onChange} />
+                    : <Typography variant={'h5'} component={'h2'} color={'textSecondary'}>({`@${character.owner?.userName}` || "Unknown"})</Typography>}
+            </Box>
+
+            {character.subTitle && 
+                <Typography variant={'h5'} component={'h2'} color={'textSecondary'} sx={{mt: -1, gridArea: 'characterSubTitle'}}>
+                    {character.subTitle}
+                </Typography>
+            }
+        </CharacterHeaderWrapper>
+    )
+}
+
+function CharacterMainControls({ character, onChange }: { character: CharacterStateType, onChange: () => void }) {
+
+    async function handleDeletion() {
+        const ConfirmationText = `Please confirm you want to delete ${character.name || "This Character"}.`;
+        if (confirm(ConfirmationText)) {
+            const CharacterDeletion = await deleteCharacter(character._id);
+            if (CharacterDeletion?.data?.deleteCharacter) {
+                alert("Character Deleted");
+                window.location.href = "/";
+            } else {
+                alert("Failed to delete character");
+            }
+        }
+    }
+
+    async function toggleCharacterPrivacy() {
+        try { 
+            await updateCharacter(character._id, { private: !character.private }) 
+            onChange();
+        }
+        catch (err) { console.log(err) }
+    }
+
+    return (
+        <>
+            <PrivateButton
+                name="private"
+                onClick={toggleCharacterPrivacy}
+                aria-label={
+                    character.private
+                    ? "Make Public"
+                    : "Make Private"
+                }
+            >
+                {!character.private ? <Eye /> : <EyeOff />}
+            </PrivateButton>
+            <Form action="edit">
+                <EditButton
+                    aria-label="edit"
+                >
+                    <Edit/>
+                </EditButton>
+            </Form>
+            <DestroyButton
+                aria-label="delete"
+                onClick={handleDeletion}
+                name="delete"
+            >
+                <Trash2/>
+            </DestroyButton>
+        </>
+    )
 }

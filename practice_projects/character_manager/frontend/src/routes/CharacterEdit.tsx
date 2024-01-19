@@ -206,8 +206,6 @@ export default function EditCharacter() {
       
     }
 
-    console.log(character);
-
     //TODO: Add ability to specify main photo in react-avatar-editor
 
     return (

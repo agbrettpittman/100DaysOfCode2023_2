@@ -18,6 +18,10 @@ const ResultList = styled(Box)`
     overflow-y: auto;
 `
 
+const OwnerNameDisplay = styled(Typography)`
+    color: ${({ theme }) => theme.palette.text.secondary};
+`
+
 const SearchItem = styled(Box)`
     display: grid;
     column-gap: 1rem;
@@ -35,6 +39,9 @@ const SearchItem = styled(Box)`
     &:hover {
         background: ${({ theme }) => theme.palette.primary.main};
         color: ${({ theme }) => theme.palette.primary.contrastText};
+        ${OwnerNameDisplay} {
+            color: ${({ theme }) => theme.palette.primary.contrastText};
+        }
     }
 `
 
@@ -115,12 +122,19 @@ function SearchResults() {
         <ResultList>
             {FoundCharacters.map((character) => {
                 const MainPhoto = character.images?.length > 0 && character.images.find((image: CharacterImagePropsType) => image?.mainPhoto && image.src);
+                const OwnerName = `@${character?.owner?.userName}` || "Unknown"
                 return (
                     <SearchItem key={character._id} onClick={() => navigate(`/Characters/${character._id}`)}>
                         {MainPhoto && <StyledCharacterMainPhoto src={MainPhoto.src} alt={MainPhoto.alt} title={MainPhoto.title} size="50px" />}
-                        {/*<div>{character.name}</div>*/}
-                        <Typography variant="h6">{character.name}</Typography>
-                        <Typography variant="body1">
+                        <Box gridArea={"name"} display={'flex'} flexDirection={'row'} gap={'0.25rem'} alignItems={'center'}>
+                            <Typography variant="h6">
+                                {character.name}
+                            </Typography>
+                            <OwnerNameDisplay variant="body1" component="span">
+                                {`(${OwnerName})`}
+                            </OwnerNameDisplay>
+                        </Box>
+                        <Typography variant="body1" gridArea={"details"}>
                             {character.subTitle}
                         </Typography>
                     </SearchItem>

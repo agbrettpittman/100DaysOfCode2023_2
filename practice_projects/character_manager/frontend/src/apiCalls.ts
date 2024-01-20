@@ -20,6 +20,8 @@ import {
     LogoutUserMutationVariables,
     CharacterCreateInput,
     CharacterUpdateInput,
+    ForkCharacterMutation,
+    ForkCharacterMutationVariables
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -82,6 +84,7 @@ export function getCharacters(useCache = true, input?: CharactersInput){
                     subTitle
                     description
                     private
+                    forkable
                     details {
                         name
                         value
@@ -123,6 +126,7 @@ export function getCharacter(id: string){
                     subTitle
                     description
                     private
+                    forkable
                     details {
                         name
                         value
@@ -225,6 +229,46 @@ export function updateCharacter(characterId: string, input: CharacterUpdateInput
     })
 
 
+}
+
+export function forkCharacter(characterId: string){
+    return ApolloClientInstance.mutate<ForkCharacterMutation, ForkCharacterMutationVariables>({
+        mutation: gql`
+            mutation forkCharacter($characterId: String!) {
+                forkCharacter(characterId: $characterId) {
+                    _id
+                    creator {
+                        _id
+                        name
+                        userName
+                        email
+                    }
+                    owner {
+                        _id
+                        name
+                        userName
+                        email
+                    }
+                    name
+                    subTitle
+                    description
+                    private
+                    details {
+                        name
+                        value
+                    }
+                    images {
+                        filename
+                        mainPhoto
+                        caption
+                    }
+                }
+            }
+        `,
+        variables: {
+            characterId
+        }
+    })
 }
 
 export function deleteCharacter(characterId: string){

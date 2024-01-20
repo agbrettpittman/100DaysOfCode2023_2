@@ -1,5 +1,5 @@
 import { Form, useFetcher, useLoaderData, useParams } from "react-router-dom";
-import { deleteCharacter, getCharacter, updateCharacter } from "@/apiCalls";
+import { deleteCharacter, getCharacter, updateCharacter, forkCharacter } from "@/apiCalls";
 import { Character as CharacterType, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Eye, EyeOff, Trash2 } from "@styled-icons/feather"
@@ -11,9 +11,12 @@ import {Captions, Thumbnails} from "yet-another-react-lightbox/plugins";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getProtectedFileProps, parseAccessToken } from "@utils/utilities";
 import { CharacterMainPhoto } from "@components/StyleLib";
+import { CallSplit } from "styled-icons/material-rounded";
+import { useCustomNavigate } from "@utils/utilities";
+import { RootContext } from "@routes/Root";
 import _ from "lodash";
 
 type CharacterImagePropsType = CharacterImageType & {
@@ -79,6 +82,18 @@ const DestroyButton = styled.button`
     color: #cfcfcf;
     :hover {
         color: ${({ theme }) => theme.palette.error.main};
+    }
+`
+
+const ForkButton = styled.button`
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 1.5em;
+    color: #d7d7d7;
+    :hover {
+        color: ${({ theme }) => theme.palette.secondary.light};
     }
 `
 
@@ -191,10 +206,10 @@ function CharacterHeader({ character, onChange }: { character: CharacterStateTyp
             {MainPhoto && <StyledCharacterMainPhoto {...MainPhotoProps} />}
             <Box display={'flex'} flexDirection={'row'} gap={'1rem'} gridArea={'characterTitle'} alignItems={'center'} sx={{ mb: 2}}>
                 <Typography component="h1" variant="h4" fontStyle={(character.name) ? "normal" : "italic"}>
-                    {character.name || "No Name"}</Typography>
-                {(character.owner?._id === ParsedAccessToken?.userId) ? 
-                    <CharacterMainControls character={character} onChange={onChange} />
-                    : <Typography variant={'h5'} component={'h2'} color={'textSecondary'}>({`@${character.owner?.userName}` || "Unknown"})</Typography>}
+                    {character.name || "No Name"}
+                </Typography>
+                {(character.owner?._id !== ParsedAccessToken?.userId) ? <Typography variant={'h5'} component={'h2'} color={'textSecondary'}>({`@${character.owner?.userName}` || "Unknown"})</Typography> : null}
+                <CharacterMainControls character={character} onChange={onChange} />
             </Box>
 
             {character.subTitle && 
@@ -208,13 +223,18 @@ function CharacterHeader({ character, onChange }: { character: CharacterStateTyp
 
 function CharacterMainControls({ character, onChange }: { character: CharacterStateType, onChange: () => void }) {
 
+    const ParsedAccessToken = parseAccessToken();
+    const { navigate } = useCustomNavigate();
+    const { getOwnCharacters } = useContext(RootContext)
+
     async function handleDeletion() {
         const ConfirmationText = `Please confirm you want to delete ${character.name || "This Character"}.`;
         if (confirm(ConfirmationText)) {
             const CharacterDeletion = await deleteCharacter(character._id);
             if (CharacterDeletion?.data?.deleteCharacter) {
+                getOwnCharacters();
                 alert("Character Deleted");
-                window.location.href = "/";
+                navigate("/");
             } else {
                 alert("Failed to delete character");
             }
@@ -229,33 +249,72 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
         catch (err) { console.log(err) }
     }
 
-    return (
-        <>
-            <PrivateButton
-                name="private"
-                onClick={toggleCharacterPrivacy}
-                aria-label={
-                    character.private
-                    ? "Make Public"
-                    : "Make Private"
-                }
-            >
-                {!character.private ? <Eye /> : <EyeOff />}
-            </PrivateButton>
-            <Form action="edit">
-                <EditButton
-                    aria-label="edit"
+    async function handleFork() {
+        const ConfirmationText = `Are you sure you want to fork ${character.name || "this character"}?`
+        if (!confirm(ConfirmationText)) return;
+        try {
+            const ForkedCharacter = await forkCharacter(character._id);
+            if (ForkedCharacter?.data?.forkCharacter?._id) {
+                getOwnCharacters();
+                navigate(`/Characters/${ForkedCharacter.data.forkCharacter._id}`);
+            } else {
+                console.log(ForkedCharacter)
+                alert("Failed to fork character");
+            }
+        } catch (err) {
+            console.log(err);
+            alert("Failed to fork character");
+        }
+    }
+
+    if (character.owner?._id === ParsedAccessToken?.userId) {
+        return (
+            <>
+                <PrivateButton
+                    name="private"
+                    onClick={toggleCharacterPrivacy}
+                    aria-label={
+                        character.private
+                        ? "Make Public"
+                        : "Make Private"
+                    }
                 >
-                    <Edit/>
-                </EditButton>
-            </Form>
-            <DestroyButton
-                aria-label="delete"
-                onClick={handleDeletion}
-                name="delete"
+                    {!character.private ? <Eye /> : <EyeOff />}
+                </PrivateButton>
+                <Form action="edit">
+                    <EditButton
+                        aria-label="edit"
+                    >
+                        <Edit/>
+                    </EditButton>
+                </Form>
+                <DestroyButton
+                    aria-label="delete"
+                    onClick={handleDeletion}
+                    name="delete"
+                >
+                    <Trash2/>
+                </DestroyButton>
+                <ForkButton
+                    aria-label="fork character"
+                    name="fork"
+                    onClick={handleFork}
+                >
+                    <CallSplit/>
+                </ForkButton>
+            </>
+        )
+    } else if (character.forkable) {
+        return (
+            <ForkButton
+                aria-label="fork character"
+                name="fork"
+                onClick={handleFork}
             >
-                <Trash2/>
-            </DestroyButton>
-        </>
-    )
+                <CallSplit/>
+            </ForkButton>
+        )
+    } else return null
+
+    
 }

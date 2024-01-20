@@ -24,7 +24,8 @@ const CharactersSchema = new mongoose.Schema({
     description: String,
     details: Array,
     images: Array,
-    private: Boolean
+    private: Boolean,
+    forkable: Boolean
 });
 
 export const UsersModel = mongoose.model("Users", UsersSchema, "Users");

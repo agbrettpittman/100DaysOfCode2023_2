@@ -11,6 +11,7 @@ import { CharactersInput } from "generated/graphql.js";
 import { Request } from "express";
 import fs from 'fs';
 import path from 'path';
+import mongoose from "mongoose";
 
 const resolvers = {
     Query: {
@@ -414,7 +415,11 @@ const resolvers = {
 
             // delete images
             for (const image of character.images) {
-                fs.rmSync(`uploads/${image.filename}`);
+                try {
+                    fs.rmSync(`uploads/${image.filename}`);
+                } catch (err) {
+                    console.log(err)
+                }
             }
 
             await CharactersModel.deleteOne({ _id: characterId });
@@ -485,7 +490,42 @@ const resolvers = {
             const UpdatedCharacter = await CharactersModel.findByIdAndUpdate(characterId, { owner: newOwnerId }, { new: true });
             return UpdatedCharacter;
         },
+        forkCharacter: async (obj:{}, { characterId }, { userId }) => {
+            if (!userId) throw new GraphQLError('Unauthorized', {
+                extensions: {
+                    code: 'UNAUTHORIZED',
+                    http: { status: 401 }
+                }
+            });
+            const character = await CharactersModel.findById(characterId)
+            if (!character) throw new GraphQLError('Character not found', {
+                extensions: {
+                    code: 'NOT_FOUND',
+                    http: { status: 404 }
+                }
+            });
+            if (!character.forkable && character.owner != userId) throw new GraphQLError('Not forkable', {
+                extensions: {
+                    code: 'NOT_FORKABLE',
+                    http: { status: 401 }
+                }
+            });
+            const NewID = new mongoose.Types.ObjectId();
+            const ForkedCharacter = new CharactersModel({
+                ...character.toObject(),
+                _id: NewID,
+                creator: userId,
+                owner: userId,
+            });
+            await ForkedCharacter.save();
+            
+            const ReturnCharacter = await CharactersModel.findById(NewID).populate('creator').populate('owner');
+
+            console.log(NewID)
+
+            return ReturnCharacter;
+        }
     }
-};
+}
 
 export default resolvers

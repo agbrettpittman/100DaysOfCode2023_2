@@ -38,6 +38,7 @@ type Character {
     details: [CharacterAttribute]
     images: [CharacterImage]
     private: Boolean
+    forkable: Boolean
 }
 
 input CharactersInputFilters {
@@ -124,6 +125,7 @@ type Mutation {
     deleteCharacter(characterId: String!): Boolean
     deleteCharacterImage(characterId: String!, imageId: Int!): Character
     transferCharacter(characterId: String!, newOwnerId: String!): Character
+    forkCharacter(characterId: String!): Character
 }
 
 `;

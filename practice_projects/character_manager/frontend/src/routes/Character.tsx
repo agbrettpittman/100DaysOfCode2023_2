@@ -3,7 +3,7 @@ import { deleteCharacter, getCharacter, forkCharacter } from "@/apiCalls";
 import { Character as CharacterType, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import styled from "styled-components";
 import { Trash2 } from "@styled-icons/feather"
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { Edit } from "@styled-icons/fluentui-system-regular/Edit";
 import Lightbox from "yet-another-react-lightbox";
 import {Captions, Thumbnails} from "yet-another-react-lightbox/plugins";
@@ -16,6 +16,7 @@ import { CharacterMainPhoto } from "@components/StyleLib";
 import { CallSplit } from "styled-icons/material-rounded";
 import { useCustomNavigate } from "@utils/utilities";
 import { RootContext } from "@routes/Root";
+import { transparentize } from "polished";
 import _ from "lodash";
 
 type CharacterImagePropsType = CharacterImageType & {
@@ -48,39 +49,15 @@ const CharacterHeaderWrapper = styled.div`
     column-gap: 1rem;
 `;
 
-const EditButton = styled.button`
+const CharacterActionButton = styled.button<{ hoverColor: string }>`
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
     width: 1.5em;
-    color: #cfcfcf;
+    color: ${({ theme }) => transparentize(0.7,theme.palette.text.primary)};
     :hover {
-        color: ${({ theme }) => theme.palette.primary.main};
-    }
-`
-
-const DestroyButton = styled.button`
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    width: 1.5em;
-    color: #cfcfcf;
-    :hover {
-        color: ${({ theme }) => theme.palette.error.main};
-    }
-`
-
-const ForkButton = styled.button`
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    width: 1.5em;
-    color: #d7d7d7;
-    :hover {
-        color: ${({ theme }) => theme.palette.secondary.light};
+        color: ${({ hoverColor }) => hoverColor};
     }
 `
 
@@ -213,6 +190,7 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
     const ParsedAccessToken = parseAccessToken();
     const { navigate } = useCustomNavigate();
     const { getOwnCharacters } = useContext(RootContext)
+    const Theme = useTheme();
 
     async function handleDeletion() {
         const ConfirmationText = `Please confirm you want to delete ${character.name || "This Character"}.`;
@@ -236,10 +214,7 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
             if (ForkedCharacter?.data?.forkCharacter?._id) {
                 getOwnCharacters();
                 navigate(`/Characters/${ForkedCharacter.data.forkCharacter._id}`);
-            } else {
-                console.log(ForkedCharacter)
-                alert("Failed to fork character");
-            }
+            } else alert("Failed to fork character");
         } catch (err) {
             console.log(err);
             alert("Failed to fork character");
@@ -249,38 +224,41 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
     if (character.owner?._id === ParsedAccessToken?.userId) {
         return (
             <>
-                <Form action="edit">
-                    <EditButton
-                        aria-label="edit"
-                    >
-                        <Edit/>
-                    </EditButton>
-                </Form>
-                <DestroyButton
+                <CharacterActionButton
+                    aria-label="edit"
+                    hoverColor={Theme.palette.primary.main}
+                    onClick={() => navigate(`edit`)}
+                >
+                    <Edit/>
+                </CharacterActionButton>
+                <CharacterActionButton
                     aria-label="delete"
                     onClick={handleDeletion}
                     name="delete"
+                    hoverColor={Theme.palette.error.main}
                 >
                     <Trash2/>
-                </DestroyButton>
-                <ForkButton
+                </CharacterActionButton>
+                <CharacterActionButton
                     aria-label="fork character"
                     name="fork"
                     onClick={handleFork}
+                    hoverColor={Theme.palette.secondary.light}
                 >
                     <CallSplit/>
-                </ForkButton>
+                </CharacterActionButton>
             </>
         )
     } else if (character.forkable) {
         return (
-            <ForkButton
+            <CharacterActionButton
                 aria-label="fork character"
                 name="fork"
                 onClick={handleFork}
+                hoverColor={Theme.palette.secondary.light}
             >
                 <CallSplit/>
-            </ForkButton>
+            </CharacterActionButton>
         )
     } else return null
 

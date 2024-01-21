@@ -17,7 +17,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+
+### Day 66, January 20, 2024 
+
+Fixed the problem from yesterday where images weren't getting copied correctly when forking a character. Had some time after that, so I implemented a few optimizations. This resulted in me getting to do one of my favorite things: deleting lines of code. If I can find a more efficient and less complex way to achieve the same or better results, it's a good day. Tomorrow is implementing a dedicated avatar uploader.
 
 ### Day 65, January 19, 2024
 

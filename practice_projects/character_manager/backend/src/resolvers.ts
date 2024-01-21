@@ -517,6 +517,19 @@ const resolvers = {
                 creator: userId,
                 owner: userId,
             });
+
+            // copy images
+            let newImages = [];
+            ForkedCharacter.images.forEach((image, index) => {
+                try {
+                    const NewFileName = `${NewID}-${index}`;
+                    fs.copyFileSync(`uploads/${image.filename}`, `uploads/${NewFileName}`);
+                    newImages.push({ ...image, filename: NewFileName });
+                } catch (err) {
+                    console.log(err)
+                }
+            })
+            ForkedCharacter.images = newImages;
             await ForkedCharacter.save();
             
             const ReturnCharacter = await CharactersModel.findById(NewID).populate('creator').populate('owner');

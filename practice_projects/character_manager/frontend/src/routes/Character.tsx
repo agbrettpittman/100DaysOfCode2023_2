@@ -1,10 +1,9 @@
-import { Form, useFetcher, useLoaderData, useParams } from "react-router-dom";
-import { deleteCharacter, getCharacter, updateCharacter, forkCharacter } from "@/apiCalls";
+import { Form, useParams } from "react-router-dom";
+import { deleteCharacter, getCharacter, forkCharacter } from "@/apiCalls";
 import { Character as CharacterType, CharacterImage as CharacterImageType } from "@/__generated__/graphql";
 import styled from "styled-components";
-import { Eye, EyeOff, Trash2 } from "@styled-icons/feather"
-import { Box, Button, Typography } from "@mui/material";
-import ProtectedImage from "@components/ProtectedImage";
+import { Trash2 } from "@styled-icons/feather"
+import { Box, Typography } from "@mui/material";
 import { Edit } from "@styled-icons/fluentui-system-regular/Edit";
 import Lightbox from "yet-another-react-lightbox";
 import {Captions, Thumbnails} from "yet-another-react-lightbox/plugins";
@@ -47,18 +46,6 @@ const CharacterHeaderWrapper = styled.div`
         "mainPhoto characterSubTitle";
     align-items: center;
     column-gap: 1rem;
-`;
-
-const PrivateButton = styled.button`
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    width: 1.5em;
-    color: #b9b9b9;
-    :hover {
-        color: ${({ theme }) => theme.palette.info.main};
-    }
 `;
 
 const EditButton = styled.button`
@@ -241,14 +228,6 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
         }
     }
 
-    async function toggleCharacterPrivacy() {
-        try { 
-            await updateCharacter(character._id, { private: !character.private }) 
-            onChange();
-        }
-        catch (err) { console.log(err) }
-    }
-
     async function handleFork() {
         const ConfirmationText = `Are you sure you want to fork ${character.name || "this character"}?`
         if (!confirm(ConfirmationText)) return;
@@ -270,17 +249,6 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
     if (character.owner?._id === ParsedAccessToken?.userId) {
         return (
             <>
-                <PrivateButton
-                    name="private"
-                    onClick={toggleCharacterPrivacy}
-                    aria-label={
-                        character.private
-                        ? "Make Public"
-                        : "Make Private"
-                    }
-                >
-                    {!character.private ? <Eye /> : <EyeOff />}
-                </PrivateButton>
                 <Form action="edit">
                     <EditButton
                         aria-label="edit"

@@ -9,7 +9,7 @@ import { getFile, updateCharacter, getCharacter } from "@/apiCalls";
 import styled from "styled-components";
 import { useState, useContext, useEffect } from "react";
 import _, { initial } from "lodash";
-import { Box, Button, Divider, TextField, Typography, ButtonGroup } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, ButtonGroup, FormControlLabel, Switch } from "@mui/material";
 import { RootContext } from "@routes/Root";
 import { getProtectedFileProps } from "@utils/utilities";
 import axios from "axios";
@@ -126,6 +126,15 @@ export default function EditCharacter() {
         setCharacterImages(newImages);
     }
 
+    function handleCharacterPrivacyChange(e: React.ChangeEvent<HTMLInputElement>) {
+        let value = e.target.checked;
+        if (value === true) {
+            setCharacter({...character, private: true, forkable: false});
+        } else {
+            setCharacter({...character, private: false});
+        }
+    }
+
     function changeCharacterDetail(e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, index: number, key: string) {
         if (!CharacterDetails || !CharacterDetails.length) return;
         if (index === undefined || !key) return;
@@ -230,6 +239,23 @@ export default function EditCharacter() {
                 value={character.subTitle}
                 onChange={(e) => setCharacter({...character, subTitle: e.target.value})}
             />
+            <Box display={'flex'} flexDirection={'column'}>
+                <FormControlLabel label={`This Character is private`} control={
+                    <Switch
+                        checked={Boolean(character.private)}
+                        onChange={handleCharacterPrivacyChange}
+                        inputProps={{ 'aria-label': `This Character is ${character.private ? 'private' : 'public'}` }}
+                    />
+                } />
+                <FormControlLabel label={`This Character is forkable`} control={
+                    <Switch
+                        checked={Boolean(character.forkable)}
+                        onChange={(e) => setCharacter({...character, forkable: e.target.checked})}
+                        inputProps={{ 'aria-label': `This Character is ${character.forkable ? 'forkable' : 'not forkable'}` }}
+                        disabled={Boolean(character.private)}
+                    />
+                } />
+            </Box>
             <TextField
                 name="description"
                 multiline

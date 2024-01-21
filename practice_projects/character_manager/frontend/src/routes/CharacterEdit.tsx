@@ -240,20 +240,25 @@ export default function EditCharacter() {
                 onChange={(e) => setCharacter({...character, subTitle: e.target.value})}
             />
             <Box display={'flex'} flexDirection={'column'}>
-                <FormControlLabel label={`This Character is private`} control={
-                    <Switch
-                        checked={Boolean(character.private)}
-                        onChange={handleCharacterPrivacyChange}
-                        inputProps={{ 'aria-label': `This Character is ${character.private ? 'private' : 'public'}` }}
-                    />
-                } />
-                <FormControlLabel label={`This Character is forkable`} control={
-                    <Switch
-                        checked={Boolean(character.forkable)}
-                        onChange={(e) => setCharacter({...character, forkable: e.target.checked})}
-                        inputProps={{ 'aria-label': `This Character is ${character.forkable ? 'forkable' : 'not forkable'}` }}
-                        disabled={Boolean(character.private)}
-                    />
+                <FormControlLabel 
+                    label={<Typography color="text.primary">This Character is private</Typography>}
+                    control={
+                        <Switch
+                            checked={Boolean(character.private)}
+                            onChange={handleCharacterPrivacyChange}
+                            inputProps={{ 'aria-label': `This Character is ${character.private ? 'private' : 'public'}` }}
+                        />
+                    } 
+                />
+                <FormControlLabel 
+                    label={<Typography color="text.primary">This Character is forkable</Typography>}
+                    control={
+                        <Switch
+                            checked={Boolean(character.forkable)}
+                            onChange={(e) => setCharacter({...character, forkable: e.target.checked})}
+                            inputProps={{ 'aria-label': `This Character is ${character.forkable ? 'forkable' : 'not forkable'}` }}
+                            disabled={Boolean(character.private)}
+                        />
                 } />
             </Box>
             <TextField

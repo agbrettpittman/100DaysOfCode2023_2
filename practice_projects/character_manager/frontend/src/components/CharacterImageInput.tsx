@@ -28,6 +28,7 @@ const Wrapper = styled(Box)`
 
 const StyledFileUploader = styled(FileUploader)`
     grid-area: image;
+    background-color: ${({ theme }) => theme.palette.extendedBackground.contrastLow};
 `;
 
 const CaptionField = styled(TextField)`

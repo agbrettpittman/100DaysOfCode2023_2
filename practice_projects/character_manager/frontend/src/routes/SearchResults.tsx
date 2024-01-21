@@ -57,7 +57,7 @@ type CharacterImagePropsType = CharacterImageType & {
 }
 
 type CharacterStateType = CharacterType & {
-    images: CharacterImagePropsType[]
+    mainPhoto: CharacterImagePropsType | null;
 }
 
 function SearchResults() {
@@ -81,10 +81,10 @@ function SearchResults() {
             const NullFilteredCharacters = CharactersResponse.data.characters.filter((character) => character !== null)
             const ImageRemappedCharacters = await Promise.all(NullFilteredCharacters.map(async (character) => {
                 if (!character) return null
-                const newCharacterImages = await processCharacterImages(character)
+                const MainPhoto = await getMainPhotoImageProps(character)
                 return {
                     ...character,
-                    images: newCharacterImages
+                    mainPhoto: MainPhoto
                 }
             }))
             setFoundCharacters(ImageRemappedCharacters as CharacterStateType[])
@@ -98,23 +98,20 @@ function SearchResults() {
         getCharactersFromAPI()
     }, [searchParams])
 
-    //TODO: only get the file props for the main photo, not all of them
-    //TODO: Bring in the owner's name
-
-    async function processCharacterImages(character: CharacterType): Promise<CharacterImagePropsType[]> {
-        if (!character.images?.length) return [];
-        let newCharacterImages = [];
+    async function getMainPhotoImageProps(character: CharacterType): Promise<CharacterImagePropsType | null> {
+        if (!character.images?.length) return null
         for (const [index, image] of character.images.entries()) {
+            if (!image?.mainPhoto) continue
             const FallBackAlt = `Image ${index + 1}`;
             const Alt = image?.caption || FallBackAlt;
             const ProtectedFileProps = await getProtectedFileProps(image?.filename || "", Alt);
-            newCharacterImages.push({
+            return {
                 ...image,
                 ...ProtectedFileProps,
                 title: Alt,
-            })
+            }
         }
-        return newCharacterImages
+        return null
     }
 
     if (Loading) return <div>Loading...</div>
@@ -122,7 +119,7 @@ function SearchResults() {
     else return (
         <ResultList>
             {FoundCharacters.map((character) => {
-                const MainPhoto = character.images?.length > 0 && character.images.find((image: CharacterImagePropsType) => image?.mainPhoto && image.src);
+                const MainPhoto = character?.mainPhoto
                 const OwnerName = `@${character?.owner?.userName}` || "Unknown"
                 return (
                     <SearchItem key={character._id} onClick={() => navigate(`/Characters/${character._id}`)}>

@@ -17,7 +17,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+
+### Day 67, January 21, 2024
+
+Today I started integrating the react-avatar-editor so that users can control the cropping and zoom of the main photo of their particular characters. This will help the character view and search result list not have poorly cropped images.
 
 ### Day 66, January 20, 2024 
 

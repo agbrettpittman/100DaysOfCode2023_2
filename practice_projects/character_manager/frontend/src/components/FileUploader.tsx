@@ -143,8 +143,6 @@ export default function FileUploader({maxFiles = 1, onChange, label = "Add an im
     useEffect(() => {
         if (onChange) onChange(files);
     }, [files])
-
-    console.log(maxFiles)
     
     const FilePreviews = files.map(file => (
         <Thumb key={file.name} singleFile={maxFiles === 1}>

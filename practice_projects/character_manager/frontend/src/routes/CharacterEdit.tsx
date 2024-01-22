@@ -14,6 +14,7 @@ import { RootContext } from "@routes/Root";
 import { getProtectedFileProps } from "@utils/utilities";
 import axios from "axios";
 import CharacterImageInput from "@components/CharacterImageInput";
+import MainPhotoEditor from "@components/MainPhotoEditor";
 
 const StyledForm = styled(Form)`
     display: flex;
@@ -25,6 +26,18 @@ const StyledForm = styled(Form)`
     box-sizing: border-box;
     gap: 30px;
 `;
+
+const HeaderSection = styled(Box)`
+    display:grid;
+    grid-template-areas:
+        "avatar name"
+        "avatar subTitle";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 1rem;
+`
+
+
 
 type CharacterImagePropsType = CharacterImageType & {
     file: File | null;
@@ -217,28 +230,53 @@ export default function EditCharacter() {
 
     //TODO: Add ability to specify main photo in react-avatar-editor
 
+    const MainPhotoIndex = CharacterImages.findIndex((image) => image.mainPhoto === true);
+    const MainPhoto = MainPhotoIndex === -1 ? null : CharacterImages[MainPhotoIndex];
+
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
-            <TextField
-                placeholder="Name"
-                aria-label="Name"
-                name="name"
-                variant="standard"
-                InputProps={{ style: { fontSize: '2rem' } }}
-                fullWidth
-                value={character.name}
-                onChange={(e) => setCharacter({...character, name: e.target.value})}
-            />
-            <TextField
-                name="subTitle"
-                placeholder="Subtitle"
-                aria-label="Subtitle"
-                variant="standard"
-                InputProps={{ style: { fontSize: '1.5rem' } }}
-                sx={{ width: '75%' }}
-                value={character.subTitle}
-                onChange={(e) => setCharacter({...character, subTitle: e.target.value})}
-            />
+            <HeaderSection>
+                <MainPhotoEditor 
+                    image={MainPhoto?.file || ""} onChange={(image) => {
+                        let newCharacterImages = _.cloneDeep(CharacterImages);
+                        if (MainPhotoIndex === -1) {
+                            newCharacterImages.push({
+                                mainPhoto: true,
+                                caption: "",
+                                file: image
+                            })
+                            setCharacterImages(newCharacterImages);
+                        } else {
+                            newCharacterImages[MainPhotoIndex].file = image;
+                            setCharacterImages(newCharacterImages);
+                        }
+                    }} onRemove={() => {
+                        let newImages = _.cloneDeep(CharacterImages);
+                        newImages.splice(MainPhotoIndex, 1);
+                        setCharacterImages(newImages);
+                    }}
+                />
+                <TextField
+                    placeholder="Name"
+                    aria-label="Name"
+                    name="name"
+                    variant="standard"
+                    InputProps={{ style: { fontSize: '2rem' } }}
+                    fullWidth
+                    value={character.name}
+                    onChange={(e) => setCharacter({...character, name: e.target.value})}
+                />
+                <TextField
+                    name="subTitle"
+                    placeholder="Subtitle"
+                    aria-label="Subtitle"
+                    variant="standard"
+                    InputProps={{ style: { fontSize: '1.5rem' } }}
+                    sx={{ width: '75%' }}
+                    value={character.subTitle}
+                    onChange={(e) => setCharacter({...character, subTitle: e.target.value})}
+                />
+            </HeaderSection>
             <Box display={'flex'} flexDirection={'column'}>
                 <FormControlLabel 
                     label={<Typography color="text.primary">This Character is private</Typography>}

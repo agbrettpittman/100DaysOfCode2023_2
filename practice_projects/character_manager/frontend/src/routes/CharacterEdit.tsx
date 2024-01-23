@@ -7,7 +7,7 @@ import {
 } from "@/__generated__/graphql";
 import { getFile, updateCharacter, getCharacter } from "@/apiCalls";
 import styled from "styled-components";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import _, { initial } from "lodash";
 import { Box, Button, Divider, TextField, Typography, ButtonGroup, FormControlLabel, Switch } from "@mui/material";
 import { RootContext } from "@routes/Root";
@@ -15,6 +15,7 @@ import { getProtectedFileProps } from "@utils/utilities";
 import axios from "axios";
 import CharacterImageInput from "@components/CharacterImageInput";
 import MainPhotoEditor from "@components/MainPhotoEditor";
+import AvatarEditor from 'react-avatar-editor'
 
 const StyledForm = styled(Form)`
     display: flex;
@@ -51,6 +52,9 @@ export default function EditCharacter() {
     const [CharacterDetails, setCharacterDetails] = useState([{name: '', value: ''}] as CharacterAttribute[]);
     const [CharacterImages, setCharacterImages] = useState([] as CharacterImagePropsType[]);
     const navigate = useNavigate();
+    const MainPhotoRef = useRef<AvatarEditor>(null);
+    const MainPhotoIndex = CharacterImages.findIndex((image) => image.mainPhoto === true);
+    const MainPhoto = MainPhotoIndex === -1 ? null : CharacterImages[MainPhotoIndex];
 
     useEffect(() => {
         getCharacterData();
@@ -195,20 +199,39 @@ export default function EditCharacter() {
         if (CharacterImages && CharacterImages.length) {
             let newImageDetails = [] as CharacterImageDetailsInput[];
             let iterator = 0;
-            CharacterImages.forEach((image) => {
-                if (!image.file) return;
+
+            for (const image of CharacterImages) {
+                if (!image.file) continue;
                 const NewFileName = `file-${iterator}`;
                 newImageDetails.push({
                     mainPhoto: image.mainPhoto,
                     caption: image.caption,
                     filename: NewFileName
                 })
+                let newFile = null;
                 // change the name of the file to be uploaded
-                const NewFile = new File([image.file], NewFileName, {type: image.file.type});
-                console.log(NewFile);
-                images.push(NewFile);
-                iterator++;
-            })
+                if (image.mainPhoto === true) {
+                    try {
+                        const CroppedMainPhoto = await GetCroppedMainPhoto();
+                        if (CroppedMainPhoto) {
+                            newFile = new File([CroppedMainPhoto], NewFileName, {type: image.file.type});
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                } else {
+                    try {
+                        newFile = new File([image.file], NewFileName, {type: image.file.type});
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+
+                if (newFile) {
+                    images.push(newFile);
+                    iterator++;
+                }
+            }
             inputValues.imageDetails = newImageDetails;
         }
 
@@ -217,7 +240,7 @@ export default function EditCharacter() {
             if (!character._id) {
                 throw new Error("Missing characterId");
             }
-            
+
             await updateCharacter(character._id, inputValues, images);
             getOwnCharacters();
             navigate(`/Characters/${character._id}`);
@@ -228,29 +251,52 @@ export default function EditCharacter() {
       
     }
 
-    //TODO: Add ability to specify main photo in react-avatar-editor
+    async function GetCroppedMainPhoto(): Promise<Blob | null> {
+        if(!MainPhotoRef.current) return null;
 
-    const MainPhotoIndex = CharacterImages.findIndex((image) => image.mainPhoto === true);
-    const MainPhoto = MainPhotoIndex === -1 ? null : CharacterImages[MainPhotoIndex];
+        function PromisifiedToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
+            return new Promise((resolve) => {
+                canvas.toBlob(blob => {
+                if (blob) resolve(blob);
+                });
+            });
+        }
+
+        try {
+            const canvas = MainPhotoRef.current?.getImage() as HTMLCanvasElement
+            const blob = await PromisifiedToBlob(canvas);
+            if (blob) return blob;
+            else return null;
+        } catch (error) {
+            console.log(error)
+            return null;
+        }
+    }
+
+    function HandleMainPhotoChange(image: File) {
+        let newCharacterImages = _.cloneDeep(CharacterImages);
+        if (MainPhotoIndex === -1) {
+            newCharacterImages.push({
+                mainPhoto: true,
+                caption: "",
+                file: image
+            })
+            setCharacterImages(newCharacterImages);
+        } else {
+            newCharacterImages[MainPhotoIndex].file = image;
+            setCharacterImages(newCharacterImages);
+        }
+    }
+
+    //TODO: Add ability to specify main photo in react-avatar-editor
 
     return (
         <StyledForm id="contact-form" method="post" onSubmit={handleSubmit}>
             <HeaderSection>
                 <MainPhotoEditor 
-                    image={MainPhoto?.file || ""} onChange={(image) => {
-                        let newCharacterImages = _.cloneDeep(CharacterImages);
-                        if (MainPhotoIndex === -1) {
-                            newCharacterImages.push({
-                                mainPhoto: true,
-                                caption: "",
-                                file: image
-                            })
-                            setCharacterImages(newCharacterImages);
-                        } else {
-                            newCharacterImages[MainPhotoIndex].file = image;
-                            setCharacterImages(newCharacterImages);
-                        }
-                    }} onRemove={() => {
+                    image={MainPhoto?.file || ""} EditorRef={MainPhotoRef}
+                    onChange={HandleMainPhotoChange} 
+                    onRemove={() => {
                         let newImages = _.cloneDeep(CharacterImages);
                         newImages.splice(MainPhotoIndex, 1);
                         setCharacterImages(newImages);
@@ -337,6 +383,7 @@ export default function EditCharacter() {
                                 setCharacterDetails(newDetails);
                             }}
                         >Remove</Button>
+                        
                     </Box>
                 )
             })}
@@ -349,6 +396,7 @@ export default function EditCharacter() {
             <Typography variant="h6">Pictures</Typography>
             {
                 CharacterImages.map((image, index) => {
+                    if (image.mainPhoto === true) return null;
                     const CurrImageDetails = {
                         ...image,
                         mainPhoto: image.mainPhoto || false,

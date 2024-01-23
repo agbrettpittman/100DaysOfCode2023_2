@@ -1,13 +1,19 @@
 import AvatarEditor from 'react-avatar-editor'
 import styled from 'styled-components'
 import Dropzone from 'react-dropzone'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Slider from '@mui/material/Slider';
 
 const StyledDropzone = styled(Dropzone)`
-    grid-area: avatar;
     width: 50px;
     height: 50px;
+`
+
+const StyledDropzoneRoot = styled.div`
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
 `
 
 const Wrapper = styled.div`
@@ -38,15 +44,14 @@ type ComponentProps = {
     image?: File | string
     onChange?: (image: File) => void
     onRemove?: () => void
+    EditorRef?: any
 }
 
-export default function MainPhotoEditor({image = "", onChange = () => {}, onRemove = () => {}}: ComponentProps) {
+export default function MainPhotoEditor({image = "", onChange = () => {}, onRemove = () => {}, EditorRef = null}: ComponentProps) {
 
     const [Scale, setScale] = useState(1)
 
-    function handleDrop(acceptedFiles: File[]) {
-        onChange(acceptedFiles[0])
-    }
+    function handleDrop(acceptedFiles: File[]) { onChange(acceptedFiles[0]) }
 
     return (
         <Wrapper>
@@ -56,13 +61,13 @@ export default function MainPhotoEditor({image = "", onChange = () => {}, onRemo
                 noKeyboard
             >
                 {({ getRootProps, getInputProps }) => (
-                    <div {...getRootProps()}>
+                    <StyledDropzoneRoot {...getRootProps()}>
                         <AvatarEditor 
-                            width={80} height={80} border={10}
+                            width={80} height={80} border={10} ref={EditorRef}
                             image={image} scale={Scale}
                         />
                         <input {...getInputProps()} />
-                    </div>
+                    </StyledDropzoneRoot>
                 )}
             </StyledDropzone>
             {image &&

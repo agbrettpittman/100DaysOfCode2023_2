@@ -19,9 +19,9 @@ const Wrapper = styled(Box)`
     display: grid;
     grid-template-areas:
         "image caption"
-        "image mainSwitch"
         "image remove";
-    gap: 1em;
+    column-gap: 1em;
+    align-items: center;
     width: 100%;
     grid-template-columns: auto 1fr;
 `;
@@ -33,10 +33,6 @@ const StyledFileUploader = styled(FileUploader)`
 
 const CaptionField = styled(TextField)`
     grid-area: caption;
-`;
-
-const MainPhotoSwitch = styled(Switch)`
-    grid-area: mainSwitch;
 `;
 
 const RemoveButton = styled(Button)`
@@ -61,13 +57,6 @@ export default function CharacterImageInput({ index, imageDetails, onChange, onR
                 onChange={(e) => onChange(index, 'caption', e.target.value)}
                 value={imageDetails.caption}
             />
-            <FormControlLabel label="Main Photo" control={
-                <MainPhotoSwitch
-                    checked={imageDetails.mainPhoto}
-                    onChange={(e) => onChange(index, 'mainPhoto', e.target.checked)}
-                    inputProps={{ 'aria-label': 'Main Photo' }}
-                />
-            } />
             <RemoveButton 
                 variant="text"
                 color="error"

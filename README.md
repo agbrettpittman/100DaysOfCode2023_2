@@ -17,7 +17,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+
+### Day 68, January 22, 2024
+
+Finished moving main photo editing to react-avatar-editor. I'm starting to see some of the benefits of TS. The type-hinting it provides is pretty great sometimes. The errors that are difficult to decipher are less great. Tomorrow I'll be working on getting character transfers working. At that point, I think I'll be in a fair place to move on and try learning another tech before the 100 days are up.
 
 ### Day 67, January 21, 2024
 

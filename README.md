@@ -17,7 +17,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+
+D69Y2 / #100DaysOfCode
+
+I lied. I did not work on character transfers. I had an idea for a way to make the images display in a nice mosaic (kinda similar to interest) instead of just being in flex rows. So with the power of grid's auto-flow dense and some math, I got that working. So no matter how many images there are, what size they are, or how big (or small) your screen is, they should create a nice mosaic. there are a few gaps left, but that seems fairly acceptable. could probably fill those in with the logo or something similar.
 
 ### Day 68, January 22, 2024
 

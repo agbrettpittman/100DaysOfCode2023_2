@@ -24,6 +24,8 @@ type CharacterImagePropsType = CharacterImageType & {
     alt: string;
     title: string;
     onClick: () => void;
+    gridRows: number;
+    gridColumns: number;
 }
 
 type CharacterStateType = CharacterType & {
@@ -72,6 +74,32 @@ const CharacterImage = styled.img`
     }
 `
 
+const ImageGridImg = styled.div<{ src: string, rows: number, columns: number }>`
+    width: 100%;
+    cursor: pointer;
+    border: 2px solid ${({ theme }) => theme.palette.background.default};
+    background-image: url(${({ src }) => src});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px;
+    padding: 2px;
+    box-sizing: border-box;
+    grid-row: span ${({ rows }) => rows || 1};
+    grid-column: span ${({ columns }) => columns || 1};
+    :hover {
+        border-color: ${({ theme }) => theme.palette.primary.main};
+    }
+`
+
+const ImageGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 100px);
+    grid-auto-rows: 100px;
+    grid-gap: 5px;
+    grid-auto-flow: dense;
+`
+
 export default function Character() {
     const { characterId } = useParams();
     const [LightboxPosition, setLightboxPosition] = useState(-1);
@@ -93,6 +121,15 @@ export default function Character() {
         }
     }
 
+    function loadImagePromise(src: string): Promise<HTMLImageElement> {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.src = src;
+            image.onload = () => resolve(image);
+            image.onerror = () => reject(image);
+        })
+    }
+
     async function processCharacterImages(character: CharacterType): Promise<CharacterImagePropsType[]> {
         if (!character.images?.length) return [];
         let newCharacterImages = [];
@@ -101,18 +138,37 @@ export default function Character() {
             const Alt = image?.caption || FallBackAlt;
             const ProtectedFileProps = await getProtectedFileProps(image?.filename || "", Alt);
             const onClick = () => setLightboxPosition(index);
+            let gridRows = 1;
+            let gridColumns = 1;
+            // get image height and width
+            try {
+                const LoadedImage = await loadImagePromise(ProtectedFileProps.src);
+                gridRows = Math.floor(LoadedImage.height / 100);
+                gridColumns = Math.floor(LoadedImage.width / 100);
+
+                if (gridRows > 4 || gridColumns > 4) {
+                    const DivisionFactor = Math.ceil(Math.max(gridRows, gridColumns) / 4);
+                    gridColumns = Math.round(gridColumns / DivisionFactor);
+                    gridRows = Math.round(gridRows / DivisionFactor);
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+
             newCharacterImages.push({
                 ...image,
                 ...ProtectedFileProps,
                 onClick,
                 title: Alt,
+                gridRows,
+                gridColumns,
             })
         }
         return newCharacterImages
     }
-
     return (
-        <Wrapper id="character">
+        <Wrapper>
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
                 <CharacterHeader character={character} onChange={getCharacterData} />
                 {character.description && <p>{character.description}</p>}
@@ -129,19 +185,23 @@ export default function Character() {
                         })}
                     </ul>
                 )}
-                
                 {character.images?.length > 0 &&
-                    <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'} gap={'0px'} alignItems={'center'}>
-                        {character.images.map((image:CharacterImagePropsType, index) => {
-                            const CharacterImageProps = {
-                                src: image.src,
-                                alt: image.alt,
-                                title: image.title,
-                                onClick: image.onClick,
+                    <ImageGrid>
+                        {character.images
+                            .filter((image:CharacterImagePropsType) => !image?.mainPhoto)
+                            .map((image:CharacterImagePropsType, index) => {
+                                const CharacterImageProps = {
+                                    src: image.src,
+                                    alt: image.alt,
+                                    title: image.title,
+                                    onClick: image.onClick,
+                                    rows: image.gridRows,
+                                    columns: image.gridColumns,
+                                }
+                                return <ImageGridImg {...CharacterImageProps} />
                             }
-                            return <CharacterImage {...CharacterImageProps} />
-                        })}
-                    </Box>
+                        )}
+                    </ImageGrid>
                 }
             </Box>
             <Lightbox

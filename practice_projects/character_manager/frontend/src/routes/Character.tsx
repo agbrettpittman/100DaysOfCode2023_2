@@ -18,6 +18,9 @@ import { useCustomNavigate } from "@utils/utilities";
 import { RootContext } from "@routes/Root";
 import { transparentize } from "polished";
 import _ from "lodash";
+import { Send } from "@styled-icons/fluentui-system-regular/Send";
+import PopupWrapper from "@components/PopupWrapper";
+import CharacterTransfer from "@components/CharacterTransfer";
 
 type CharacterImagePropsType = CharacterImageType & {
     src: string;
@@ -60,17 +63,6 @@ const CharacterActionButton = styled.button<{ hoverColor: string }>`
     color: ${({ theme }) => transparentize(0.7,theme.palette.text.primary)};
     :hover {
         color: ${({ hoverColor }) => hoverColor};
-    }
-`
-
-const CharacterImage = styled.img`
-    max-height: 50vh;
-    cursor: pointer;
-    border: 2px solid ${({ theme }) => theme.palette.background.default};
-    padding: 2px;
-    box-sizing: border-box;
-    :hover {
-        border-color: ${({ theme }) => theme.palette.primary.main};
     }
 `
 
@@ -168,7 +160,7 @@ export default function Character() {
         return newCharacterImages
     }
     return (
-        <Wrapper>
+        <Wrapper> 
             <Box display={'flex'} flexDirection={'column'} gap={'1rem'}>
                 <CharacterHeader character={character} onChange={getCharacterData} />
                 {character.description && <p>{character.description}</p>}
@@ -233,7 +225,7 @@ function CharacterHeader({ character, onChange }: { character: CharacterStateTyp
                     {character.name || "No Name"}
                 </Typography>
                 {(character.owner?._id !== ParsedAccessToken?.userId) ? <Typography variant={'h5'} component={'h2'} color={'textSecondary'}>({`@${character.owner?.userName}` || "Unknown"})</Typography> : null}
-                <CharacterMainControls character={character} onChange={onChange} />
+                <CharacterMainControls character={character} />
             </Box>
 
             {character.subTitle && 
@@ -245,8 +237,9 @@ function CharacterHeader({ character, onChange }: { character: CharacterStateTyp
     )
 }
 
-function CharacterMainControls({ character, onChange }: { character: CharacterStateType, onChange: () => void }) {
+function CharacterMainControls({ character }: { character: CharacterStateType }) {
 
+    const [DisplayCharacterTransfer, setDisplayCharacterTransfer] = useState(false);
     const ParsedAccessToken = parseAccessToken();
     const { navigate } = useCustomNavigate();
     const { getOwnCharacters } = useContext(RootContext)
@@ -307,6 +300,15 @@ function CharacterMainControls({ character, onChange }: { character: CharacterSt
                 >
                     <CallSplit/>
                 </CharacterActionButton>
+                <CharacterTransfer Opener={
+                    <CharacterActionButton
+                        aria-label="transfer ownership"
+                        name="transfer"
+                        hoverColor={Theme.palette.info.dark}
+                    >
+                        <Send />
+                    </CharacterActionButton>
+                } />
             </>
         )
     } else if (character.forkable) {

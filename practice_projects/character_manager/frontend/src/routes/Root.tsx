@@ -35,7 +35,7 @@ const Wrapper = styled.div`
 
 export const RootContext = createContext({
     OwnCharacters: [] as Character[],
-    getOwnCharacters: () => {}
+    getOwnCharacters: () => {},
 })
 
 export default function Root() {
@@ -65,7 +65,7 @@ export default function Root() {
 
     const ContextValue = {
         OwnCharacters,
-        getOwnCharacters: getCharactersFromAPI
+        getOwnCharacters: getCharactersFromAPI,
     }
     
     return (

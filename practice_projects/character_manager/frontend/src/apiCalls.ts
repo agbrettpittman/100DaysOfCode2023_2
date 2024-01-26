@@ -21,7 +21,9 @@ import {
     CharacterCreateInput,
     CharacterUpdateInput,
     ForkCharacterMutation,
-    ForkCharacterMutationVariables
+    ForkCharacterMutationVariables,
+    TransferCharacterMutation,
+    TransferCharacterMutationVariables
 } from '@/__generated__/graphql';
 import { setContext } from '@apollo/client/link/context';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -280,6 +282,48 @@ export function deleteCharacter(characterId: string){
         `,
         variables: {
             characterId
+        }
+    })
+}
+
+export function transferCharacter(characterId: string, newOwnerId: string){
+    return ApolloClientInstance.mutate<TransferCharacterMutation, TransferCharacterMutationVariables>({
+        mutation: gql`
+            mutation transferCharacter($characterId: String!, $newOwnerId: String!) {
+                transferCharacter(characterId: $characterId, newOwnerId: $newOwnerId) {
+                    _id
+                    creator {
+                        _id
+                        name
+                        userName
+                        email
+                    }
+                    owner {
+                        _id
+                        name
+                        userName
+                        email
+                    }
+                    name
+                    subTitle
+                    description
+                    private
+                    details {
+                        name
+                        value
+                    }
+                    images {
+                        filename
+                        mainPhoto
+                        caption
+                    }
+                
+                }
+            }
+        `,
+        variables: {
+            characterId,
+            newOwnerId
         }
     })
 }

@@ -225,7 +225,7 @@ function CharacterHeader({ character, onChange }: { character: CharacterStateTyp
                     {character.name || "No Name"}
                 </Typography>
                 {(character.owner?._id !== ParsedAccessToken?.userId) ? <Typography variant={'h5'} component={'h2'} color={'textSecondary'}>({`@${character.owner?.userName}` || "Unknown"})</Typography> : null}
-                <CharacterMainControls character={character} />
+                <CharacterMainControls character={character} reloadCharacterData={onChange}/>
             </Box>
 
             {character.subTitle && 
@@ -237,9 +237,13 @@ function CharacterHeader({ character, onChange }: { character: CharacterStateTyp
     )
 }
 
-function CharacterMainControls({ character }: { character: CharacterStateType }) {
+type CharacterMainControlsPropsType = {
+    character: CharacterStateType;
+    reloadCharacterData: () => void;
+}
 
-    const [DisplayCharacterTransfer, setDisplayCharacterTransfer] = useState(false);
+function CharacterMainControls({ character, reloadCharacterData }: CharacterMainControlsPropsType) {
+
     const ParsedAccessToken = parseAccessToken();
     const { navigate } = useCustomNavigate();
     const { getOwnCharacters } = useContext(RootContext)
@@ -300,15 +304,17 @@ function CharacterMainControls({ character }: { character: CharacterStateType })
                 >
                     <CallSplit/>
                 </CharacterActionButton>
-                <CharacterTransfer Opener={
-                    <CharacterActionButton
-                        aria-label="transfer ownership"
-                        name="transfer"
-                        hoverColor={Theme.palette.info.dark}
-                    >
-                        <Send />
-                    </CharacterActionButton>
-                } />
+                <CharacterTransfer character={character} onSuccess={reloadCharacterData}
+                    opener={
+                        <CharacterActionButton
+                            aria-label="transfer ownership"
+                            name="transfer"
+                            hoverColor={Theme.palette.info.dark}
+                        >
+                            <Send />
+                        </CharacterActionButton>
+                    } 
+                />
             </>
         )
     } else if (character.forkable) {

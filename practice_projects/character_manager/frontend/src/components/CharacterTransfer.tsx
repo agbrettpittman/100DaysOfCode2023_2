@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import {useState, useEffect, useContext} from 'react';
 import PopupWrapper from './PopupWrapper';
 import styled from 'styled-components';
 import { Button, Typography, TextField, Box } from '@mui/material';
 import { Character as CharacterType } from '@/__generated__/graphql';
 import { transferCharacter } from '@/apiCalls';
+import {RootContext} from '@routes/Root';
 
 const OpenerDiv = styled.div`
     display: contents;
@@ -12,7 +13,7 @@ const OpenerDiv = styled.div`
 type Props = {
     opener?: React.ReactNode;
     character?: CharacterType
-    onSuccess?: () => void;
+    onSuccess?: (useCache: boolean) => void;
 }
 
 
@@ -20,6 +21,7 @@ const DefaultOpener = <Button variant="contained">Transfer Character</Button>
 
 export default function CharacterTransfer({ opener = DefaultOpener, character, onSuccess}: Props) {
 
+    const { getOwnCharacters } = useContext(RootContext)
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [newOwner, setNewOwner] = useState("");
@@ -66,14 +68,16 @@ export default function CharacterTransfer({ opener = DefaultOpener, character, o
     }
 
     function handleSubmission() {
-        console.log({name, newOwner, character})
         if (name !== character?.name || newOwner === "" || !character?._id) return
         transferCharacter(character._id, newOwner).then((response) => {
             if (!response.data?.transferCharacter) {
                 alert("Character transfer failed")
                 return
             }
-            if (onSuccess) onSuccess()
+            if (onSuccess) {
+                onSuccess(false)
+            }
+            getOwnCharacters()
         }).catch((err) => {
             console.log(err)
             alert("An error occurred while transferring the character")

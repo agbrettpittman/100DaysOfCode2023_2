@@ -101,9 +101,9 @@ export default function Character() {
         getCharacterData();
     }, [characterId])
 
-    async function getCharacterData() {
+    async function getCharacterData(useCache = true) {
         if (!characterId) return;
-        const CharacterResponse = await getCharacter(characterId);
+        const CharacterResponse = await getCharacter(characterId, useCache);
         if (CharacterResponse?.data?.character?._id) {
             let character = CharacterResponse.data.character;
             setCharacter({

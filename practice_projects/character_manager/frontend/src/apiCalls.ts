@@ -106,7 +106,7 @@ export function getCharacters(useCache = true, input?: CharactersInput){
     })
 }
 
-export function getCharacter(id: string){
+export function getCharacter(id: string, useCache = true){
     return ApolloClientInstance.query<GetCharacterQuery, GetCharacterQueryVariables>({
         query: gql`
             query getCharacter($id: String!) {
@@ -143,7 +143,8 @@ export function getCharacter(id: string){
         `,
         variables: {
             id
-        }
+        },
+        fetchPolicy: useCache ? 'cache-first' : 'no-cache'
     })
 }
 

@@ -17,7 +17,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+
+### Day 72, January 26, 2024 
+
+Character transfers now work as one would expect. And with that, I think I am concluding work on the example project. That way I can try my hand at another tech before the 100 days is over. There is a lot more that I want to do with the system, and some things that I could spend some more time on to fine tune. However, the point of this project is to learn a technology. From it I have learned quite a bit about TypeScript, GraphQL, MaterialUI, and MongoDB. I had only ever touched Mongo before, and that was only at a very cursory level. The rest I had zero experience with this, and I feel like I have enough of a grasp on each to know how to utilize them in the future. I'd like to spend a bit of time with HTMX next. It is catching on quite a bit, so I'd like to dig in. Here are some screenshots of my Lair of the Ancients project:
 
 ### Day 71, January 25, 2024
 

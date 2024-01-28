@@ -10,6 +10,7 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🌴 = GraphQL
 - 🟦 = TypeScript
 - 🐲 = Practice Project (Character Manager) [ 🌴 , 🟦 ]
+- 🦄 = HTMX
 - ❌ = Missed Day
 
 ### Chart
@@ -17,7 +18,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄
+
+### Day 73, January 27, 2024 
+
+Started on an HTMX crash course by Traversy Media. It's definitely really interesting, and I'm definitely interested in diving a bit deeper after this course! I could see benefit for it in smaller projects. I think I still like the bells and whistles of full-blown React, but for a smaller app, it seems pretty slick.
 
 ### Day 72, January 26, 2024 
 

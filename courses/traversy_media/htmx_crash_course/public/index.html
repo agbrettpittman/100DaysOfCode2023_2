@@ -1,17 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTMX Crash Course</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
-</head>
-<body>
-    <div class="text-center">
-        <span hx-get="/poll" hx-trigger="every 5s">
-            Loading...
-        </span>
-    </div>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HTMX Crash Course</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script
+            src="https://unpkg.com/htmx.org@1.9.10"
+            integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+            crossorigin="anonymous"
+        ></script>
+        <style>
+            .htmx-indicator {
+                display: none;
+            }
+            .htmx-request {
+                display: table-row-group;
+                opacity: 0.5;
+            }
+            .htmx-request.htmx-request-loading {
+                display: table-row-group;
+                opacity: 1;
+            }
+        </style>
+    </head>
+    <body class="bg-blue-500">
+        <nav
+            class="font-sans flex flex-col text-center sm:flex-row sm:text-left sm:justify-between py-4 px-6 bg-white shadow sm:items-baseline w-full"
+        >
+            <div class="mb-2 sm:mb-0">
+                <a
+                    href="/"
+                    class="text-2xl no-underline text-grey-darkest hover:text-blue-dark"
+                    >HTMX Crash Course</a
+                >
+            </div>
+            <div
+                hx-get="/nav-items"
+                hx-target="this"
+                hx-swap="innerHTML"
+                hx-trigger="load"
+            ></div>
+        </nav>
+        <div class="container mx-auto mt-8 h-full">
+            <h1
+                class="text-5xl font-bold align-middle text-center text-white opacity-50"
+            >
+                Welcome to Brett Pittman's HTMX Crash Course
+            </h1>
+        </div>
+    </body>
 </html>

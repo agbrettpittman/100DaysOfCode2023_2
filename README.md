@@ -20,6 +20,9 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄
 
+### Day 74, January 28, 2024
+I finished Traversy Media's crash course on HTMX. I definitely see the benefit, and honestly, I could see myself using it in the future for smaller projects. Especially if the project is almost entirely a FastAPI with little reactivity needed. The concept of returning whole HTML components from the server would take a bit of getting used to, but I don't hate the idea.
+
 ### Day 73, January 27, 2024 
 
 Started on an HTMX crash course by Traversy Media. It's definitely really interesting, and I'm definitely interested in diving a bit deeper after this course! I could see benefit for it in smaller projects. I think I still like the bells and whistles of full-blown React, but for a smaller app, it seems pretty slick.

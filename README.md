@@ -11,6 +11,7 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟦 = TypeScript
 - 🐲 = Practice Project (Character Manager) [ 🌴 , 🟦 ]
 - 🦄 = HTMX
+- 🔒 = MERN Auth
 - ❌ = Missed Day
 
 ### Chart
@@ -18,7 +19,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪🌴🌴🌴🌴🌴🌴🟦🟦🟦🟦🟦🟦🐲🐲🐲🟪🐲🟪🐲
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
-- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄
+- 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒
+
+
+### Day 75, January 29, 2024
+Started on Net Ninja's course on MERN auth. Auth is one of my weaknesses, and I'd like to deploy it better and with greater confidence. Though we don't use express or mongo at my job, I suspect I can take the concepts and apply them to FastAPI and MySQL. I noticed he was using postman for API testing. I personally love the autodocs from FastAPI, so I stopped for a bit to work on getting automatic swagger docs working in the express portion. I think I just about have that working, but not quite.
 
 ### Day 74, January 28, 2024
 I finished Traversy Media's crash course on HTMX. I definitely see the benefit, and honestly, I could see myself using it in the future for smaller projects. Especially if the project is almost entirely a FastAPI with little reactivity needed. The concept of returning whole HTML components from the server would take a bit of getting used to, but I don't hate the idea.

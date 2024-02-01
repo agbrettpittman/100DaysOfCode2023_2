@@ -21,6 +21,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
+- 🍿
+
+### Day 77, January 31, 2024
+My HTMX form is now successfully submitting to my backend and receiving an HTML table back. I'm working on handling the actual connection to the Rapid API at the moment. My goal is to be returning a list of movies from that tomorrow.
 
 ### Day 76, January 30, 2024
 Wanted to do something in HTMX before moving on and got inspired today to create a movie of the night app. It's super simple and uses data from Rapid API. I'm using Pico for CSS since I want to spend as little time on that as possible. The goal is to get a feel for using HTMX to return basic HTML fragments, not to learn tailwind or implement a custom UI. So I spun up my API hero (FastAPI), created an index.html as the main page, and I just about have it working. Should be done tomorrow.

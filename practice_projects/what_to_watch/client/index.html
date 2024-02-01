@@ -3,7 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <favicon
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/img/favicon.ico"
+        />
+        <title>What To Watch</title>
         <script
             src="https://unpkg.com/htmx.org@1.9.10"
             integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
@@ -18,19 +21,33 @@
                 max-height: 25vh;
                 overflow: auto;
             }
+            button[type="submit"] {
+                width: clamp(8em, 15vw, 20em);
+                margin-left: auto;
+                margin-right: auto;
+            }
+            progress {
+                width: 25vw;
+                margin: 1em auto;
+                display: block;
+            }
         </style>
     </head>
     <body>
         <main class="container">
             <h1>What To Watch</h1>
-            <form hx-post="/api/movies" hx-target="#movies" hx-swap="outerHTML">
+            <form
+                hx-post="/api/search"
+                hx-target="#results"
+                hx-swap="innerHTML"
+            >
                 <details>
                     <summary>Service</summary>
                     <fieldset>
                         <label>
                             <input
                                 type="checkbox"
-                                name="service"
+                                name="services"
                                 value="Netflix"
                             />
                             Netflix
@@ -38,7 +55,7 @@
                         <label>
                             <input
                                 type="checkbox"
-                                name="service"
+                                name="services"
                                 value="Prime Video"
                             />
                             Prime Video
@@ -46,7 +63,7 @@
                         <label>
                             <input
                                 type="checkbox"
-                                name="service"
+                                name="services"
                                 value="HBO Max"
                             />
                             HBO Max
@@ -54,7 +71,7 @@
                         <label>
                             <input
                                 type="checkbox"
-                                name="service"
+                                name="services"
                                 value="Hulu"
                             />
                             Hulu
@@ -71,7 +88,10 @@
                     <fieldset id="genreOptions"></fieldset>
                 </details>
                 <input type="text" name="keyword" placeholder="Title" />
+                <button type="submit" class="outline">Search</button>
+                <progress></progress>
             </form>
+            <section id="results"></section>
         </main>
     </body>
 </html>

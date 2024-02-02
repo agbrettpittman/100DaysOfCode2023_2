@@ -129,7 +129,6 @@ async def search_movies(keyword: Annotated[str, Form()] = "", services: Annotate
 
     response = requests.get(url, headers=headers, params=querystring)
     data = response.json()
-    print(data)
     movies = data['result']
     tableRows = []
 

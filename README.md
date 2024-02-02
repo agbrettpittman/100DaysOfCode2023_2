@@ -21,7 +21,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿
+- 🍿🍿
+
+### Day 78, February 01, 2024
+Finished my example app of HTMX. I'm pretty happy with it as a small example of the capabilities of HTMX and Pico CSS. I really think if you're a backend dev who just needs a simple, professional frontend, this is a pretty great stack. 95% of what I worked in was the FastAPI backend. Of course, a larger project would have more complexity, but for it's intended usecase, HTMX, Pico CSS, and FastAPI work wonderfully. I connected to a prebuilt DB, but you can attach whatever DB you want to this stack and it seems like it'd be pretty great.
 
 ### Day 77, January 31, 2024
 My HTMX form is now successfully submitting to my backend and receiving an HTML table back. I'm working on handling the actual connection to the Rapid API at the moment. My goal is to be returning a list of movies from that tomorrow.

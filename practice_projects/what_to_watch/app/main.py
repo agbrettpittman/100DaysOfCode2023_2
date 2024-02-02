@@ -19,16 +19,58 @@ ui_app.mount("/", StaticFiles(directory="client",html = True), name="client")
 async def get_root():
     return {"message": "Hello World"}
 
+
+@app.get("/services", response_class=HTMLResponse)
+async def get_services():
+    services = {
+        "netflix": "Netflix",
+        "disney": "Disney+",
+        "hulu": "Hulu",
+    }
+
+    if (os.environ.get('USE_API') != 'False'):
+        url = "https://streaming-availability.p.rapidapi.com/countries"
+
+        headers = {
+            "X-RapidAPI-Key": os.environ.get('RAPID_API_KEY'),
+            "X-RapidAPI-Host": "streaming-availability.p.rapidapi.com"
+        }
+
+        response = requests.get(url, headers=headers)
+        data = response.json()
+        servicesObject = data['result']['us']['services']
+        services = {}
+
+        for serviceKey in servicesObject:
+            individualService = servicesObject[serviceKey]
+            supportedStreamingTypes = individualService['supportedStreamingTypes']
+            if (supportedStreamingTypes['free']):
+                services[f"{individualService['id']}.free"] = f"{individualService['name']} (Free)"
+            if (supportedStreamingTypes['subscription']):
+                services[f"{individualService['id']}.subscription"] = f"{individualService['name']} (Subscription)"
+
+    labels = []
+
+    for key in services:
+        labels.append(f'<label><input type="checkbox" name="services" value="{key}" />{services[key]}</label>')
+
+    labels_string = '\n'.join(labels)
+
+    return f'''
+    {labels_string}
+    '''
+
+
+
+
 @app.get("/genres", response_class=HTMLResponse)
 async def get_genres():
     
-    print(os.environ.get('USE_API'))
-    print(os.environ.get('RAPID_API_KEY'))
     genres = {
         12:"Adventure",
-        14:"Fantasy",
         16:"Animation",
-        18:"Drama"
+        18:"Drama",
+        14:"Fantasy"
     }
 
     if (os.environ.get('USE_API') != 'False'):
@@ -41,10 +83,10 @@ async def get_genres():
 
         response = requests.get(url, headers=headers)
         data = response.json()
-        genres = data['result']
+        genres = data['result']   
 
-        print(genres)
-    
+        # resort the genres based on the value
+        genres = dict(sorted(genres.items(), key=lambda item: item[1])) 
     
     labels = []
 
@@ -59,6 +101,10 @@ async def get_genres():
 
 @app.post("/search", response_class=HTMLResponse)
 async def search_movies(keyword: Annotated[str, Form()] = "", services: Annotated[list, Form()] = [], genres: Annotated[list, Form()] = []):
+
+    if (len(services) == 0):
+        return "<p class='form-error'>Please select at least one service</p>"
+
     print(f"keyword: {keyword}")
     print(f"services: {services}")
     print(f"genres: {genres}")
@@ -73,7 +119,7 @@ async def search_movies(keyword: Annotated[str, Form()] = "", services: Annotate
         "order_by":"original_title",
         "genres":",".join(genres),
         "genres_relation":"and",
-        "show_type":"all"
+        "show_type":"movie",
     }
 
     headers = {
@@ -82,29 +128,41 @@ async def search_movies(keyword: Annotated[str, Form()] = "", services: Annotate
     }
 
     response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    print(data)
+    movies = data['result']
+    tableRows = []
 
-    print(response.json())
+    for movie in movies:
+        services = []
+        serviceData = movie['streamingInfo']['us']
+        for serviceObject in serviceData:
+            services.append(serviceObject['service'])
+
+        services = list(set(services))
+
+        tableRows.append(f'''
+        <tr>
+            <td>{movie['year']}</td>
+            <td>{movie['title']}</td>
+            <td>{",".join(movie['directors'])}</td>
+            <td>{", ".join(services)}</td>
+        </tr>
+        ''')
 
     return f'''
     <h3>Results</h3>
     <table>
         <thead>
             <tr>
-                <th>Title</th>
                 <th>Year</th>
+                <th>Title</th>
                 <th>Directors</th>
+                <th>Services</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Movie 1</td>
-                <td>2021</td>
-                <td>Director 1</td>
-            </tr>
-            <tr>
-                <td>Movie 2</td>
-                <td>2020</td>
-                <td>Director 2</td>
-            </tr>
+            {''.join(tableRows)}
+        </tbody>
     </table>
     '''

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <favicon
             href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/img/favicon.ico"
-        />
+        ></favicon>
         <title>What To Watch</title>
         <script
             src="https://unpkg.com/htmx.org@1.9.10"
@@ -31,6 +31,12 @@
                 margin: 1em auto;
                 display: block;
             }
+            .form-error {
+                color: #ff8383;
+                font-size: 1em;
+                text-align: center;
+                margin-top: 3em;
+            }
         </style>
     </head>
     <body>
@@ -39,44 +45,17 @@
             <form
                 hx-post="/api/search"
                 hx-target="#results"
-                hx-swap="innerHTML"
+                hx-swap="innerHTML show:#results:top"
+                hx-indicator="progress"
             >
-                <details>
+                <details
+                    hx-get="/api/services"
+                    hx-target="#serviceOptions"
+                    hx-swap="innerHTML"
+                    hx-trigger="load"
+                >
                     <summary>Service</summary>
-                    <fieldset>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="services"
-                                value="Netflix"
-                            />
-                            Netflix
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="services"
-                                value="Prime Video"
-                            />
-                            Prime Video
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="services"
-                                value="HBO Max"
-                            />
-                            HBO Max
-                        </label>
-                        <label>
-                            <input
-                                type="checkbox"
-                                name="services"
-                                value="Hulu"
-                            />
-                            Hulu
-                        </label>
-                    </fieldset>
+                    <fieldset id="serviceOptions"></fieldset>
                 </details>
                 <details
                     hx-get="/api/genres"
@@ -89,7 +68,7 @@
                 </details>
                 <input type="text" name="keyword" placeholder="Title" />
                 <button type="submit" class="outline">Search</button>
-                <progress></progress>
+                <progress class="htmx-indicator"></progress>
             </form>
             <section id="results"></section>
         </main>

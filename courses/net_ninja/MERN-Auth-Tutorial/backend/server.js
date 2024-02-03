@@ -18,7 +18,7 @@ const doc = {
 }
 
 const outputFile = "./swagger-output.json"
-const routes_root = ["./server.js"]
+const routes_root = ["./routes/user.js", "./routes/workouts.js"]
 
 // express app
 const app = express()

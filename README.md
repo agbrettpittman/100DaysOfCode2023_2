@@ -21,8 +21,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒
+- 🍿🍿🔒🟪
 
+
+### Day 80, February 03, 2024
+I had to keep today's to a flat hour, so that means an iCodeThis challenge! I feel like today's went particularly well, so I figure I'll share. Some things aren't quite right, but I'm pretty happy with it for getting it done in a flat hour.
 
 ### Day 79, February 02, 2024 
 Back on @thenetninjauk  's MERN auth tutorial video. I also got Swagger docs auto-generating correctly. Today he talked about salting, hashing, and how JWT's work on a conceptual level.

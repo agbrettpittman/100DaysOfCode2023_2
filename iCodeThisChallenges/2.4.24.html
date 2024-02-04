@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My HTML Page</title>
+        <style>
+            body {
+                background-color: #f4f7ff;
+                color: #1e1f3f;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                display: flex;
+                gap: 2em;
+                flex-direction: column;
+                align-items: center;
+                width: clamp(500px, 60vw, 1500px);
+                margin: 10vh auto 0px auto;
+            }
+            h1 {
+                font-family: "Times New Roman", Times, serif;
+            }
+            .positions-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1em;
+                padding: 1em;
+                width: 100%;
+                height: 50vh;
+            }
+            .position {
+                background-color: #ffffff;
+                padding: 1em;
+                border-radius: 13px;
+                text-align: center;
+                box-shadow: 0px 0px 16px 18px #ebf1fa;
+                display: grid;
+                gap: 1em;
+                align-items: center;
+                grid-template-areas:
+                    "icon title"
+                    "button button";
+                justify-content: center;
+            }
+            .position i {
+                grid-area: icon;
+                font-size: 1.5em;
+                color: #1f2246;
+                background-color: #d1d1ff;
+                width: 2em;
+                height: 2em;
+                display: grid;
+                align-items: center;
+                place-items: center;
+                border-radius: 10px;
+                justify-self: right;
+            }
+            .position h2 {
+                grid-area: title;
+                justify-self: left;
+                font-weight: normal;
+            }
+            button {
+                background-color: transparent;
+                color: #1f2246;
+                border: 2px solid #e5e2ef;
+                padding: 0.5em 1em;
+                border-radius: 5px;
+                cursor: pointer;
+                grid-area: button;
+                width: clamp(10em, 12vw, 18em);
+                height: clamp(2em, 100%, 3.5em);
+                max-height: 4em;
+                justify-self: center;
+            }
+            button:hover {
+                background-color: #1f2246;
+                color: #ffffff;
+                border-color: #1f2246;
+            }
+            .disclaimer {
+                text-align: center;
+                padding: 1em;
+                font-weight: bold;
+                font-size: 0.85em;
+                color: #6a6c7d;
+            }
+            .ri-brush-line {
+                background-image: linear-gradient(
+                    134deg,
+                    #c1cefc 0%,
+                    #e9d4fe 100%
+                );
+            }
+            .ri-code-s-slash-line {
+                background-image: linear-gradient(
+                    135deg,
+                    #febdd7 0%,
+                    #f9d2d8 100%
+                );
+            }
+            .ri-settings-3-line {
+                background-image: linear-gradient(
+                    134deg,
+                    #c2edf9 0%,
+                    #ead8fc 100%
+                );
+            }
+            .ri-group-line {
+                background-image: linear-gradient(
+                    134deg,
+                    #bff8e7 0%,
+                    #cfe2fc 100%
+                );
+            }
+            .ri-survey-line {
+                background-image: linear-gradient(
+                    134deg,
+                    #bddaf3 0%,
+                    #fbd9e3 100%
+                );
+            }
+            .ri-graduation-cap-line {
+                background-image: linear-gradient(
+                    134deg,
+                    #fedeca 0%,
+                    #dbd9fb 100%
+                );
+            }
+        </style>
+        <link
+            href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <h1>Open positions</h1>
+        <div class="positions-grid">
+            <div class="position">
+                <i class="ri-brush-line"></i>
+                <h2>Design</h2>
+                <button>4 open positions</button>
+            </div>
+            <div class="position">
+                <i class="ri-code-s-slash-line"></i>
+                <h2>Engineering</h2>
+                <button>8 open positions</button>
+            </div>
+            <div class="position">
+                <i class="ri-settings-3-line"></i>
+                <h2>Operations</h2>
+                <button>2 open positions</button>
+            </div>
+            <div class="position">
+                <i class="ri-group-line"></i>
+                <h2>People</h2>
+                <button>6 open positions</button>
+            </div>
+            <div class="position">
+                <i class="ri-survey-line"></i>
+                <h2>Sales</h2>
+                <button>7 open positions</button>
+            </div>
+            <div class="position">
+                <i class="ri-graduation-cap-line"></i>
+                <h2>University</h2>
+                <button>8 open positions</button>
+            </div>
+        </div>
+        <p class="disclaimer">
+            We are proud to be an equal opportunity employer that values
+            diversity. We do not discriminate on the basis of race, religion,
+            color, national origin, gender, sexual orientation, age, marital
+            status, veteran status, or disability status.
+        </p>
+    </body>
+</html>

@@ -21,8 +21,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒
+- 🍿🍿🔒🟪🔒🔒
 
+### Day 82, February 05, 2024
+Almost finished with @thenetninjauk 's MERN auth tutorial. Today was tying signup, login, and logout to the API as well as persisting login across refreshes.
 
 ### Day 81, February 04, 2024
 More progress on NetNinja's MERN auth tutorial. Today we finished the signup and login portions of the backend and added a couple of pages to the app for those.

@@ -16,7 +16,10 @@ app.use(express.json())
 
 app.use((req, res, next) => {
     res.on("finish", () => {
-        console.log(`${req.method}: ${req.path} -> ${res.statusCode}`)
+        let originalUrl = req.originalUrl
+        // remove '/api' from the originalUrl
+        originalUrl = originalUrl.replace("/api", "")
+        console.log(`${req.method}: ${originalUrl} -> ${res.statusCode}`)
     })
     next()
 })

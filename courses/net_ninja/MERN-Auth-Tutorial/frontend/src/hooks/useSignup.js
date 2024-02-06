@@ -18,16 +18,8 @@ export function useSignup() {
     }
 
     async function signup(email, password) {
-        console.log(email, password)
-
         setIsLoading(true)
         setError(null)
-
-        try {
-            console.log(JSON.stringify({ email, password }))
-        } catch (error) {
-            console.log(error)
-        }
 
         try {
             const response = await fetch("/api/user/signup", {
@@ -38,11 +30,7 @@ export function useSignup() {
                 body: JSON.stringify({ email, password }),
             })
 
-            console.log(response)
-
             const data = await response.json()
-
-            console.log(data)
 
             if (!response.ok) {
                 setIsLoading(false)

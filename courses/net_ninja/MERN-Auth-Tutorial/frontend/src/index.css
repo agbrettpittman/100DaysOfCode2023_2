@@ -120,6 +120,7 @@ nav button {
     cursor: pointer;
     font-family: "Poppins";
     font-size: 1em;
+    margin-left: 10px;
 }
 
 /* auth forms */

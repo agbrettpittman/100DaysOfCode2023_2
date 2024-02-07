@@ -13,16 +13,17 @@ const Navbar = () => {
                     <h1>Workout Buddy</h1>
                 </Link>
                 <nav>
-                    {user && (
+                    {user ? (
                         <div>
                             <span>{user?.email}</span>
                             <button onClick={logout}>Logout</button>
                         </div>
+                    ) : (
+                        <div>
+                            <Link to="/login">Login</Link>
+                            <Link to="/signup">Sign Up</Link>
+                        </div>
                     )}
-                    <div>
-                        <Link to="/login">Login</Link>
-                        <Link to="/signup">Sign Up</Link>
-                    </div>
                 </nav>
             </div>
         </header>

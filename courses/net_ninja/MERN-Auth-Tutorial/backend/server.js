@@ -24,10 +24,19 @@ app.use((req, res, next) => {
     next()
 })
 
+const SwaggerOptions = {
+    customSiteTitle: "Workout Buddy API",
+    customCss: ".swagger-ui .topbar { display: none }",
+}
+
 // routes
 app.use("/api/workouts", workoutRoutes)
 app.use("/api/user", userRoutes)
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile))
+app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerFile, SwaggerOptions)
+)
 
 // connect to db
 mongoose

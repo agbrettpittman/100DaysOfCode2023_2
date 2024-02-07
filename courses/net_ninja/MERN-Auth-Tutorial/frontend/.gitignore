@@ -5,3 +5,8 @@
 
 # testing
 /coverage
+
+# linting
+.eslintrc.js
+.prettierrc
+```

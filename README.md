@@ -21,7 +21,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒
+- 🍿🍿🔒🟪🔒🔒🔒
+
+
+### Day 83, February 06, 2024
+Finished Net Ninja's MERN auth tutorial. It wasn't quite as in-depth as I was hoping, although, I get the sense that it was intended as a high-level intro, while I was looking for more of a deep dive. Hopefully, I can find another tomorrow. I also installed ES Lint on the project to play with it's auto-formatting capabilities. I have to say that it wasn't quite what I was shooting for. I was looking for something like Prettier, but more flexible / less opinionated, and that does not seem to be quite what it is. I mainly wanted it for formatting with the --fix option. Prettier is great, but some of it's "opinions" are just not something that I appreciate. Some are great, but others I'm less of a fan of. So finding a formatter with more flexibility would be nice.
 
 ### Day 82, February 05, 2024
 Almost finished with @thenetninjauk 's MERN auth tutorial. Today was tying signup, login, and logout to the API as well as persisting login across refreshes.

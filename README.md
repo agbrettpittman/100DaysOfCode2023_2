@@ -24,6 +24,9 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🍿🍿🔒🟪🔒🔒🔒🔒
 
 
+### Day 85, February 08, 2024
+finished @yesdavidgray 's MERN auth with JWTs tutorial. It was a bit to get setup (since I was coming into the middle of the course), but it was definitely as in-depth as I was hoping. I think I'll do the next bit on the React side of auth as well.
+
 ### Day 84, February 07, 2024
 Started on David Gray's MERN auth tutorial as a bit of a deeper dive. I don't know that I agree with his assertion that a refresh token should always be allowed to expire, but I'm wondering if he will discuss a keep-alive method at some point. It's also possible that I'm missing something conceptually with auth. I'm hoping that he'll explain that assertion at some point.
 

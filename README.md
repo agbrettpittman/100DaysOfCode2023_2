@@ -21,8 +21,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒
+- 🍿🍿🔒🟪🔒🔒🔒🔒
 
+
+### Day 84, February 07, 2024
+Started on David Gray's MERN auth tutorial as a bit of a deeper dive. I don't know that I agree with his assertion that a refresh token should always be allowed to expire, but I'm wondering if he will discuss a keep-alive method at some point. It's also possible that I'm missing something conceptually with auth. I'm hoping that he'll explain that assertion at some point.
 
 ### Day 83, February 06, 2024
 Finished Net Ninja's MERN auth tutorial. It wasn't quite as in-depth as I was hoping, although, I get the sense that it was intended as a high-level intro, while I was looking for more of a deep dive. Hopefully, I can find another tomorrow. I also installed ES Lint on the project to play with it's auto-formatting capabilities. I have to say that it wasn't quite what I was shooting for. I was looking for something like Prettier, but more flexible / less opinionated, and that does not seem to be quite what it is. I mainly wanted it for formatting with the --fix option. Prettier is great, but some of it's "opinions" are just not something that I appreciate. Some are great, but others I'm less of a fan of. So finding a formatter with more flexibility would be nice.

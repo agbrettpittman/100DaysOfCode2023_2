@@ -13,6 +13,7 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🍿 = Practice Project (What To Watch) [ 🦄 , PicoCSS ]
 - 🦄 = HTMX
 - 🔒 = MERN Auth
+- ⚒️ = DNS idea
 - ❌ = Missed Day
 
 ### Chart
@@ -21,8 +22,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️
 
+
+### Day 86, February 09, 2024
+I had an idea I wanted to mess with. I tried setting up a DNS server in WSL along with nginx so that my local projects can have their own domain names and I wouldn't have to remember them. This has proven to be much more difficult than anticipated. My original idea was an app that I could use to track my local project names and ports. It would be able to write new conf files for nginx and edit the etc/hosts file in windows when I needed to add, remove, or edit an app entry. However, it doesn't seem you can edit the windows etc/hosts file from WSL. bummer. So I tried setting up dnsmasq on WSL and pointing my Windows desktop to that as the first resolver. However, for reasons I haven't figured out, Windows would not use the local DNS to resolve domain names. I'm moving on to David Gray's frontend auth tutorial tomorrow as this was intended to be a short deviation and appears it will take longer than the time I had alotted it. I'd rather use that time getting more friendly with auth.
 
 ### Day 85, February 08, 2024
 finished @yesdavidgray 's MERN auth with JWTs tutorial. It was a bit to get setup (since I was coming into the middle of the course), but it was definitely as in-depth as I was hoping. I think I'll do the next bit on the React side of auth as well.

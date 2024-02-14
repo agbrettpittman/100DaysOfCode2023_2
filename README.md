@@ -22,8 +22,9 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪
 
+### Day 90, February 13, 2024 I had a tight hour today, so I worked on yesterday's iCodeThis challenge. fairly happy with the results from less than an hour. to get it done.
 
 ### Day 89, February 12, 2024
 Working on David Gray's refresh token portion of his MERN stack today. Ran into some issues, and I think it's because my cookies are getting written to 127.0.0.1, rather than localhost. not sure yet though. I did notice that in thunderclient.

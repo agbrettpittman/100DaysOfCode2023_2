@@ -22,8 +22,14 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒
 
+
+### Day 89, February 12, 2024
+Working on David Gray's refresh token portion of his MERN stack today. Ran into some issues, and I think it's because my cookies are getting written to 127.0.0.1, rather than localhost. not sure yet though. I did notice that in thunderclient.
+
+### Day 88, February 11, 2024
+Finished the frontend login portion of David Gray's MERN course. Also spent a decent bit of time researching RTK Query and Redux. I've avoided Redux because I have the context API with vanilla React, but I do feel like I see the use case over the context API. 
 
 ### Day 87, February 10, 2024
 Just about finished David Gray's next portion of MERN authentication. This part focused heavily on the frontend. He kept mentioning "RTK" like it was a query library. Not sure what exactly it is. Will have to do research later, because it looks cool.

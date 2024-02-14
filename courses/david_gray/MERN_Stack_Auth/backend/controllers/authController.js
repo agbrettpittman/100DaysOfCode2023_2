@@ -2,6 +2,36 @@ const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const asyncHandler = require("express-async-handler")
+const accessTokenExpiration = "10s"
+const refreshTokenExpiration = "60s"
+
+function stringTimeToMiliseconds(time) {
+    // time can be in format of "1d 2h 3m 4s"
+    const timeArray = time.split(" ")
+    let milliseconds = 0
+    for (let i = 0; i < timeArray.length; i++) {
+        const CaptureGroups = timeArray[i].match(/(\d+)(\w)/)
+        const number = parseInt(CaptureGroups[1])
+        const unit = CaptureGroups[2]
+        switch (unit) {
+            case "d":
+                milliseconds += number * 24 * 60 * 60 * 1000
+                break
+            case "h":
+                milliseconds += number * 60 * 60 * 1000
+                break
+            case "m":
+                milliseconds += number * 60 * 1000
+                break
+            case "s":
+                milliseconds += number * 1000
+                break
+            default:
+                break
+        }
+    }
+    return milliseconds
+}
 
 // @desc Login
 // @route POST /auth
@@ -33,20 +63,21 @@ const login = asyncHandler(async (req, res) => {
             },
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "5m" }
+        { expiresIn: accessTokenExpiration }
     )
 
     const refreshToken = jwt.sign(
         { username: foundUser.username },
         process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
+        { expiresIn: refreshTokenExpiration }
     )
 
+    // max age should match refresh token expiration
     res.cookie("jwt", refreshToken, {
         httpOnly: true, // only accessible by the server
         secure: false, // only accessible by https
         sameSite: "none", // allow cross-site
-        maxAge: 1 * 24 * 60 * 60 * 1000, // match the refresh token expiration
+        maxAge: 1000 * 20, // 20 seconds
     })
 
     res.status(200).json({ accessToken })
@@ -57,6 +88,8 @@ const login = asyncHandler(async (req, res) => {
 // @access Public - because access token has expired
 const refresh = asyncHandler(async (req, res) => {
     const cookies = req.cookies
+
+    console.log(cookies)
 
     if (!cookies.jwt) {
         return res.status(401).json({ message: "Unauthorized" })
@@ -86,7 +119,7 @@ const refresh = asyncHandler(async (req, res) => {
                     },
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: "5m" }
+                { expiresIn: accessTokenExpiration }
             )
 
             res.json({ accessToken })

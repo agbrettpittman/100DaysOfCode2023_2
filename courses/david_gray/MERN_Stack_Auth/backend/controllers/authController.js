@@ -75,7 +75,7 @@ const login = asyncHandler(async (req, res) => {
     // max age should match refresh token expiration
     res.cookie("jwt", refreshToken, {
         httpOnly: true, // only accessible by the server
-        secure: false, // only accessible by https
+        secure: true, // only accessible by https
         sameSite: "none", // allow cross-site
         maxAge: 1000 * 20, // 20 seconds
     })

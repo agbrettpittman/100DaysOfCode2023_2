@@ -22,9 +22,15 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪
 
-### Day 90, February 13, 2024 I had a tight hour today, so I worked on yesterday's iCodeThis challenge. fairly happy with the results from less than an hour. to get it done.
+### Day 91, February 14, 2024
+Was pretty exhausted today, so I did an iCodeThis
+challenge. Definitely didn't do nearly as good this time around. I think the prompt was a bit more difficult this time.
+![2 14 24ICodeThisFinal](https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/f1799564-dbd0-431b-b6d9-04198e4c44f9)
+
+### Day 90, February 13, 2024 I had a tight hour today, so I worked on yesterday's iCodeThis challenge. fairly happy with the results from less than an hour to get it done.
+![Screenshot 2024-02-13 221703](https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/ca79f7c0-82bc-4a83-8b7e-aaa6e1b4d699)
 
 ### Day 89, February 12, 2024
 Working on David Gray's refresh token portion of his MERN stack today. Ran into some issues, and I think it's because my cookies are getting written to 127.0.0.1, rather than localhost. not sure yet though. I did notice that in thunderclient.

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>2.14.24</title>
+        <style>
+            body {
+                font-family: "Lucida Sans", "Lucida Sans Regular",
+                    "Lucida Grande", "Lucida Sans Unicode", Geneva, Verdana,
+                    sans-serif;
+            }
+            main {
+                display: grid;
+                gap: 1em;
+            }
+            h1 {
+                font-family: Cambria, Cochin, Georgia, Times, "Times New Roman",
+                    serif;
+                margin: 0px;
+            }
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1em;
+            }
+            .searchInput input {
+                padding: 1em;
+                border: 1px solid #0000002b;
+                border-radius: 4px;
+            }
+            nav {
+                display: flex;
+                gap: 1em;
+            }
+            a {
+                text-decoration: none;
+                color: black;
+                padding: 0.75em;
+            }
+            a.active {
+                background: #9395eb;
+                border-radius: 5px;
+                color: white;
+            }
+            .results {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 1em;
+                margin-top: 3em;
+                grid-auto-rows: 20vh;
+            }
+            .user {
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto auto;
+                column-gap: 1em;
+                background-color: #fbfdff;
+                padding: 1em;
+                border-radius: 16px;
+            }
+            .user p,
+            h3 {
+                margin: 0;
+            }
+            .user h3 {
+                align-self: end;
+            }
+            .user p {
+                margin-bottom: 3em;
+            }
+            .imageWrapper {
+                grid-row: 1 / -1;
+                background-color: teal;
+                width: 4em;
+                border-radius: 4em;
+                aspect-ratio: 1;
+            }
+            .imageWrapper h4 {
+                font-size: 2em;
+                margin: 0;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #ffffff96;
+            }
+            .tags {
+                display: flex;
+                gap: 0.5em;
+            }
+            .tags span {
+                border: 2px solid #00000014;
+                color: #9395eb;
+                padding: 2px 7px;
+                border-radius: 1em;
+                font-size: 0.65em;
+                font-weight: bold;
+                height: fit-content;
+            }
+        </style>
+        <script defer>
+            document.addEventListener("DOMContentLoaded", function () {
+                const Users = [
+                    {
+                        name: "Lelah Nichols",
+                        location: "Troy, MI",
+                        tags: ["clothes", "stem"],
+                    },
+                    {
+                        name: "Jesus Weiss",
+                        location: "Fort Worth, Tx",
+                        tags: ["headset", "gadget", "speed", "winter"],
+                    },
+                    {
+                        name: "Annie Rice",
+                        location: "Austin, Tx",
+                        tags: ["road", "mountain", "trip", "earth", "nature"],
+                    },
+                    {
+                        name: "Robert Browser",
+                        location: "Cincinnati, OH",
+                        tags: ["Maintenance", "gears", "frames", "repair"],
+                    },
+                    {
+                        name: "Amy Campbell",
+                        location: "Warrior, AL",
+                        tags: ["music", "disks"],
+                    },
+                    {
+                        name: "Anthony S. Morin",
+                        location: "Lyndhurst, NJ",
+                        tags: ["vintage", "electric"],
+                    },
+                ]
+                let htmlToInsert = ""
+                Users.forEach((user) => {
+                    let image = ""
+                    if (user.image) {
+                        image = `<img src="${user.image}" alt="${user.name} profile pic" />`
+                    } else {
+                        const nameParts = user.name.split(" ")
+                        const namesToKeep = [
+                            nameParts[0],
+                            nameParts[nameParts.length - 1],
+                        ]
+                        const initials = namesToKeep
+                            .map((name) => name[0])
+                            .join("")
+                            .toUpperCase()
+                        image = `<h4>${initials}</h4>`
+                    }
+                    const BackgroundGradient = `linear-gradient(45deg, #${Math.floor(
+                        Math.random() * 16777215
+                    ).toString(16)}, #${Math.floor(
+                        Math.random() * 16777215
+                    ).toString(16)})`
+                    htmlToInsert += `
+                        <div class="user">
+                            <div class="imageWrapper" style="background: ${BackgroundGradient}">
+                                ${image}
+                            </div>
+                            <h3>${user.name}</h3>
+                            <p>${user.location}</p>
+                            <div class="tags">
+                                ${user.tags
+                                    .map((tag) => `<span>${tag}</span>`)
+                                    .join("")}
+                            </div>
+                        </div>
+                    `
+                })
+                document.querySelector(".results").innerHTML = htmlToInsert
+            })
+        </script>
+    </head>
+    <body>
+        <main>
+            <h1>Users</h1>
+            <header>
+                <div class="searchInput">
+                    <input type="text" placeholder="Search users" />
+                </div>
+                <nav>
+                    <a href="">Reputation</a>
+                    <a href="" class="active">New Users</a>
+                    <a href="">Voters</a>
+                    <a href="">Editors</a>
+                    <a href="">Moderators</a>
+                </nav>
+            </header>
+            <div class="results">
+                <div class="user">
+                    <img src="" alt="" />
+                    <h3>Person's Name</h3>
+                    <p>City, St</p>
+                    <div class="tags">
+                        <span>Tag 1</span>
+                        <span>Tag 2</span>
+                        <span>Tag 3</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

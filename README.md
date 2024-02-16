@@ -22,7 +22,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒
+
+### Day 92, February 15, 2024
+got back to David Gray's MERN auth tutorial. Finally figured out what was messing me up with setting the cookie (I had set secure to false while testing with Thunder Client). After that, I got a bit over halfway through lesson 10.
 
 ### Day 91, February 14, 2024
 Was pretty exhausted today, so I did an iCodeThis

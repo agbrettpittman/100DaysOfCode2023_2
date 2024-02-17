@@ -2,8 +2,8 @@ const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const asyncHandler = require("express-async-handler")
-const accessTokenExpiration = "10s"
-const refreshTokenExpiration = "60s"
+const accessTokenExpiration = "15m"
+const refreshTokenExpiration = "7d"
 
 function stringTimeToMiliseconds(time) {
     // time can be in format of "1d 2h 3m 4s"
@@ -77,7 +77,7 @@ const login = asyncHandler(async (req, res) => {
         httpOnly: true, // only accessible by the server
         secure: true, // only accessible by https
         sameSite: "none", // allow cross-site
-        maxAge: 1000 * 20, // 20 seconds
+        maxAge: stringTimeToMiliseconds(refreshTokenExpiration),
     })
 
     res.status(200).json({ accessToken })

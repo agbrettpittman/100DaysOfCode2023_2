@@ -22,8 +22,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒
 
+
+### Day 94, February 17, 2024
+Completed lesson 11 of David Gray's MERN auth tutorial. Routes and nav buttons are now protected. Also fixed a little bug when logging out that I created while troubleshooting why my refresh tokens were not being set.
 
 ### Day 93, February 16, 2024
 Moved on to lesson 11 of David Gray's MERN tutorial. We're now adding role based permissions to the app.

@@ -38,16 +38,18 @@ const PersistLogin = () => {
 
     let content = null
 
-    if (!persist) content = <Outlet />
-    else if (isLoading) content = <p>Loading...</p>
+    if (isLoading) content = <p>Loading...</p>
     else if (isError) {
         content = (
             <p className="errmsg">
-                {error.data?.message}
+                {error.data?.message + " - "}
                 <Link to="/login">Please login again</Link>
             </p>
         )
-    } else if (isSuccess && trueSuccess) content = <Outlet />
+    } else if (!persist && !token)
+        content = <Link to="/login">Please login</Link>
+    else if (!persist) content = <Outlet />
+    else if (isSuccess && trueSuccess) content = <Outlet />
     else if (token && isUninitialized) content = <Outlet />
 
     return content

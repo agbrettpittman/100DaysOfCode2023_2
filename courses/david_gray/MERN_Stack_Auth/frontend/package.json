@@ -1,5 +1,5 @@
 {
-  "name": "lesson_07-frontend",
+  "name": "mern-frontend",
   "version": "0.1.0",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",

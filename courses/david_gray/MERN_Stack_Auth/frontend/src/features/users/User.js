@@ -36,4 +36,5 @@ const User = ({ userId }) => {
 
     } else return null
 }
-export default User
+const memoizedUser = memo(User)
+export default memoizedUser

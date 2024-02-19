@@ -1,6 +1,7 @@
 import { useGetNotesQuery } from "./notesApiSlice"
 import Note from "./Note"
 import useAuth from "../../hooks/useAuth"
+import PulseLoader from "react-spinners/PulseLoader"
 
 const NotesList = () => {
     const { username, isManager, isAdmin } = useAuth()
@@ -18,7 +19,7 @@ const NotesList = () => {
 
     let content
 
-    if (isLoading) content = <p>Loading...</p>
+    if (isLoading) content = <PulseLoader color="#FFF" />
 
     if (isError) {
         content = <p className="errmsg">{error?.data?.message}</p>
@@ -36,9 +37,7 @@ const NotesList = () => {
             })
         }
 
-        const tableContent =
-            ids?.length &&
-            filteredIds.map((noteId) => <Note key={noteId} noteId={noteId} />)
+        const tableContent = ids?.length && filteredIds.map((noteId) => <Note key={noteId} noteId={noteId} />)
 
         content = (
             <table className="table table--notes">

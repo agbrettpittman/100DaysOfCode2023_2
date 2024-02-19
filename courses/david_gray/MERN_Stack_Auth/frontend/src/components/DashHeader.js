@@ -10,6 +10,7 @@ import {
 import { useNavigate, Link, useLocation } from "react-router-dom"
 import { useSendLogoutMutation } from "../features/auth/authApiSlice"
 import useAuth from "../hooks/useAuth"
+import PulseLoader from "react-spinners/PulseLoader"
 
 const PATH_REGEXS = {
     DASH_REGEX: /^\/dash(\/)?$/,
@@ -23,8 +24,7 @@ const DashHeader = () => {
     const { pathname } = useLocation()
     const OnDash = pathname.includes("/dash")
 
-    const [sendLogout, { isLoading, isSuccess, isError, error }] =
-        useSendLogoutMutation()
+    const [sendLogout, { isLoading, isSuccess, isError, error }] = useSendLogoutMutation()
 
     const NavButtons = [
         {
@@ -43,19 +43,13 @@ const DashHeader = () => {
             title: "Notes",
             onClick: () => navigate("/dash/notes"),
             icon: faFilePen,
-            check: () =>
-                Boolean(!PATH_REGEXS.NOTES_REGEX.test(pathname) && OnDash),
+            check: () => Boolean(!PATH_REGEXS.NOTES_REGEX.test(pathname) && OnDash),
         },
         {
             title: "Users",
             onClick: () => navigate("/dash/users"),
             icon: faUserGear,
-            check: () =>
-                Boolean(
-                    (isManager || isAdmin) &&
-                        !PATH_REGEXS.USERS_REGEX.test(pathname) &&
-                        OnDash
-                ),
+            check: () => Boolean((isManager || isAdmin) && !PATH_REGEXS.USERS_REGEX.test(pathname) && OnDash),
         },
         {
             title: "Logout",
@@ -81,17 +75,12 @@ const DashHeader = () => {
 
     let buttonContent = null
 
-    if (isLoading) buttonContent = <p>Logging Out...</p>
+    if (isLoading) buttonContent = <PulseLoader color="#FFF" />
     else {
         buttonContent = NavButtons.map((button, index) => {
             if (button.check()) {
                 return (
-                    <button
-                        key={index}
-                        className="icon-button"
-                        title={button.title}
-                        onClick={button.onClick}
-                    >
+                    <button key={index} className="icon-button" title={button.title} onClick={button.onClick}>
                         <FontAwesomeIcon icon={button.icon} />
                     </button>
                 )

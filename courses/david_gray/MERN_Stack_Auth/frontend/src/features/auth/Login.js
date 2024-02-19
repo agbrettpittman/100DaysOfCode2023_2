@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux"
 import { setCredentials } from "./authSlice"
 import { useLoginMutation } from "./authApiSlice"
 import usePersist from "../../hooks/usePersist"
+import PulseLoader from "react-spinners/PulseLoader"
 
 const Login = () => {
     const userRef = useRef()
@@ -111,7 +112,7 @@ const Login = () => {
         </section>
     )
 
-    if (isLoading) return <h1>Loading...</h1>
+    if (isLoading) return <PulseLoader color="#FFF" />
     else return content
 }
 export default Login

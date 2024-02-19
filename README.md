@@ -13,6 +13,7 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🍿 = Practice Project (What To Watch) [ 🦄 , PicoCSS ]
 - 🦄 = HTMX
 - 🔒 = MERN Auth
+- 🔮 = MERN (in general)
 - ⚒️ = DNS idea
 - ❌ = Missed Day
 
@@ -22,8 +23,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮
 
+
+### Day 95, February 18, 2024
+Completed lesson 12 of David Gray's MERN tutorial. Today had almost nothing to do with auth, but with only 2 lessons remaining after yesterday, the completionist in me said I had to finish it out. Today we made a number of optimizations including memoizing a couple components and optimizing RTK query's prefetch methods. We also made a couple of UI tweaks like adding a nice loading spinner and adding a hook for changing the title based on the current route.
 
 ### Day 94, February 17, 2024
 Completed lesson 11 of David Gray's MERN auth tutorial. Routes and nav buttons are now protected. Also fixed a little bug when logging out that I created while troubleshooting why my refresh tokens were not being set.

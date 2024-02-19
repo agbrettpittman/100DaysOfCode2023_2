@@ -3,6 +3,7 @@ import EditNoteForm from "./EditNoteForm"
 import { useGetNotesQuery } from "./notesApiSlice"
 import { useGetUsersQuery } from "../users/usersApiSlice"
 import useAuth from "../../hooks/useAuth"
+import PulseLoader from "react-spinners/PulseLoader"
 
 const EditNote = () => {
     const { id } = useParams()
@@ -20,6 +21,9 @@ const EditNote = () => {
             users: data?.ids.map((id) => data?.entities[id]),
         }),
     })
+
+    if (!note || !users) return <PulseLoader color="#FFF" />
+
     if (!isManager && !isAdmin && note.username !== username) return <p className="errmsg">No Access</p>
 
     return <EditNoteForm note={note} users={users} />

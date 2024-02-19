@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux"
-import { selectAllUsers } from "../users/usersApiSlice"
 import NewNoteForm from "./NewNoteForm"
 import { useGetUsersQuery } from "../users/usersApiSlice"
 import PulseLoader from "react-spinners/PulseLoader"
@@ -11,7 +9,7 @@ const NewNote = () => {
         }),
     })
 
-    if (!users?.length) return <p>Not Currently Available</p>
+    if (!users?.length) return <PulseLoader color="#FFF" />
 
     return <NewNoteForm users={users} />
 }

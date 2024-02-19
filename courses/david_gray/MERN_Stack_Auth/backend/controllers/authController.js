@@ -1,7 +1,6 @@
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
-const asyncHandler = require("express-async-handler")
 const accessTokenExpiration = "15m"
 const refreshTokenExpiration = "7d"
 
@@ -36,7 +35,7 @@ function stringTimeToMiliseconds(time) {
 // @desc Login
 // @route POST /auth
 // @access Public
-const login = asyncHandler(async (req, res) => {
+const login = async (req, res) => {
     const { username, password } = req.body
 
     if (!username || !password) {
@@ -81,12 +80,12 @@ const login = asyncHandler(async (req, res) => {
     })
 
     res.status(200).json({ accessToken })
-})
+}
 
 // @desc Refresh
 // @route GET /auth/refresh
 // @access Public - because access token has expired
-const refresh = asyncHandler(async (req, res) => {
+const refresh = async (req, res) => {
     const cookies = req.cookies
 
     console.log(cookies)
@@ -100,7 +99,7 @@ const refresh = asyncHandler(async (req, res) => {
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        asyncHandler(async (err, decoded) => {
+        async (err, decoded) => {
             if (err) return res.status(403).json({ message: "Forbidden" })
 
             const foundUser = await User.findOne({
@@ -123,9 +122,9 @@ const refresh = asyncHandler(async (req, res) => {
             )
 
             res.json({ accessToken })
-        })
+        }
     )
-})
+}
 
 // @desc Logout
 // @route POST /auth/logout

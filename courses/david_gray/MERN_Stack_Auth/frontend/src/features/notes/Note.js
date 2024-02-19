@@ -1,5 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import { useNavigate } from "react-router-dom"
 import { useGetNotesQuery } from "./notesApiSlice"
 import { memo } from "react"
 
@@ -28,10 +29,13 @@ const Note = ({ noteId }) => {
         return (
             <tr className="table__row">
                 <td className="table__cell note__status">
-                    {note.completed
-                        ? <span className="note__status--completed">Completed</span>
-                        : <span className="note__status--open">Open</span>
-                    }
+                    {note.completed ? (
+                        <span className="note__status--completed">
+                            Completed
+                        </span>
+                    ) : (
+                        <span className="note__status--open">Open</span>
+                    )}
                 </td>
                 <td className="table__cell note__created">{created}</td>
                 <td className="table__cell note__updated">{updated}</td>
@@ -48,7 +52,6 @@ const Note = ({ noteId }) => {
                 </td>
             </tr>
         )
-
     } else return null
 }
 const memoizedNote = memo(Note)

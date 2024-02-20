@@ -23,8 +23,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🟪🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
-- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮
+- 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮🔮
 
+
+### Day 96, February 19, 2024
+Finished David Gray's MERN tutorial. Today he showed off deploying the app to a production server. Since I spun up my DB locally, and have used similar tools in the past, I skipped the actual deployment. Render does look pretty cool though. I had a bit of time left over, and figured I'd work out a way to dynamically generate tab titles based on the current route (rather than hard setting them everywhere).
 
 ### Day 95, February 18, 2024
 Completed lesson 12 of David Gray's MERN tutorial. Today had almost nothing to do with auth, but with only 2 lessons remaining after yesterday, the completionist in me said I had to finish it out. Today we made a number of optimizations including memoizing a couple components and optimizing RTK query's prefetch methods. We also made a couple of UI tweaks like adding a nice loading spinner and adding a hook for changing the title based on the current route.

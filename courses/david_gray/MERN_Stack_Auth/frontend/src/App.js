@@ -17,7 +17,7 @@ import RequireAuth from "./features/auth/RequireAuth"
 import useTitle from "./hooks/useTitle"
 
 function App() {
-    useTitle("Dan D. Repairs")
+    useTitle()
     return (
         <Routes>
             <Route path="/" element={<Layout />}>

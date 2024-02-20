@@ -1,7 +1,3 @@
-const allowedOrigins = [
-    'http://localhost:3000',
-    'https://www.dandrepairshop.com',
-    'https://dandrepairshop.com'
-]
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
 
 module.exports = allowedOrigins

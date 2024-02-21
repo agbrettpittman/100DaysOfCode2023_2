@@ -1,0 +1,47 @@
+.env
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Dependency directories
+lib/
+libs/
+lib64/
+dist/
+build/
+egg-info/
+pip-wheel-metadata/
+*.egg-info/
+*.egg/
+*.whl/
+
+# Testing
+htmlcov/
+.coverage
+.tox/
+.noseids
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Miscellaneous
+*.bak
+*.swp
+*.tmp
+*.tmp.*
+*~
+*.DS_Store

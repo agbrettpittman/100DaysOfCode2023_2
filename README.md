@@ -11,7 +11,7 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟦 = TypeScript
 - 🐲 = Practice Project (Character Manager) [ 🌴 , 🟦 , Mongo, MaterialUI ]
 - 🍿 = Practice Project (What To Watch) [ 🦄 , PicoCSS ]
-- 🧪 = Practice Project (System Tests) [FastAPI, React (Javascript), MySQL, MaterialUI
+- 🧪 = Practice Project (System Tests) [FastAPI, React (Javascript), MySQL, MaterialUI]
 - 🦄 = HTMX
 - 🔒 = MERN Auth
 - 🔮 = MERN (in general)
@@ -25,7 +25,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
 - 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮🔮🧪
+- 🧪
 
+### Day 98, February 21, 2024 
+Got full CRUD operations for the system and test entities in on the API side. I need to make a couple of changes to the m2m table joining them tomorrow (so that it can track sign-offs). Then it'll be on to the frontend. Might not finish before the 100 days is up, but it'll be pretty close!
 
 ### Day 97, February 20, 2024 
 Started work on a final example project using MySQL, FastAPI ,  React, and MaterialUI. The goal is to knock it out in the next 4 days (including today). So ~4 hours. Maybe a bit more. Overall it's a system test tracking app. Obviously, given the time constraint, it won't be super complex. Users can create system entities with a given software version, create tests that can be used across different systems, assign those tests to devices, and sign off that they've been completed. Today I got the DB built, the beginnings of the API setup, including connecting to said DB via TorMySQL.

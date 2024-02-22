@@ -19,5 +19,5 @@ class DBConn:
     async def getCursor(self):
         async with await self.pool.Connection() as conn:
             async with conn.cursor(DictCursor) as cursor:
-                yield cursor
+                yield cursor,conn
                 

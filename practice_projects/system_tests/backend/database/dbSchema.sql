@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS devices;
 DROP TABLE IF EXISTS tests;
-DROP TABLE IF EXISTS m2m_systems_tests;
+DROP TABLE IF EXISTS tests_for_systems;
 
 
 CREATE TABLE systems (
@@ -18,7 +18,7 @@ CREATE TABLE tests (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE m2m_systems_tests (
+CREATE TABLE tests_for_systems (
     id INT UNSIGNED AUTO_INCREMENT NOT NULL,
     systems_id INT UNSIGNED NOT NULL,
     tests_id INT UNSIGNED NOT NULL,
@@ -27,5 +27,5 @@ CREATE TABLE m2m_systems_tests (
     PRIMARY KEY (`id`)
 );
 
-ALTER TABLE m2m_systems_tests ADD CONSTRAINT m2m_systems_tests_systems_id_systems_id FOREIGN KEY (systems_id) REFERENCES systems(id);
-ALTER TABLE m2m_systems_tests ADD CONSTRAINT m2m_systems_tests_tests_id_tests_id FOREIGN KEY (tests_id) REFERENCES tests(id);
+ALTER TABLE tests_for_systems ADD CONSTRAINT tests_for_systems_const_systems_id_systems_id FOREIGN KEY (systems_id) REFERENCES systems(id);
+ALTER TABLE tests_for_systems ADD CONSTRAINT tests_for_systems_const_tests_id_tests_id FOREIGN KEY (tests_id) REFERENCES tests(id);

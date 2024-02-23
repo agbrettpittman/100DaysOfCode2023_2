@@ -1,9 +1,12 @@
 import tormysql, os, contextlib
 from tormysql.cursor import DictCursor
 
-class DBConn:
+class DBConnection:
 
     def __init__(self):
+        self.pool = None
+
+    def connect(self):
         self.pool = tormysql.ConnectionPool(
             max_connections = 20, #max open connections
             idle_seconds = 7200, #conntion idle timeout time, 0 is not timeout
@@ -21,3 +24,5 @@ class DBConn:
             async with conn.cursor(DictCursor) as cursor:
                 yield cursor,conn
                 
+        
+DBConn = DBConnection()

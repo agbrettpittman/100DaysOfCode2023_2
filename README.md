@@ -25,7 +25,10 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
 - 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮🔮🧪
-- 🧪
+- 🧪🧪
+
+### Day 99, February 22, 2024
+CRUD for joining tests to systems and allowing signoffs is working on the API. That definitely took a bit longer than I was hoping. Also broke things into routers. I can probably get the beginning of the frontend working tomorrow. This might end up being 102 days of code haha.
 
 ### Day 98, February 21, 2024 
 Got full CRUD operations for the system and test entities in on the API side. I need to make a couple of changes to the m2m table joining them tomorrow (so that it can track sign-offs). Then it'll be on to the frontend. Might not finish before the 100 days is up, but it'll be pretty close!

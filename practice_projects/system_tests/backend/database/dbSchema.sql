@@ -23,7 +23,7 @@ CREATE TABLE tests_for_systems (
     systems_id INT UNSIGNED NOT NULL,
     tests_id INT UNSIGNED NOT NULL,
     signature VARCHAR(100) NOT NULL,
-    signedOn DATETIME NOT NULL,
+    signedOn DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
 

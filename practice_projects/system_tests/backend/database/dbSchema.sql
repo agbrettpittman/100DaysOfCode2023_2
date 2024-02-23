@@ -19,8 +19,12 @@ CREATE TABLE tests (
 );
 
 CREATE TABLE m2m_systems_tests (
+    id INT UNSIGNED AUTO_INCREMENT NOT NULL,
     systems_id INT UNSIGNED NOT NULL,
-    tests_id INT UNSIGNED NOT NULL
+    tests_id INT UNSIGNED NOT NULL,
+    signature VARCHAR(100) NOT NULL,
+    signedOn DATETIME NOT NULL,
+    PRIMARY KEY (`id`)
 );
 
 ALTER TABLE m2m_systems_tests ADD CONSTRAINT m2m_systems_tests_systems_id_systems_id FOREIGN KEY (systems_id) REFERENCES systems(id);

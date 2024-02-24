@@ -1,7 +1,7 @@
 from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List
 from .tests_for_systems import Tests_For_Systems_Base
 
 class Systems_Base(BaseModel):
@@ -28,3 +28,6 @@ class Systems_Test(BaseModel):
     name: str
     signature: Optional[str] = None
     signedOn: Optional[str] = None
+
+class Single_System(Systems_Full):
+    tests: List[Systems_Test]

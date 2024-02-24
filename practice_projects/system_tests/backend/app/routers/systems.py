@@ -1,7 +1,7 @@
 import traceback
 from fastapi import APIRouter, HTTPException
 from typing import List
-from ..models.systems import Systems_Full, Systems_Base, Systems_Update, Systems_Add_Test, Systems_Test
+from ..models.systems import Systems_Full, Systems_Base, Systems_Update, Systems_Add_Test, Systems_Test, Single_System
 from ..models.tests_for_systems import Tests_For_Systems_Full, Tests_For_Systems_Base
 from database.connection import DBConn
 from datetime import datetime
@@ -73,12 +73,15 @@ async def create_system(system: Systems_Base) -> Systems_Full:
         raise HTTPException(status_code=500, detail=str(e))
     
 @router.get("/{id}")
-async def get_system(id: int) -> Systems_Full:
+async def get_system(id: int) -> Single_System:
     try:
         query = "SELECT * FROM systems WHERE id = %s"
         async with DBConn.getCursor() as (cursor,conn):
             await cursor.execute(query, (id,))
             result = cursor.fetchone()
+
+        items = await get_tests_for_system(id)
+        result["tests"] = items
         return result
     except Exception as e:
         traceback.print_exc()

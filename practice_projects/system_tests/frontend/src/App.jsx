@@ -9,7 +9,7 @@ import SingleSystem from "./pages/SingleSystem"
 import "remixicon/fonts/remixicon.css"
 
 const MainContent = styled.div`
-    min-height: 80vh;
+    min-height: 78vh;
 `
 
 function App() {

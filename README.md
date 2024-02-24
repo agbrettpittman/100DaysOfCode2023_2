@@ -25,7 +25,15 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🐲🐲🐲❌🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲❌❌🐲🐲
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
 - 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮🔮🧪
-- 🧪🧪
+- 🧪🧪🧪
+
+### Day 100, February 24, 2024 
+And the 100 days is complete!! Took 3 hours but on the last day I knocked out the entire UI for the system test tracking app. It's pretty basic, and has some kinks, but it works end-to-end! I've learned a lot over the last 100 days, and I've discovered some really cool tools and technologies to make deploying apps faster and with less bugs. Looking forward to next year!!
+
+<img src="https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/5d47e5a4-5590-49de-a0a7-bbca24d6f135" width="400">
+<img src="https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/e59a9f8d-ab0c-4ebd-b234-d9712338d18d" width="400">
+<img src="https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/69964ee6-108a-4f68-95b0-344abed76490" width="400">
+
 
 ### Day 99, February 22, 2024
 CRUD for joining tests to systems and allowing signoffs is working on the API. That definitely took a bit longer than I was hoping. Also broke things into routers. I can probably get the beginning of the frontend working tomorrow. This might end up being 102 days of code haha.

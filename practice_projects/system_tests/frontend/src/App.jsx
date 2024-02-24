@@ -1,5 +1,10 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+import styled from 'styled-components'
+
+const MainContent = styled.div`
+    min-height: 80vh;
+`
 
 function App() {
 
@@ -15,13 +20,18 @@ function App() {
                     <li><Link to="/tests">Tests</Link></li>
                 </ul>
             </nav>
-            <Routes>
-                {/*<Route path="/" element={<Home />} />*/}
-                {/*<Route path="/404" element={<NotFound />} />*/}
-                {/*<Route path="/tests" element={<TestList />} />*/}
-                {/*<Route path="/systems" element={<SystemList />} />*/}
-                {/*<Route path="*" element={<Navigate replace to="/404" />} />*/}
-            </Routes>
+            <MainContent>
+                <Routes>
+                    {/*<Route path="/" element={<Home />} />*/}
+                    {/*<Route path="/404" element={<NotFound />} />*/}
+                    {/*<Route path="/tests" element={<TestList />} />*/}
+                    {/*<Route path="/systems" element={<SystemList />} />*/}
+                    {/*<Route path="*" element={<Navigate replace to="/404" />} />*/}
+                </Routes>
+            </MainContent>
+            <footer>
+                <p>Created by Brett Pittman 2024</p>
+            </footer>
         </main>
     </BrowserRouter>
   )

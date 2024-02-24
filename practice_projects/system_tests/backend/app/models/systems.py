@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from .tests_for_systems import Tests_For_Systems_Base
+from datetime import datetime
 
 class Systems_Base(BaseModel):
     hardwareMake: str
@@ -27,7 +28,7 @@ class Systems_Test(BaseModel):
     tests_id: int
     name: str
     signature: Optional[str] = None
-    signedOn: Optional[str] = None
+    signedOn: Optional[datetime] = None
 
 class Single_System(Systems_Full):
     tests: List[Systems_Test]

@@ -266,6 +266,7 @@ async def update_test_for_system(system_id: int, tests_id: int, data: Tests_For_
                 await conn.commit()
                 await cursor.execute(get_results_query, get_results_args)
                 result = cursor.fetchone()
+                print(result)
                 return result
 
     except Exception as e:

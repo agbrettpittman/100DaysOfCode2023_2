@@ -23,8 +23,6 @@ function SystemList() {
             .catch((err) => console.log(err))
     }, [])
 
-    console.log(Data)
-
     return (
         <div>
             <h2>Systems</h2>

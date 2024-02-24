@@ -6,6 +6,7 @@ import SystemList from "./pages/SystemList"
 import TestList from "./pages/TestList"
 import Home from "./pages/Home"
 import SingleSystem from "./pages/SingleSystem"
+import "remixicon/fonts/remixicon.css"
 
 const MainContent = styled.div`
     min-height: 80vh;
@@ -32,6 +33,7 @@ function App() {
                         </li>
                     </ul>
                 </nav>
+                <hr />
                 <MainContent>
                     <Routes>
                         <Route path="/" element={<Home />} />

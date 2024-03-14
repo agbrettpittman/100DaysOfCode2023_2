@@ -9,9 +9,9 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🟪 = iCodeThis Challenge
 - 🌴 = GraphQL
 - 🟦 = TypeScript
-- 🐲 = Practice Project (Character Manager) [ 🌴 , 🟦 , Mongo, MaterialUI ]
-- 🍿 = Practice Project (What To Watch) [ 🦄 , PicoCSS ]
-- 🧪 = Practice Project (System Tests) [FastAPI, React (Javascript), MySQL, MaterialUI]
+- 🐲 = Practice Project (Character Manager) [ 🌴 , 🟦 , Mongo, MaterialUI, React ]
+- 🍿 = Practice Project (What To Watch) [ 🦄 , FastAPI, PicoCSS ]
+- 🧪 = Practice Project (System Tests) [FastAPI, React, MySQL, MaterialUI, PicoCSS]
 - 🦄 = HTMX
 - 🔒 = MERN Auth
 - 🔮 = MERN (in general)
@@ -26,6 +26,11 @@ This is my 2nd run through the 100 Days of Code challenge. I completed the chall
 - 🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🐲🦄🦄🔒🍿
 - 🍿🍿🔒🟪🔒🔒🔒🔒🔒⚒️🔒🔒🟪🟪🔒🔒🔒🔮🔮🧪
 - 🧪🧪🧪
+
+![image](https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/bd57e553-1910-488e-a528-acf3056f4965)
+
+![image](https://github.com/agbrettpittman/100DaysOfCode2023_2/assets/65371971/91f13fc8-d774-4242-be96-4c6039901cb9)
+
 
 ### Day 100, February 24, 2024 
 And the 100 days is complete!! Took 3 hours but on the last day I knocked out the entire UI for the system test tracking app. It's pretty basic, and has some kinks, but it works end-to-end! I've learned a lot over the last 100 days, and I've discovered some really cool tools and technologies to make deploying apps faster and with less bugs. Looking forward to next year!!
